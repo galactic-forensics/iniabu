@@ -1,0 +1,45 @@
+## Editors ##
+# PyCharm
+.idea
+
+# ST3
+*.sublime-project
+*.sublime-workspace
+
+## temporary files and folders ##
+temp
+tmp
+
+## Build directories ##
+doc/_build
+
+## Venv ##
+.venv/
+
+## setup.py generated files ##
+MANIFEST
+
+## Python files to ignore ##
+*.py[cod]
+
+## Packaging ##
+.egg/
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+
+## Unit test / coverage reports ##
+.coverage
+.tox
+nosetests.xml
+.pytest_cache
