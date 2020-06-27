@@ -1,6 +1,12 @@
 IniAbu
 ======
 
+.. image::https://github.com/galactic-forensics/iniabu/workflows/pytest/badge.svg?branch=master
+    :target: https://github.com/galactic-forensics/iniabu
+    :alt: pytest
+.. image::https://github.com/galactic-forensics/iniabu/workflows/Lint/badge.svg?branch=master
+    :target: https://github.com/galactic-forensics/iniabu
+    :alt: Linting
 .. image:: https://img.shields.io/badge/License-GPL%20v2-blue.svg
     :target: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
     :alt: License: GPL v2
