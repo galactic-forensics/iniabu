@@ -1,1 +1,6 @@
+bump2version
 pytest
+pytest-sugar
+pytest-cov
+sphinx
+tox

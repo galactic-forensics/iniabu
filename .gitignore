@@ -11,7 +11,9 @@ temp
 tmp
 
 ## Build directories ##
-doc/_build
+docs/_build
+docs/_static
+docs/_templates
 
 ## Venv ##
 .venv/
@@ -41,5 +43,4 @@ lib64
 ## Unit test / coverage reports ##
 .coverage
 .tox
-nosetests.xml
 .pytest_cache
