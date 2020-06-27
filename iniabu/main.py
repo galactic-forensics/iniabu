@@ -1,7 +1,5 @@
 """
 Todo License text and copyright
-
-Todo: Fix bump2version
 """
 
 from . import read_data

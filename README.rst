@@ -1,10 +1,13 @@
 IniAbu
 ======
 
-.. image::https://github.com/galactic-forensics/iniabu/workflows/pytest/badge.svg?branch=master
+.. image:: https://readthedocs.org/projects/iniabu/badge/?version=latest
+    :target: https://iniabu.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+.. image:: https://github.com/galactic-forensics/iniabu/workflows/pytest/badge.svg?branch=master
     :target: https://github.com/galactic-forensics/iniabu
     :alt: pytest
-.. image::https://github.com/galactic-forensics/iniabu/workflows/Lint/badge.svg?branch=master
+.. image:: https://github.com/galactic-forensics/iniabu/workflows/Lint/badge.svg?branch=master
     :target: https://github.com/galactic-forensics/iniabu
     :alt: Linting
 .. image:: https://img.shields.io/badge/License-GPL%20v2-blue.svg
