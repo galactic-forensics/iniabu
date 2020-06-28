@@ -2,6 +2,7 @@
 Todo License text and copyright
 """
 
+import os
 from . import read_data
 
 
@@ -41,3 +42,14 @@ class IniAbu:
         :rtype: <float>
         """
         return x + 1
+
+    def file_temp(self):
+        """
+        Read lodders file and return first entry
+        
+        :return:
+        """
+        nupy_path = os.path.dirname(os.path.realpath(__file__))
+        print(nupy_path)
+        with open(os.path.join(nupy_path, "data/lodders09.dat"), "r") as f:
+            return f.readline()

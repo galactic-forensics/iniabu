@@ -19,3 +19,12 @@ def test_temp():
     :return:
     """
     assert ini.temp(4) == 5
+
+
+def test_file_temp():
+    """
+    Tests file reading
+    :return: 
+    """
+    retval = "#Z ELE A ATOM% N\n"
+    assert ini.file_temp() == retval

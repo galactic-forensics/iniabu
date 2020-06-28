@@ -5,7 +5,7 @@ ini = IniAbu()
 
 
 # Package information
-__version__ = "1.0.0"
+__version__ = "0.9.8"
 
 __title__ = "iniabu"
 __description__ = (

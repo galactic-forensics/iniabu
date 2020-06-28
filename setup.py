@@ -1,4 +1,4 @@
-import setuptools
+from setuptools import setup, find_packages
 
 # VARIABLES #
 
@@ -23,9 +23,9 @@ CLASSIFIERS = [
 
 # SETUP #
 
-setuptools.setup(
+setup(
     name="iniabu",  # Replace with your own username
-    version="0.9.0",
+    version="0.9.8",
     author="Reto Trappitsch",
     description="Simple access to initial solar system elemental and isotopic "
     "abundances",
@@ -35,7 +35,14 @@ setuptools.setup(
         "Documentation": "https://iniabu.readthedocs.io",  # todo version
         "Source": "https://github.com/galactic-forensics/iniabu",
     },
-    packages=setuptools.find_packages(),
+    packages=find_packages(
+        include=["iniabu", "iniabu.*"]
+    ),  # include all packages under iniabu
+    # package_dir={"": ""},  # tell distutils where the package is
+    package_data={
+        # Include all .dat files
+        "": ["*.dat"],
+    },
     install_requires=INSTALL_REQUIRES,
     classifiers=CLASSIFIERS,
     python_requires=">=3.5",
