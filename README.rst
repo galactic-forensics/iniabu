@@ -7,6 +7,9 @@ IniAbu
 .. image:: https://github.com/galactic-forensics/iniabu/workflows/pytest/badge.svg?branch=master
     :target: https://github.com/galactic-forensics/iniabu
     :alt: pytest
+.. image:: https://coveralls.io/repos/github/galactic-forensics/iniabu/badge.svg?branch=master
+    :target: https://coveralls.io/github/galactic-forensics/iniabu?branch=master
+    :alt: coverage
 .. image:: https://github.com/galactic-forensics/iniabu/workflows/Lint/badge.svg?branch=master
     :target: https://github.com/galactic-forensics/iniabu
     :alt: Linting
