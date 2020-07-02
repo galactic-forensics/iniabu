@@ -3,7 +3,7 @@ Todo License text and copyright
 """
 
 import os
-from . import read_data
+from . import data
 
 
 class IniAbu:
@@ -26,30 +26,8 @@ class IniAbu:
         """
         Initializes iniabu
         """
-        if database not in read_data.reader_dict.keys():
-            raise FileNotFoundError(
-                "The database {} could not be found. Make sure it exists and that the "
-                "appropriate reader methods are implemented as well."
-            )
+        # save database
+        self._database = database
 
-    def temp(self, x):
-        """
-        This is the doc string for the temp function. Adds one to whatever goes in.
-
-        :param <float> x: Whatever comes in
-
-        :return: Returns whatever comes in + 1
-        :rtype: <float>
-        """
-        return x + 1
-
-    def file_temp(self):
-        """
-        Read lodders file and return first entry
-        
-        :return:
-        """
-        nupy_path = os.path.dirname(os.path.realpath(__file__))
-        print(nupy_path)
-        with open(os.path.join(nupy_path, "data/lodders09.dat"), "r") as f:
-            return f.readline()
+        # initialize dictionaries
+        self._ele_dict, self._iso_dict = data.database_selector(database)

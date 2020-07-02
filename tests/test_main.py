@@ -1,30 +1,29 @@
 import iniabu
+import iniabu.data as data
 import pytest
 
-ini = iniabu.IniAbu()
+
+def test_auto_loading():
+    """
+    Ensure that the lodders09 is loaded by default. This is what the docs say.
+    """
+    assert iniabu.ini._database == "lodders09"
 
 
-def test_init_bad_database():
+def test_init_database():
     """
-    Test loading iniabu without a database
-    :return:
+    Test loading iniabu with all available databases
     """
-    with pytest.raises(Exception) as e_info:
-        iniabu.IniAbu("not_a_database_test")
+    # test nist15 database
+    ini = iniabu.IniAbu(database="nist")
+    assert ini._ele_dict == data.nist15_elements
+    assert ini._iso_dict == data.nist15_isotopes
 
+    # test lodders09 database
+    ini = iniabu.IniAbu(database="lodders09")
+    assert ini._ele_dict == data.lodders09_elements
+    assert ini._iso_dict == data.lodders09_isotopes
 
-def test_temp():
-    """
-    Tests the temporary function
-    :return:
-    """
-    assert ini.temp(4) == 5
-
-
-def test_file_temp():
-    """
-    Tests file reading
-    :return: 
-    """
-    retval = "#Z ELE A ATOM% N\n"
-    assert ini.file_temp() == retval
+    # test that wrong database raises a ValueError
+    with pytest.raises(ValueError):
+        iniabu.IniAbu(database="not-valid-database")

@@ -59,25 +59,17 @@ data_in = data_in[2 : len(data_in)]
 
 # now go through the input data and parse out the lines, put it into a real list
 data = []
+# read in fixed width
+fixed_width = ((0, 4), (4, 8), (8, 13), (13, 32), (32, 46))
 for line in data_in:
     if line[0] != "_":
-        tmp = line.split()
-        if len(tmp) > 4:  # element, but with isotope abundance
-            data.append(tmp[0:5])
-        elif len(tmp) == 4:  # element
-            try:
-                float(tmp[0])
-                data.append(tmp)
-            except ValueError:  # take care of deuterium
-                tmp.insert(0, "")
-                data.append(tmp)
-        else:
-            if tmp[0] == "T":  # exception for tritium
-                tmp.insert(0, "")
-            else:
-                tmp.insert(0, "")
-                tmp.insert(0, "")
-            data.append(tmp)
+        tmp_append = []
+        for tpl in fixed_width:
+            value = line[tpl[0] : tpl[1]].replace(" ", "")
+            tmp_append.append(value)
+        # append to list
+        data.append(tmp_append)
+
 
 # now go through the array and transform data to ints and floats when required
 for line in data:
@@ -90,74 +82,130 @@ for line in data:
     except IndexError:
         pass
 
+# DICTIONARIES FOR ABUNDANCES #
+
+# ELEMENT DICTIONARY #
+
 # Element / isotope dictionary, keys: Element names
-ele_isos_header = ("A", "Mass", "Abundance")
-ele_isos_keys = []
-ele_z = []
-ele_isos_tmp = []
+ele_keys = []
+ele_entries = []
 
-tmp_list = None
-for line in data:
-    if line[0] != "":
-        ele_isos_keys.append(line[1])
-        ele_z.append(line[0])
+# for later:
+ele_zz = []  # for later - NIST special
+ele_iso_masses = []
+
+tmp_list = None  # helper array, to be initialized in loop
+tmp_isomass = None
+for dat in data:
+    if dat[0] != "":  # we have a new element!
+        # write over tmp_append -> append it and re-init
         if tmp_list is not None:
-            ele_isos_tmp.append(tmp_list)
-        tmp_list = [[], [], []]
+            tmp_list[0] = np.nan
+            # add list
+            ele_entries.append(tmp_list)
+            ele_iso_masses.append(tmp_isomass)
+        # z, mass, [a1, a2,...], [abu1, abu2,...], [mass1, mass2,...]
+        tmp_list = [np.nan, [], [], []]
+        # save these data for later
+        ele_keys.append(dat[1])
+        ele_zz.append(dat[0])
+        tmp_isomass = []
 
-    tmp_list[0].append(line[2])
-    tmp_list[1].append(line[3])
-    try:
-        tmp_list[2].append(line[4])
-    except IndexError:
+    tmp_list[1].append(dat[2])
+    if dat[4] == "":
         tmp_list[2].append(0.0)
-
-ele_isos_tmp.append(tmp_list)
-
-ele_isos_dict = dict(zip(ele_isos_keys, ele_isos_tmp))
-
-
-# Element dictionary, keys: Element names
-ele_header = ("Z", "Mass")
-ele_tmp = []
-for it, line in enumerate(ele_isos_tmp):
-    denominator = np.array(line[2], dtype=np.float).sum()
-    if denominator > 0:
-        mass_tmp = (
-            np.sum(
-                np.array(line[1], dtype=np.float)
-                * np.array(line[2], dtype=np.float)
-            )
-            / denominator
-        )
     else:
-        mass_tmp = 0.0
-    ele_tmp.append([ele_z[it], mass_tmp])
+        tmp_list[2].append(dat[4])
+    # solar abundance, does not exist
+    tmp_list[3].append(np.nan)
+    # isomass - for later
+    tmp_isomass.append(dat[3])
 
-ele_dict = dict(zip(ele_isos_keys, ele_tmp))
+# The final append
+tmp_list[0] = np.nan
+# add list
+ele_entries.append(tmp_list)
+ele_iso_masses.append(tmp_isomass)
 
-# Isotope dictionary, keys: "Name-A"
-iso_dict_keys = []
-iso_dict_header = ("Mass", "Abundance")
-iso_dict_tmp = []
+ele_dict = dict(zip(ele_keys, ele_entries))
 
-for ele in ele_isos_keys:
-    for jt, a in enumerate(ele_isos_dict[ele][0]):
-        mass = ele_isos_dict[ele][1][jt]
-        abu = ele_isos_dict[ele][2][jt]
-        iso_dict_keys.append("{}-{}".format(ele, a))
-        iso_dict_tmp.append([mass, abu])
+# ISOTOPE DICTIONARY #
 
-iso_dict = dict(zip(iso_dict_keys, iso_dict_tmp))
-print(iso_dict)
+iso_keys = []
+iso_entries = []
 
-# make an elementary dictionary: {"Name": average_mass}
-with open("nist_data.py", "w") as f:
-    f.write("elements = ")
+# loop through element
+for element in ele_keys:
+    # loop through A list
+    for it, aa in enumerate(ele_dict[element][1]):
+        # create the isotope name
+        iso_keys.append("{}-{}".format(element, aa))
+        # stitch information together
+        tmp_list = []
+        tmp_list.append(ele_dict[element][2][it])
+        tmp_list.append(np.nan)
+        iso_entries.append(tmp_list)
+
+iso_dict = dict(zip(iso_keys, iso_entries))
+
+# MAKE GENERAL DICTIONARIES FROM EXISTING DATA #
+masses = []
+for it, element in enumerate(ele_keys):
+    abus = np.array(ele_dict[element][2])
+    mass = np.array(ele_iso_masses[it])
+    sum_abu = np.sum(abus)
+    if sum_abu > 0:
+        masses.append(np.sum(abus * mass) / sum_abu)
+    else:
+        masses.append(np.nan)
+
+ele_mass_dict = dict(zip(ele_keys, masses))
+
+ele_zz_dict = dict(zip(ele_keys, ele_zz))
+
+iso_mass_entry = []
+# loop through element
+for it in range(len(ele_iso_masses)):
+    for jt in range(len(ele_iso_masses[it])):
+        iso_mass_entry.append(ele_iso_masses[it][jt])
+
+iso_mass_dict = dict(zip(iso_keys, iso_mass_entry))
+
+# header to write
+py_header = r"""'''
+This file was automatically created using the `nist_data.py` parser available in the
+dev/nist_data folder.
+
+The atomic weights are available for elements 1 through 118 and isotopic compositions
+or abundances are given when appropriate. The atomic weights data were published by
+J. Meija et al in Atomic Weights of the Elements 2013, and the isotopic compositions
+data were published by M. Berglund and M.E. Wieser in Isotopic Compositions of the
+Elements 2009. The relative atomic masses of the isotopes data were published by
+M. Wang, G. Audi, A.H. Wapstra, F.G. Kondev, M. MacCormick, X. Xu1, and B. Pfeiffer in
+The AME2012 Atomic Mass Evaluation.
+
+The NIST data were exported on July 1, 2020 from the NIST database:
+https://www.nist.gov/pml/atomic-weights-and-isotopic-compositions-relative-atomic-masses
+
+The text file with the NIST data can be seen in dev/nist_data as well.
+'''"""
+
+# save file
+with open("nist15.py", "w") as f:
+    f.write(py_header)
+    f.write("\n\n")
+    f.write("import numpy as np\nNaN = np.nan\n\n")
+    f.write("elements_mass = ")
+    f.write(json.dumps(ele_mass_dict, indent=4))
+    f.write("\n\n")
+    f.write("elements_z = ")
+    f.write(json.dumps(ele_zz_dict, indent=4))
+    f.write("\n\n")
+    f.write("isotopes_mass = ")
+    f.write(json.dumps(iso_mass_dict, indent=4))
+    f.write("\n\n")
+    f.write("nist15_elements = ")
     f.write(json.dumps(ele_dict, indent=4))
     f.write("\n\n")
-    f.write("elements_isotopes = ")
-    f.write(json.dumps(ele_isos_dict, indent=4))
-    f.write("\n\n")
-    f.write("isotopes = ")
+    f.write("nist15_isotopes = ")
     f.write(json.dumps(iso_dict, indent=4))
