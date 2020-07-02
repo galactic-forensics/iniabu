@@ -13,19 +13,17 @@ class IniAbu:
     reader must exist for the chose
     datafile. This goes even more over the line now.
 
-    :param <str> database: Name of the database to read in. Must be defined in
-        reading class. Defaults to lodders09
-
     Current possibilities for databases that are included are:
 
-    - lodders09
+    - ``nist``: Current (as of 2020) NIST isotopic abundances.
+    - ``lodders09``: Lodders et al. (2009), doi: 10.1007/978-3-540-88055-4_34
 
+    :param str database: Name of the database to read in. Must be defined in reading
+        class. Defaults to lodders09.
     """
 
     def __init__(self, database="lodders09"):
-        """
-        Initializes iniabu
-        """
+        """Initialize IniAbu."""
         # save database
         self._database = database
 
