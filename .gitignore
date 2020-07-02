@@ -45,3 +45,4 @@ lib64
 .coverage
 .tox
 .pytest_cache
+htmlcov

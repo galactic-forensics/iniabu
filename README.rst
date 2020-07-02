@@ -4,6 +4,9 @@ IniAbu
 .. image:: https://readthedocs.org/projects/iniabu/badge/?version=latest
     :target: https://iniabu.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
+.. image:: https://img.shields.io/pypi/v/iniabu?color=informational
+    :target: https://pypi.org/project/iniabu/
+    :alt: PyPi
 .. image:: https://github.com/galactic-forensics/iniabu/workflows/pytest/badge.svg?branch=master
     :target: https://github.com/galactic-forensics/iniabu
     :alt: pytest

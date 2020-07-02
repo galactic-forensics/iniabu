@@ -1,8 +1,5 @@
-black
-bump2version
 coveralls
 pytest
 pytest-sugar
 pytest-cov
-sphinx
 tox
