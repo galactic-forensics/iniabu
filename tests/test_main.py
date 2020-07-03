@@ -20,6 +20,11 @@ def test_init_database():
     assert ini._ele_dict == data.lodders09_elements
     assert ini._iso_dict == data.lodders09_isotopes
 
+    # test asplund09 database
+    ini = iniabu.IniAbu(database="asplund09")
+    assert ini._ele_dict == data.asplund09_elements
+    assert ini._iso_dict == data.asplund09_isotopes
+
     # test that wrong database raises a ValueError
     with pytest.raises(ValueError):
         iniabu.IniAbu(database="not-valid-database")

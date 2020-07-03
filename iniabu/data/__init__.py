@@ -8,6 +8,8 @@ from .nist15 import (
 
 from .lodders09 import lodders09_elements, lodders09_isotopes
 
+from .asplund09 import asplund09_elements, asplund09_isotopes
+
 
 def database_selector(db):
     """
@@ -22,6 +24,8 @@ def database_selector(db):
         return nist15_elements, nist15_isotopes
     elif db == "lodders09":
         return lodders09_elements, lodders09_isotopes
+    elif db == "asplund09":
+        return asplund09_elements, asplund09_isotopes
     else:
         raise ValueError(
             "The database {} could not be found. Make sure it is a valid option or "

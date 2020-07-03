@@ -9,16 +9,21 @@ Introduction
 Available databases
 -------------------
 Currently, several databases are available to work with. The default database is
-called `lodders09`` and is based on
+called ``lodders09`` and is based on
 `Lodders et al. (2009) <https://doi.org/10.1007/978-3-540-88055-4_34>`_. Further
 databases, listed by the string used to call them, are as following:
 
+- ``asplund09``: `Asplund et al. (2009) <https://doi.org/10.1146/annurev.astro.46.060407.145222>`_
+- ``lodders09`` (default): `Lodders et al. (2009) <https://doi.org/10.1007/978-3-540-88055-4_34>`_
 - ``nist``: `NIST database <https://www.nist.gov/pml/atomic-weights-and-isotopic-compositions-relative-atomic-masses>`_
-- ``lodders09``: `Lodders et al. (2009) <https://doi.org/10.1007/978-3-540-88055-4_34>`_
+
+The solar abundances of all databases were converted to number abundances and
+are relative to `Si = 1e6`. Conversion to dex, as described below, is possible.
 
 *Note*: Not all databases mentioned here contain the solar abundances. If an
 operation that you are trying to perform requires the solar abundance to be
 available, the result will be return as an ``np.nan``, i.e., as not a number.
+
 
 Basic usage
 -----------
@@ -28,6 +33,9 @@ Importing the module:
 
 Loading a database:
 ~~~~~~~~~~~~~~~~~~~
+
+Putting the solar abundances into logarithmic mode:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Querying element and isotope properties:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

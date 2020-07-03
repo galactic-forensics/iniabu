@@ -8,6 +8,7 @@ isotopes.
 import numpy as np
 import re
 import json
+from collections import OrderedDict
 
 
 # some global patterns
@@ -127,7 +128,7 @@ tmp_list[0] = np.nan
 ele_entries.append(tmp_list)
 ele_iso_masses.append(tmp_isomass)
 
-ele_dict = dict(zip(ele_keys, ele_entries))
+ele_dict = OrderedDict(zip(ele_keys, ele_entries))
 
 # ISOTOPE DICTIONARY #
 
@@ -146,7 +147,7 @@ for element in ele_keys:
         tmp_list.append(np.nan)
         iso_entries.append(tmp_list)
 
-iso_dict = dict(zip(iso_keys, iso_entries))
+iso_dict = OrderedDict(zip(iso_keys, iso_entries))
 
 # MAKE GENERAL DICTIONARIES FROM EXISTING DATA #
 masses = []
@@ -159,9 +160,9 @@ for it, element in enumerate(ele_keys):
     else:
         masses.append(np.nan)
 
-ele_mass_dict = dict(zip(ele_keys, masses))
+ele_mass_dict = OrderedDict(zip(ele_keys, masses))
 
-ele_zz_dict = dict(zip(ele_keys, ele_zz))
+ele_zz_dict = OrderedDict(zip(ele_keys, ele_zz))
 
 iso_mass_entry = []
 # loop through element
@@ -169,7 +170,7 @@ for it in range(len(ele_iso_masses)):
     for jt in range(len(ele_iso_masses[it])):
         iso_mass_entry.append(ele_iso_masses[it][jt])
 
-iso_mass_dict = dict(zip(iso_keys, iso_mass_entry))
+iso_mass_dict = OrderedDict(zip(iso_keys, iso_mass_entry))
 
 # header to write
 py_header = r"""'''

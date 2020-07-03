@@ -65,10 +65,10 @@ def test_isotopes_solar_abundance():
 
 def test_solar_abundance():
     """Test solar abundance property"""
-    assert ini.element["Si"].solar_abundance == 853506.127
+    assert ini.element["Si"].solar_abundance == 999700.0
     assert (
         ini.element[["Fe", "Ni"]].solar_abundance
-        == np.array([717133.4154099999, 26195.732864999998])
+        == np.array([847990.0, 49093.0])
     ).all()
 
     # switch to nist database where we have no solar abundances

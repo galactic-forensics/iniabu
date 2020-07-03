@@ -5,6 +5,8 @@ data file.
 
 import numpy as np
 import json
+from collections import OrderedDict
+
 
 # read in data file
 data_in = []
@@ -31,7 +33,7 @@ for dat in data:
     iso_keys.append("{}-{}".format(dat[1], dat[2]))
     iso_entries.append([dat[3], dat[4]])
 
-iso_dict = dict(zip(iso_keys, iso_entries))
+iso_dict = OrderedDict(zip(iso_keys, iso_entries))
 
 # ELEMENT DICTIONARY #
 ele_keys = []
@@ -45,10 +47,7 @@ for dat in data:
     if ele != last_ele:
         # average solar abundance calculation and appending
         if tmp_append is not None:
-            ssabu = (
-                np.sum(np.array(tmp_append[2]) * np.array(tmp_append[3]))
-                / np.array(tmp_append[2]).sum()
-            )
+            ssabu = np.array(tmp_append[3]).sum()
             tmp_append[0] = ssabu
             # append
             ele_entries.append(tmp_append)
@@ -72,13 +71,13 @@ tmp_append[0] = ssabu
 # append
 ele_entries.append(tmp_append)
 
-ele_dict = dict(zip(ele_keys, ele_entries))
+ele_dict = OrderedDict(zip(ele_keys, ele_entries))
 
 # write out
 # header to write
 py_header = r"""'''
 This file was automatically created using the `lodders09_to_dict.py` parser available 
-in the dev/nist_data folder.
+in the dev/lodders09 folder.
 
 The abundance data in this file are taken from:
 Lodders, Palme, and Gail (2009)

@@ -15,7 +15,7 @@ def test_proxy_list():
 
     # make sure initialization with tuple works
     val = ini.element[("Fe", "Ni")].solar_abundance
-    assert (val == np.array([717133.4154099999, 26195.732864999998])).all()
+    assert (val == np.array([847990.0, 49093.0])).all()
 
     # ensure that the generator of the proxy list returns the correct object type
     gen = ini.element.__iter__()

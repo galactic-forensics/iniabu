@@ -12,13 +12,13 @@ def test_lodders09_elements():
 
     # entry tests
     assert data.lodders09_elements["Fe"] == [
-        717133.4154099999,
+        847990.0,
         [54, 56, 57, 58],
         [0.058449999999999995, 0.91754, 0.021191, 0.002819],
         [49600.0, 778000.0, 18000.0, 2390.0],
     ]
     assert data.lodders09_elements["Mo"] == [
-        0.4096954200000001,
+        2.549,
         [92, 94, 95, 96, 97, 98, 100],
         [0.14525, 0.09151, 0.15838, 0.16672, 0.09599, 0.24391, 0.09824],
         [0.37, 0.233, 0.404, 0.425, 0.245, 0.622, 0.25],
@@ -27,6 +27,9 @@ def test_lodders09_elements():
     # non-existent entry
     with pytest.raises(KeyError):
         data.lodders09_elements["Sj"]
+
+    # test si29 is equal to 1e6 within 1000
+    assert data.lodders09_elements["Si"][0] == pytest.approx(1e6, 1000)
 
     # test sum of abundances is equal to 1
     for element in data.lodders09_elements.keys():
