@@ -1,29 +1,36 @@
+import numpy as np
+import pytest
+
 from iniabu import ini
 import iniabu.elements
 import iniabu.utilities
 from iniabu.utilities import return_value_simplifier
 
-import numpy as np
-import pytest
 
-
-def test_proxy_list():
-    """Test the whole ProxyList class"""
+def test_proxy_list_index_error(ini_default):
+    """Test ProxyList with invalid element."""
     # entry not in list
     with pytest.raises(IndexError):
-        val = ini.element["invalid"]
+        ini_default.element["invalid"]
 
-    # make sure initialization with tuple works
-    val = ini.element[("Fe", "Ni")].solar_abundance
+
+def test_proxy_list_tuple_initialization(ini_default):
+    """Test initialization of ProxyList with tuple."""
+    val = ini_default.element[("Fe", "Ni")].solar_abundance
     assert (val == np.array([847990.0, 49093.0])).all()
 
-    # ensure that the generator of the proxy list returns the correct object type
-    gen = ini.element.__iter__()
+
+def test_proxy_list_generator(ini_default):
+    """Test that generator of ProxyList returns the correct object type."""
+    gen = ini_default.element.__iter__()
     val = next(gen)
     assert isinstance(val, iniabu.elements.Elements)
 
+
+def test_proxy_list_length(ini_default):
+    """Test that length of the ProxyList."""
     # test proxy list length
-    length = len(ini.ele_dict.keys())
+    length = len(ini_default.ele_dict.keys())
     assert ini.element.__len__() == length
 
 

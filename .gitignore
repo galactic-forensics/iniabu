@@ -16,6 +16,7 @@ docs/_static
 docs/_templates
 
 ## Venv ##
+.python-version
 .venv/
 
 ## setup.py generated files ##

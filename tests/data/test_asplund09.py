@@ -1,16 +1,16 @@
-import iniabu.data as data
-import pytest
 import numpy as np
+import pytest
+
+import iniabu.data as data
 
 
-def test_asplund09_elements():
-    """
-    Test asplund09 elements dictionary
-    """
-    # type check
+def test_asplund09_elements_type_check():
+    """Test asplund09 elements dictionary type."""
     assert isinstance(data.asplund09_elements, dict)
 
-    # entry tests
+
+def test_asplund09_elements_data_check():
+    """Test asplund09 elements dictionary data."""
     assert data.asplund09_elements["Fe"] == [
         977237.2209558112,
         [54, 56, 57, 58],
@@ -22,6 +22,7 @@ def test_asplund09_elements():
             2755.8089630953873,
         ],
     ]
+
     assert data.asplund09_elements["Mo"] == [
         2.3442288153199176,
         [92, 94, 95, 96, 97, 98, 100],
@@ -37,33 +38,40 @@ def test_asplund09_elements():
         ],
     ]
 
-    # non-existent entry
+
+def test_asplund09_elements_data_na():
+    """Test asplund09 elements dictionary not available entry."""
     with pytest.raises(KeyError):
         data.asplund09_elements["Sj"]
 
-    # test si29 is equal to 1e6 within 1000
+
+def test_asplund09_elements_si_normalization():
+    """Test that Si is normed to 1e6."""
     assert data.asplund09_elements["Si"][0] == pytest.approx(1e6, 1000)
 
-    # test sum of abundances is equal to 1
+
+def test_asplund09_relative_abundance_normalization():
+    """Test sum of abundances is equal to 1."""
     for element in data.asplund09_elements.keys():
         abu_sum = np.array(data.asplund09_elements[element][2]).sum()
         assert abu_sum == pytest.approx(1.0, 0.001)
 
 
-def test_asplund09_isotopes():
-    """
-    Test asplund09 isotopes dictionary
-    """
-    # type check
+def test_asplund09_isotopes_type_check():
+    """Test asplund09 isotopes dictionary type check."""
     assert isinstance(data.asplund09_isotopes, dict)
 
-    # data check
+
+def test_asplund09_isotopes_data_check():
+    """Test asplund09 isotopes dictionary data."""
     assert data.asplund09_isotopes["Si-28"] == [
         0.9222969999999999,
         922296.9999999999,
     ]
     assert data.asplund09_isotopes["U-238"] == [0.75712, np.nan]
 
-    # non-existent entry
+
+def test_asplund09_isotopes_data_na():
+    """Test asplund09 isotopes dictionary data not available."""
     with pytest.raises(KeyError):
         data.asplund09_isotopes["Sj"]

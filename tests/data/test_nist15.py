@@ -3,62 +3,64 @@ import pytest
 import numpy as np
 
 
-def test_elements_mass():
-    """
-    Test the nist15 elements_mass dictionary
-    """
-    # type check
+def test_elements_mass_type_check():
+    """Test the nist15 elements_mass dictionary type."""
     assert isinstance(data.elements_mass, dict)
 
-    # data check
+
+def test_elements_mass_data_check():
+    """Test the nist15 elements_mass dictionary data."""
     assert data.elements_mass["Fe"] == 55.845144433865904
     assert data.elements_mass["Lv"] is np.nan
 
-    # non-existent entry
+
+def test_elements_mass_data_na():
+    """Test the nist15 elements_mass dictionary data that do not exist."""
     with pytest.raises(KeyError):
         data.elements_mass["Sj"]
 
 
-def test_elements_z():
-    """
-    Test the nist15 elements_z dictionary
-    """
-    # type check
+def test_elements_z_type_check():
+    """Test the nist15 elements_z dictionary type."""
     assert isinstance(data.elements_z, dict)
 
-    # data check
+
+def test_elements_z_data_check():
+    """Test the nist15 elements_z dictionary data."""
     assert data.elements_z["Ne"] == 10
     assert data.elements_z["Pt"] == 78
 
-    # non-existent entry
+
+def test_elements_z_data_na():
+    """Test the nist15 elements_z dictionary data that do not exist."""
     with pytest.raises(KeyError):
         data.elements_z["Sj"]
 
 
-def test_isotopes_mass():
-    """
-    Test the nist15 isotopes_mass dictionary
-    """
-    # type check
+def test_nist15_isotopes_mass_type_check():
+    """Test nist15 isotopes_mass dictionary type check."""
     assert isinstance(data.isotopes_mass, dict)
 
-    # data check
+
+def test_nist15_isotopes_mass_data_check():
+    """Test nist15 isotopes_mass dictionary data."""
     assert data.isotopes_mass["Ti-48"] == 47.94794198
     assert data.isotopes_mass["Tc-98"] == 97.9072124
 
-    # non-existent entry
+
+def test_nist15_isotopes_mass_data_na():
+    """Test nist15 isotopes_mass dictionary data not available."""
     with pytest.raises(KeyError):
         data.isotopes_mass["Sj-28"]
 
 
-def test_nist15_elements():
-    """
-    Test the nist15 element dictionary
-    """
-    # type check
+def test_nist15_elements_type_check():
+    """Test nist15 elements dictionary type."""
     assert isinstance(data.nist15_elements, dict)
 
-    # data tests
+
+def test_nist15_elements_data_check():
+    """Test nist15 elements dictionary data."""
     assert data.nist15_elements["H"] == [
         np.nan,
         [1, 2, 3],
@@ -67,27 +69,32 @@ def test_nist15_elements():
     ]
     assert data.nist15_elements["Lv"] == [np.nan, [293], [0.0], [np.nan]]
 
-    # non-existent entry
+
+def test_nist15_elements_data_na():
+    """Test nist15 elements dictionary not available entry."""
     with pytest.raises(KeyError):
         data.nist15_elements["Sj"]
 
-    # test sum of abundances is equal to 1 or 0 (for radioactive-only elements)
+
+def test_nist15_elements_si_normalization():
+    """Test that Si is normed to 1e6."""
     for element in data.nist15_elements.keys():
         abu_sum = np.array(data.nist15_elements[element][2]).sum()
         assert abu_sum == pytest.approx(1.0, 0.001) or abu_sum == 0.0
 
 
-def test_nist15_isotopes():
-    """
-    Test the nist15 isotope dictionary
-    """
-    # type check
+def test_nist15_isotopes_type_check():
+    """Test nist15 isotopes dictionary type check."""
     assert isinstance(data.nist15_elements, dict)
 
-    # data atests
+
+def test_nist15_isotopes_data_check():
+    """Test nist15 isotopes dictionary data."""
     assert data.nist15_isotopes["Sc-45"] == [1.0, np.nan]
     assert data.nist15_isotopes["U-238"] == [0.992742, np.nan]
 
-    # non-existent entry
+
+def test_nist15_isotopes_data_na():
+    """Test nist15 isotopes dictionary data not available."""
     with pytest.raises(KeyError):
         data.nist15_isotopes["Sj-29"]

@@ -1,48 +1,37 @@
-import iniabu
-import iniabu.data as data
 import pytest
 
-
-def test_auto_loading():
-    """Ensure that the lodders09 is loaded by default. This is what the docs say."""
-    assert iniabu.ini._database == "lodders09"
+import iniabu
+import iniabu.data as data
 
 
-def test_init_database():
-    """Test loading iniabu with all available databases."""
-    # test nist15 database
-    ini = iniabu.IniAbu(database="nist")
-    assert ini._ele_dict == data.nist15_elements
-    assert ini._iso_dict == data.nist15_isotopes
+def test_init_database_default(ini_default):
+    """Test loading iniabu with default database."""
+    assert ini_default._ele_dict == data.lodders09_elements
+    assert ini_default._iso_dict == data.lodders09_isotopes
+    assert ini_default.database == "lodders09"
 
-    # test lodders09 database
-    ini = iniabu.IniAbu(database="lodders09")
-    assert ini._ele_dict == data.lodders09_elements
-    assert ini._iso_dict == data.lodders09_isotopes
 
-    # test asplund09 database
+def test_init_database_nist(ini_nist):
+    """Test loading iniabu with nist database."""
+    assert ini_nist._ele_dict == data.nist15_elements
+    assert ini_nist._iso_dict == data.nist15_isotopes
+    assert ini_nist.database == "nist"
+
+
+def test_init_database_asplund():
+    """Test loading iniabu with asplund database."""
     ini = iniabu.IniAbu(database="asplund09")
     assert ini._ele_dict == data.asplund09_elements
     assert ini._iso_dict == data.asplund09_isotopes
+    assert ini.database == "asplund09"
 
-    # test that wrong database raises a ValueError
+
+def test_init_database_invalid(ini_nist):
+    """Test data base initialization with invalid database"""
     with pytest.raises(ValueError):
         iniabu.IniAbu(database="not-valid-database")
 
 
-def test_database():
-    """Tests setting and getting the database."""
-    # initialize
-    ini = iniabu.IniAbu(database="nist")
-    assert ini.database == "nist"
-
-    # now set lodders and make sure all is set right
-    ini.database = "lodders09"
-    assert ini.database == "lodders09"
-    assert ini._ele_dict == data.lodders09_elements
-    assert ini._iso_dict == data.lodders09_isotopes
-
-
-def test_ele_dict():
+def test_ele_dict(ini_default):
     """Test returning the elementary dictionary"""
-    assert iniabu.ini.ele_dict == data.lodders09_elements
+    assert ini_default.ele_dict == data.lodders09_elements

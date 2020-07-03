@@ -3,14 +3,13 @@ import pytest
 import numpy as np
 
 
-def test_lodders09_elements():
-    """
-    Test lodders09 elements dictionary
-    """
-    # type check
+def test_lodders09_elements_type_check():
+    """Test lodders09 elements dictionary type."""
     assert isinstance(data.lodders09_elements, dict)
 
-    # entry tests
+
+def test_lodders09_elements_data_check():
+    """Test lodders09 elements dictionary data."""
     assert data.lodders09_elements["Fe"] == [
         847990.0,
         [54, 56, 57, 58],
@@ -24,30 +23,37 @@ def test_lodders09_elements():
         [0.37, 0.233, 0.404, 0.425, 0.245, 0.622, 0.25],
     ]
 
-    # non-existent entry
+
+def test_lodders09_elements_data_na():
+    """Test lodders09 elements dictionary not available entry."""
     with pytest.raises(KeyError):
         data.lodders09_elements["Sj"]
 
-    # test si29 is equal to 1e6 within 1000
+
+def test_lodders09_elements_si_normalization():
+    """Test that Si is normed to 1e6."""
     assert data.lodders09_elements["Si"][0] == pytest.approx(1e6, 1000)
 
-    # test sum of abundances is equal to 1
+
+def test_lodders09_relative_abundance_normalization():
+    """Test sum of abundances is equal to 1."""
     for element in data.lodders09_elements.keys():
         abu_sum = np.array(data.lodders09_elements[element][2]).sum()
         assert abu_sum == pytest.approx(1.0, 0.001)
 
 
-def test_lodders09_isotopes():
-    """
-    Test lodders09 isotopes dictionary
-    """
-    # type check
+def test_lodders09_isotopes_type_check():
+    """Test lodders09 isotopes dictionary type check."""
     assert isinstance(data.lodders09_isotopes, dict)
 
-    # data check
+
+def test_lodders09_isotopes_data_check():
+    """Test lodders09 isotopes dictionary data."""
     assert data.lodders09_isotopes["Si-28"] == [0.9223, 9.22e05]
     assert data.lodders09_isotopes["U-238"] == [0.75712, 0.0180]
 
-    # non-existent entry
+
+def test_lodders09_isotopes_data_na():
+    """Test lodders09 isotopes dictionary data not available."""
     with pytest.raises(KeyError):
         data.lodders09_isotopes["Sj"]
