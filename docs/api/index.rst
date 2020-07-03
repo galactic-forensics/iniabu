@@ -1,7 +1,7 @@
 .. _api:
 
-IniAbu Reference
-================
+API Reference
+=============
 
 Contents:
 
@@ -9,3 +9,6 @@ Contents:
     :maxdepth: 2
 
     main
+    elements
+    isotopes
+    utilities
