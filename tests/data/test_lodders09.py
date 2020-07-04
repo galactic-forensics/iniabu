@@ -1,6 +1,7 @@
-import iniabu.data as data
-import pytest
 import numpy as np
+import pytest
+
+import iniabu.data as data
 
 
 def test_lodders09_elements_type_check():

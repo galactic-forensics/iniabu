@@ -1,14 +1,12 @@
-from .nist15 import (
+from .asplund09 import asplund09_elements, asplund09_isotopes
+from .lodders09 import lodders09_elements, lodders09_isotopes
+from .nist15 import (  # noqa: F401
     elements_mass,
     elements_z,
     isotopes_mass,
     nist15_elements,
     nist15_isotopes,
 )
-
-from .lodders09 import lodders09_elements, lodders09_isotopes
-
-from .asplund09 import asplund09_elements, asplund09_isotopes
 
 
 def database_selector(db):

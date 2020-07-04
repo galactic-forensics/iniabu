@@ -99,12 +99,12 @@ iso_dict = OrderedDict(zip(iso_keys, iso_entries))
 # write out
 # header to write
 py_header = r"""'''
-This file was automatically created using the `asplund09_to_dict.py` parser available 
+This file was automatically created using the `asplund09_to_dict.py` parser available
 in the dev/asplund09 folder.
 
 The abundance data in this file are taken from:
 Asplund et al. (2009)
-10.1146/annurev.astro.46.060407.145222 
+10.1146/annurev.astro.46.060407.145222
 
 Solar abundances are number abundances normed such that N_Si = 1e6
 '''"""

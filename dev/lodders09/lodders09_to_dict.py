@@ -76,12 +76,12 @@ ele_dict = OrderedDict(zip(ele_keys, ele_entries))
 # write out
 # header to write
 py_header = r"""'''
-This file was automatically created using the `lodders09_to_dict.py` parser available 
+This file was automatically created using the `lodders09_to_dict.py` parser available
 in the dev/lodders09 folder.
 
 The abundance data in this file are taken from:
 Lodders, Palme, and Gail (2009)
-doi: 10.1007/978-3-540-88055-4_34 
+doi: 10.1007/978-3-540-88055-4_34
 '''"""
 
 # save file

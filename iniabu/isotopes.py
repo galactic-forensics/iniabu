@@ -2,9 +2,10 @@
 Todo License information
 """
 
-from .utilities import return_value_simplifier
 
 import numpy as np
+
+from .utilities import return_value_simplifier
 
 
 class Isotopes(object):

@@ -7,15 +7,12 @@ IniAbu
 .. image:: https://img.shields.io/pypi/v/iniabu?color=informational
     :target: https://pypi.org/project/iniabu/
     :alt: PyPi
-.. image:: https://github.com/galactic-forensics/iniabu/workflows/pytest/badge.svg?branch=master
+.. image:: https://github.com/galactic-forensics/iniabu/workflows/tests/badge.svg?branch=master
     :target: https://github.com/galactic-forensics/iniabu
-    :alt: pytest
+    :alt: Tests
 .. image:: https://coveralls.io/repos/github/galactic-forensics/iniabu/badge.svg?branch=master
     :target: https://coveralls.io/github/galactic-forensics/iniabu?branch=master
     :alt: coverage
-.. image:: https://github.com/galactic-forensics/iniabu/workflows/Lint/badge.svg?branch=master
-    :target: https://github.com/galactic-forensics/iniabu
-    :alt: Linting
 .. image:: https://img.shields.io/badge/License-GPL%20v2-blue.svg
     :target: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
     :alt: License: GPL v2
@@ -148,5 +145,5 @@ be installed with ``pip`` as well, are furthermore recommended:
 
 - ``black``: Automatic code formatting to adhere to the formatting guidelines of the project.
 - ``coverage``: To display graphical coverage in a browser.
+- ``nox``: Testing in various environments
 - ``sphinx``: Documentation generation
-- ``tox``: Testing in various environments

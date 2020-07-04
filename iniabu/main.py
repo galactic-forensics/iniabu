@@ -2,7 +2,6 @@
 Todo License text and copyright
 """
 
-import os
 from . import data
 from .elements import Elements
 from .isotopes import Isotopes

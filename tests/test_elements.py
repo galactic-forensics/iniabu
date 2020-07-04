@@ -1,7 +1,7 @@
-import iniabu.elements
-
 import numpy as np
 import pytest
+
+import iniabu.elements
 
 
 def test_elements_require_parent_class():

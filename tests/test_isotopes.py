@@ -1,8 +1,8 @@
-import iniabu
-import iniabu.isotopes
-
 import numpy as np
 import pytest
+
+import iniabu
+import iniabu.isotopes
 
 
 def test_isotopes_require_parent_class():
