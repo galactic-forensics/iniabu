@@ -23,6 +23,7 @@ def lint(session):
 
 @nox.session(python=python_suite)
 def tests(session):
+    session.install("-r", "requirements.txt", "-r", "dev-requirements.txt")
     session.run("pytest")
 
 
