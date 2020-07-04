@@ -19,9 +19,7 @@ def test_elements_eles_list(ini_default):
 
 def test_isotopes_a(ini_default):
     """Test isotope atomic number returner"""
-    assert (
-        ini_default.element["Si"].isotopes_a == np.array([28, 29, 30])
-    ).all()
+    assert (ini_default.element["Si"].isotopes_a == np.array([28, 29, 30])).all()
 
     left = ini_default.element[["Si", "Fe"]].isotopes_a
     right = [
