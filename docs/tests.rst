@@ -1,3 +1,5 @@
+.. currentmodule:: tests
+
 Tests Reference
 ===============
 
