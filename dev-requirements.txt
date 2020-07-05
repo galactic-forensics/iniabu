@@ -1,4 +1,4 @@
-darglint
+darglint<1.5.0
 flake8
 flake8-bandit
 flake8-black

@@ -19,16 +19,20 @@ def black(session):
 
 
 @nox.session(python="3.8")
+def build(session):
+    """Pack iniabu for release on PyPi."""
+    session.install("flit")
+    session.run("flit", "build")
+
+
+@nox.session(python="3.8")
 def docs(session):
     """Build the documentation."""
-    session.install(
-        "sphinx",
-        "sphinx-autodoc-typehints",
-        "sphinx_rtd_theme",
-        "-r",
-        "requirements.txt",
-    )
-    session.run("sphinx-build", "docs", "docs/_build")
+    session.install("sphinx", "sphinx_rtd_theme", "-r", "requirements.txt", "pytest")
+    session.chdir("docs")
+    session.run(
+        "sphinx-build", "-b", "html", ".", "_build/html/"
+    )  # as for readthedocs.io
 
 
 @nox.session(python=python_suite)
