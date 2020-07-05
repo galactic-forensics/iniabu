@@ -1,3 +1,5 @@
+"""Test suite for ``data/nist15.py``."""
+
 import numpy as np
 import pytest
 

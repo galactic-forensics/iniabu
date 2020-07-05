@@ -1,4 +1,5 @@
-"""
+"""NIST isotope data, retrieved in 2020.
+
 This file was automatically created using the `nist_data.py` parser available in the
 dev/nist_data folder.
 

@@ -1,3 +1,5 @@
+"""Test suite for ``elements.py``."""
+
 import numpy as np
 import pytest
 
@@ -18,7 +20,7 @@ def test_elements_eles_list(ini_default):
 
 
 def test_isotopes_a(ini_default):
-    """Test isotope atomic number returner"""
+    """Test isotope atomic number returner."""
     assert (ini_default.element["Si"].isotopes_a == np.array([28, 29, 30])).all()
 
     left = ini_default.element[["Si", "Fe"]].isotopes_a
@@ -30,7 +32,7 @@ def test_isotopes_a(ini_default):
 
 
 def test_isotopes_relative_abundance(ini_default):
-    """Test isotope relative abundance returner"""
+    """Test isotope relative abundance returner."""
     assert (
         ini_default.element["Si"].isotopes_relative_abundance
         == np.array([0.9223, 0.04683, 0.03087])

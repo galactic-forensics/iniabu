@@ -1,3 +1,5 @@
+"""Initialization of the iniabu package."""
+
 # import the standard module as ini
 from .main import IniAbu
 

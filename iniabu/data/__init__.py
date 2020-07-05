@@ -1,3 +1,5 @@
+"""Initializes all the data."""
+
 from .asplund09 import asplund09_elements, asplund09_isotopes
 from .lodders09 import lodders09_elements, lodders09_isotopes
 from .nist15 import (  # noqa: F401
@@ -10,13 +12,17 @@ from .nist15 import (  # noqa: F401
 
 
 def database_selector(db):
-    """
+    """Select the database to be used.
+
     Selects the correct database and returns the element and isotope dictionary.
 
-    :param <str> db: Database to be read in
+    :param db: Database to be read in
+    :type db: str
 
     :return: elements_dictionary, isotopes_dictionary
-    :rtype: <dict>, <dict>
+    :rtype: tuple<dict, dict>
+
+    :raises ValueError: An invalid database was selected.
     """
     if db == "nist":
         return nist15_elements, nist15_isotopes

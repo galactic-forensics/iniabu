@@ -1,4 +1,5 @@
-"""
+"""Lodders et al. (2009) data.
+
 This file was automatically created using the `lodders09_to_dict.py` parser available
 in the dev/lodders09 folder.
 

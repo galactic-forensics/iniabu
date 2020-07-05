@@ -1,5 +1,6 @@
-"""
-Todo License information
+"""Isotope handler.
+
+This class manages the isotopes. It must be called from :class:`iniabu.IniAbu`.
 """
 
 
@@ -9,17 +10,34 @@ from .utilities import return_value_simplifier
 
 
 class Isotopes(object):
+    """Class representing the isotopes.
 
-    """
-    Class representing the isotopes. This is mainly a list to easily interact with
-    the `parent._iso_dict` dictionary.
+    This is mainly a list to easily interact with the `parent._iso_dict` dictionary.
+
+    Example:
+        >>> from iniabu import ini
+        >>> isotope = ini.isotope["Si-28"]
+        >>> isotope.relative_abundance
+        0.9223
 
     .. warning:: This class should NOT be manually created by the user. It is
-        designed to be initialized by the ``IniAbu`` class
+        designed to be initialized by :class:`iniabu.IniAbu`
     """
 
     def __init__(self, parent, isos):
-        """Initialize the Isotopes class."""
+        """Initialize the Isotopes class.
+
+        Checks for initialization from the proper parent class and sets up the required
+        dictionaries to be used later.
+
+        :param parent: Parent class.
+        :type parent: class:`iniabu.IniAbu`
+        :param isos: Isotope dictionary.
+        :type isos: dict
+
+        :raises TypeError: The class was not initialized with :class:`iniabu.IniAbu`
+            as the parent.
+        """
         # check for correct parent
         if parent.__class__.__name__ != "IniAbu":
             raise TypeError("Isotopes class must be initialized from IniAbu.")
@@ -32,12 +50,13 @@ class Isotopes(object):
 
     @property
     def relative_abundance(self):
-        """
-        Gets the relative abundances of the isotope and returns a float with the value.
-        If more than one isotope is selected, an np.array<float> is returned. If solar
-        abundance is not part of the database, `np.nan` is returned
+        """Get relative abundance of isotope(s).
 
-        :return: Solar abundance isotope / isotopes
+        Returns the relative abundance of the selected isotope(s). Returns the result
+        either as a ``float`` or as a numpy ``ndarray``. Note: All relative abundances
+        sum up up to unity.
+
+        :return: Relative abundance of isotope(s)
         :rtype: float,ndarray
         """
         ret_arr = []
@@ -48,13 +67,14 @@ class Isotopes(object):
 
     @property
     def solar_abundance(self):
-        """
-        Gets the solar abundances of the isotope and returns a float with the value.
-        If more than one isotope is selected, an np.array<float> is returned.
+        """Get solar abundance of isotope(s).
 
-        Note: All relative abundances of an elements isotope sum to unity.
+        Returns the solar abundance of the selected isotope(s). Returns the result
+        either as a ``float`` or as a numpy ``ndarray``. Note: Not all databases contain
+        this information. If the information is not available, these values will be
+        filled with ``np.nan``.
 
-        :return: Relative abundance isotope / isotopes
+        :return: Solar abundance of isotope(s)
         :rtype: float,ndarray
         """
         ret_arr = []

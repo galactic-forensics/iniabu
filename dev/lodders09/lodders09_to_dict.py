@@ -75,7 +75,8 @@ ele_dict = OrderedDict(zip(ele_keys, ele_entries))
 
 # write out
 # header to write
-py_header = r"""'''
+py_header = r"""'''Lodders et al. (2009) data.
+
 This file was automatically created using the `lodders09_to_dict.py` parser available
 in the dev/lodders09 folder.
 

@@ -173,7 +173,8 @@ for it in range(len(ele_iso_masses)):
 iso_mass_dict = OrderedDict(zip(iso_keys, iso_mass_entry))
 
 # header to write
-py_header = r"""'''
+py_header = r"""'''NIST isotope data, retrieved in 2020.
+
 This file was automatically created using the `nist_data.py` parser available in the
 dev/nist_data folder.
 

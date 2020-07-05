@@ -1,3 +1,5 @@
+"""Test suite for ``data/lodders09.py``."""
+
 import numpy as np
 import pytest
 

@@ -1,5 +1,6 @@
-"""
-Todo License text and copyright
+"""IniAbu class - the heart of the package.
+
+This file contains the main `IniAbu` class.
 """
 
 from . import data
@@ -9,23 +10,26 @@ from .utilities import ProxyList
 
 
 class IniAbu(object):
+    """Initialize the IniAbu class.
 
-    """
-    Initialize the IniAbu class. By default, lodders09 is read in. A valid data
-    reader must exist for the chose
-    datafile. This goes even more over the line now.
+    By default, the ``lodders09`` database is read in. Available databases are:
 
-    Current possibilities for databases that are included are:
-
-    - ``nist``: Current (as of 2020) NIST isotopic abundances.
+    - ``asplund09``: Asplund et al. (2009), doi: 10.1146/annurev.astro.46.060407.145222
     - ``lodders09``: Lodders et al. (2009), doi: 10.1007/978-3-540-88055-4_34
+    - ``nist``: Current (as of 2020) NIST isotopic abundances.
 
-    :param str database: Name of the database to read in. Must be defined in reading
-        class. Defaults to lodders09.
+    Example: todo
     """
 
     def __init__(self, database="lodders09"):
-        """Initialize IniAbu."""
+        """Initialize IniAbu.
+
+        Load and set the default database.
+
+        :param database: Database to initialize the class with, defaults to
+            ``lodders09``.
+        :type database: str
+        """
         # init parameters
         self._database = None
 
@@ -36,50 +40,63 @@ class IniAbu(object):
 
     @property
     def element(self):
-        """
-        Gets a specific element and the associated information. This represents a
-        convenient way to dig through elemental information. More information and a
-        full list of properties can be found in the :doc:`Elements </api/elements>`
-        class.
+        """Get information for a specific element.
 
-        Example::
+        Calls the :class`iniabu.elements.Elements`. This handler represents a convenient
+        way to dig through elemental information. More information and a full list of
+        properties can be found in the :doc:`Elements </api/elements>` class.
 
-         from iniabu import ini
-         # get the solar abundance of silicon, store to var1
-         var1 = ini.element["Si"].solar_abundance
+        :return: Returns a ProxyList initialized with the required element
+        :rtype: class
 
-         # get a numpy array of the solar abundance of two elements, store to var2
-         var2 = ini.element[["Fe", "Ni"]].solar_abundance
+        Example:
+            >>> from iniabu import ini
+            >>> # get the solar abundance of silicon
+            >>> ini.element["Si"].solar_abundance
+            999700.0
 
-         # get a list of all atomic numbers for isotopes of helium, store to var3
-         var3 = ini.element["He"].isotopes_a
+            >>> # get a numpy array of the solar abundance of two elements
+            >>> ini.element[["Fe", "Ni"]].solar_abundance
+            array([847990.,  49093.])
 
-         # similarly, query isotopes relative abundances, and solar abundances
-         var4 = ini.element["He"].isotopes_relative_abundance
-         var5 = ini.element["He"].isotopes_solar_abundance
+            >>> # get a list of all atomic numbers for isotopes of helium
+            >>> ini.element["He"].isotopes_a
+            array([3, 4])
+
+            >>> # similarly, query isotopes relative abundances, and solar abundances
+            >>> ini.element["He"].isotopes_relative_abundance
+            array([1.66000e-04, 9.99834e-01])
+            >>> ini.element["He"].isotopes_solar_abundance
+            array([1.03e+06, 2.51e+09])
         """
         return ProxyList(self, Elements, self._ele_dict.keys())
 
     @property
     def isotope(self):
-        """
-        Gets a specific isotope and the associated information. This represents a
-        convenient way to dig through isotope information. More information and a
-        full list of properties can be found in the :doc:`Isotopes </api/isotopes>`
-        class.
+        """Get information for a specific isotope.
 
-        Example::
+        Calls the :class`iniabu.isotopes.Isotopes`. This handler represents a convenient
+        way to dig through isotopic information. More information and a full list of
+        properties can be found in the :doc:`Isotopes </api/isotopes>` class.
 
-         from iniabu import ini
-         # get the solar abundance of Si-28, store to var1
-         var1 = ini.isotope["Si-28"].solar_abundance
+        :return: Returns a ProxyList initialized with the required element
+        :rtype: class
 
-         # get a numpy array of the solar abundance of two isotopes, store to var2
-         var2 = ini.isotope[["Fe-56", "Ni-60"]].solar_abundance
+        Example:
+            >>> from iniabu import ini
+            >>> # get the solar abundance of Si-28
+            >>> ini.isotope["Si-28"].solar_abundance
+            922000.0
 
-         # similarly, query relative abundance(s) of isotope(s)
-         var4 = ini.isotope["He-4"].relative_abundance
-         var5 = ini.isotope[["H-2", "He-3"]].relative_abundance
+            >>> # get a numpy array of the solar abundance of two isotopes
+            >>> ini.isotope[["Fe-56", "Ni-60"]].solar_abundance
+            array([778000.,  12900.])
+
+            >>> # similarly, query relative abundance(s) of isotope(s)
+            >>> ini.isotope["He-4"].relative_abundance
+            0.999834
+            >>> ini.isotope[["H-2", "He-3"]].relative_abundance
+            array([1.94e-05, 1.66e-04])
         """
         return ProxyList(self, Isotopes, self._iso_dict.keys())
 
@@ -87,16 +104,19 @@ class IniAbu(object):
 
     @property
     def database(self):
-        """
-        Gets / Sets the current database. A string is expected with the database
-        name, as if the class was freshly initialized.
+        """Get / Set the current database.
 
-        Example::
+        :setter: Database to set.
+        :type: str
 
-         from iniabu import ini  # loads `lodders09` by default
-         ini.database = "nist"  # change database to `nist`
-         print(ini.database)  # print out which database is loaded
+        :return: Name of the loaded database.
+        :rtype: str
 
+        Example:
+            >>> from iniabu import ini  # loads with default ("lodders09")
+            >>> ini.database = "nist"  # change database to "nist"
+            >>> ini.database
+            'nist'
         """
         return self._database
 
@@ -107,17 +127,33 @@ class IniAbu(object):
 
     @property
     def ele_dict(self):
-        """
-        Gets the element dictionary and returns it. There is no setter for this, the
-        element dictionary needs to be set by choosing a database.
+        """Get the element dictionary.
+
+        The dictionary keys are element symbols, e.g., "H". The entries for the element
+        dictionary are a list containing the following entries (in order):
+
+        - Solar abundance
+        - ndarray with mass numbers of all isotopes
+        - ndarray with relative abundances of all isotopes
+        - ndarray with solar abundances of all isotopes
+
+        :return: Element dictionary
+        :rtype: dict
         """
         return self._ele_dict
 
     @property
     def iso_dict(self):
-        """
-        Gets the isotope dictionary and returns it. There is no setter for this, the
-        isotope dictionary needs to be set by choosing a database.
+        """Get the isotope dictionary.
+
+        The dictionary keys are isotope symbols, e.g., "H-1". The entries for the
+        isotope dictionary are a list containing the following entries (in order):
+
+        - Relative abundance
+        - Solar abundance
+
+        :return: Isotope dictionary
+        :rtype: dict
         """
         return self._iso_dict
 

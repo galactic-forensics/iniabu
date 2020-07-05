@@ -98,7 +98,8 @@ iso_dict = OrderedDict(zip(iso_keys, iso_entries))
 
 # write out
 # header to write
-py_header = r"""'''
+py_header = r"""'''Asplund et al. (2009) data.
+
 This file was automatically created using the `asplund09_to_dict.py` parser available
 in the dev/asplund09 folder.
 

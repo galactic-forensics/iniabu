@@ -1,3 +1,5 @@
+"""Test suite for ``main.py``."""
+
 import pytest
 
 import iniabu
@@ -27,11 +29,11 @@ def test_init_database_asplund():
 
 
 def test_init_database_invalid(ini_nist):
-    """Test data base initialization with invalid database"""
+    """Test data base initialization with invalid database."""
     with pytest.raises(ValueError):
         iniabu.IniAbu(database="not-valid-database")
 
 
 def test_ele_dict(ini_default):
-    """Test returning the elementary dictionary"""
+    """Test returning the elementary dictionary."""
     assert ini_default.ele_dict == data.lodders09_elements

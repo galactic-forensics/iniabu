@@ -1,3 +1,5 @@
+"""Test suite for ``isotopes.py``."""
+
 import numpy as np
 import pytest
 
@@ -18,7 +20,7 @@ def test_isotopes_isos_list(ini_default):
 
 
 def test_relative_abundance(ini_default):
-    """Test isotope relative abundance returner"""
+    """Test isotope relative abundance returner."""
     assert ini_default.isotope["Si-29"].relative_abundance == 0.04683
     assert (
         ini_default.isotope[["Si-29", "Ni-64"]].relative_abundance
@@ -27,7 +29,7 @@ def test_relative_abundance(ini_default):
 
 
 def test_solar_abundance(ini_default):
-    """Test isotope solar abundance returner"""
+    """Test isotope solar abundance returner."""
     # test valid values
     assert ini_default.isotope["Si-29"].solar_abundance == 46800.0
     assert (
@@ -37,7 +39,7 @@ def test_solar_abundance(ini_default):
 
 
 def test_solar_abundance_nan(ini_nist):
-    """Test isotope solar abundance returner if not available"""
+    """Test isotope solar abundance returner if not available."""
     # check with database that does not contain this
     assert np.isnan(ini_nist.isotope["Si-29"].solar_abundance)
     assert np.isnan(ini_nist.isotope[["Si-29", "Ni-64"]].solar_abundance).all()

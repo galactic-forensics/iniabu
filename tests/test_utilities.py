@@ -1,3 +1,5 @@
+"""Test suite for ``utilities.py``."""
+
 import numpy as np
 import pytest
 
@@ -35,7 +37,7 @@ def test_proxy_list_length(ini_default):
 
 
 def test_return_value_simplifier():
-    """Test return value simplifier routine. This is not a property of the class"""
+    """Test return value simplifier routine."""
     assert return_value_simplifier([]) is None
     assert return_value_simplifier([3.14]) == 3.14
     assert return_value_simplifier([1, 2, 3]) == [1, 2, 3]
