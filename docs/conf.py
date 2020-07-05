@@ -1,5 +1,8 @@
 """Configuration file for the Sphinx documentation builder."""
 
+import sys
+
+sys.path.append("../")
 
 # -- Project information -----------------------------------------------------
 
