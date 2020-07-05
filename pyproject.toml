@@ -47,3 +47,6 @@ test = [
 
 [tool.flit.metadata.urls]
 Documentation = "https://iniabu.readthedocs.io"
+
+[tool.flit.sdist]
+exclude = ["dev/"]
