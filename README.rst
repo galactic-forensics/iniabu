@@ -9,7 +9,10 @@ IniAbu
     :alt: PyPi
 .. image:: https://github.com/galactic-forensics/iniabu/workflows/tests/badge.svg?branch=master
     :target: https://github.com/galactic-forensics/iniabu
-    :alt: Tests
+    :alt: tests
+.. image:: https://github.com/galactic-forensics/iniabu/workflows/doctests/badge.svg?branch=master
+    :target: https://github.com/galactic-forensics/iniabu
+    :alt: doctests
 .. image:: https://coveralls.io/repos/github/galactic-forensics/iniabu/badge.svg?branch=master
     :target: https://coveralls.io/github/galactic-forensics/iniabu?branch=master
     :alt: coverage

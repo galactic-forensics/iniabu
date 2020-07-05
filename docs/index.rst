@@ -18,7 +18,10 @@ The Iniabu Project
     :alt: PyPi
 .. image:: https://github.com/galactic-forensics/iniabu/workflows/tests/badge.svg?branch=master
     :target: https://github.com/galactic-forensics/iniabu
-    :alt: Tests
+    :alt: tests
+.. image:: https://github.com/galactic-forensics/iniabu/workflows/doctests/badge.svg?branch=master
+    :target: https://github.com/galactic-forensics/iniabu
+    :alt: doctests
 .. image:: https://coveralls.io/repos/github/galactic-forensics/iniabu/badge.svg?branch=master
     :target: https://coveralls.io/github/galactic-forensics/iniabu?branch=master
     :alt: coverage
@@ -28,5 +31,6 @@ The Iniabu Project
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
     :alt: Code style: black
+
 
 .. include:: intro.rst
