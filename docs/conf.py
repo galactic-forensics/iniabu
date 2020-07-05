@@ -9,7 +9,7 @@ sys.path.append("../")
 project = "iniabu"
 author = "Reto Trappitsch"
 copyright = "2020, {}".format(author)
-version = "0.9.8"
+version = "0.9.9"
 release = version
 
 

@@ -40,7 +40,6 @@ develop-eggs
 .installed.cfg
 lib
 lib64
-.pypirc
 
 ## Unit test / coverage reports ##
 .coveralls.yml
