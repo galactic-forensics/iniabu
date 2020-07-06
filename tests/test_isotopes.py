@@ -30,11 +30,20 @@ def test_relative_abundance(ini_default):
 
 def test_solar_abundance(ini_default):
     """Test isotope solar abundance returner."""
-    # test valid values
     assert ini_default.isotope["Si-29"].solar_abundance == 46800.0
     assert (
         ini_default.isotope[["Si-29", "Ni-64"]].solar_abundance
         == np.array([46800.0, 454.0])
+    ).all()
+
+
+def test_solar_abundance_log(ini_default):
+    """Test isotope solar abundance returner."""
+    ini_default.abundance_unit = "log"
+    assert ini_default.isotope["Si-29"].solar_abundance == 6.2570856515232585
+    assert (
+        ini_default.isotope[["Si-29", "Ni-64"]].solar_abundance
+        == np.array([6.2570856515232585, 4.244134719575358])
     ).all()
 
 

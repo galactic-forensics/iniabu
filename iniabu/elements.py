@@ -24,7 +24,7 @@ class Elements(object):
         designed to be initialized by :class:`iniabu.IniAbu`.
     """
 
-    def __init__(self, parent, eles):
+    def __init__(self, parent, eles, log_abu=False, *args, **kwargs):
         """Initialize the Elements class.
 
         Checks for initialization from the proper parent class and sets up the required
@@ -34,6 +34,10 @@ class Elements(object):
         :type parent: class:`iniabu.IniAbu`
         :param eles: Element dictionary.
         :type eles: dict
+        :param log_abu: Use logarithmic (astronomical definition) for solar abundance?
+        :type log_abu: True
+        :param *args: Variable length argument list.
+        :param **kwargs: Arbitrary keyword arguments.
 
         :raises TypeError: The class was not initialized with :class:`iniabu.IniAbu`
             as the parent.
@@ -44,7 +48,10 @@ class Elements(object):
 
         # set the variables
         self._eles = eles
-        self._ele_dict = parent.ele_dict
+        if log_abu:
+            self._ele_dict = parent.ele_dict_log
+        else:
+            self._ele_dict = parent.ele_dict
 
     # PROPERTIES #
 

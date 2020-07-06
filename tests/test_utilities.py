@@ -6,7 +6,7 @@ import pytest
 from iniabu import ini
 import iniabu.elements
 import iniabu.utilities
-from iniabu.utilities import return_value_simplifier
+from iniabu.utilities import make_log_abundance_dictionaries, return_value_simplifier
 
 
 def test_proxy_list_index_error(ini_default):
@@ -34,6 +34,25 @@ def test_proxy_list_length(ini_default):
     # test proxy list length
     length = len(ini_default.ele_dict.keys())
     assert ini.element.__len__() == length
+
+
+def test_make_log_abundance_dictionaries():
+    """Ensure that logarithmic abundance dictionaries are made in correct form."""
+    ele_dict_lin = {
+        "H": [10000.0, [1, 2], [0.8, 0.2], [8000.0, 2000.0]],
+        "X": [1000.0, [10], [1.0], [1000.0]],
+    }
+    # get logarithmic dictionaries
+    ele_dict_log, iso_dict_log = make_log_abundance_dictionaries(ele_dict_lin)
+    # assert elements
+    assert ele_dict_log["H"][0] == 12.0
+    assert ele_dict_log["X"][0] == np.log10(0.1) + 12.0
+    assert ele_dict_log["H"][3][0] == np.log10(0.8) + 12.0
+    assert ele_dict_log["H"][3][1] == np.log10(0.2) + 12.0
+    # assert isotopes
+    assert iso_dict_log["H-1"][1] == np.log10(0.8) + 12.0
+    assert iso_dict_log["H-2"][1] == np.log10(0.2) + 12.0
+    assert iso_dict_log["X-10"][1] == np.log10(0.1) + 12.0
 
 
 def test_return_value_simplifier():
