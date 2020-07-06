@@ -1,13 +1,12 @@
 .. currentmodule:: iniabu.isotopes
 
-=======================
-Isotopes Querying Class
-=======================
+===============
+Isotope Queries
+===============
 
-.. Todo Some information on the class
 
 :class:`Isotopes` Querying Class
-================================
+--------------------------------
 
 .. autoclass:: Isotopes
     :members:

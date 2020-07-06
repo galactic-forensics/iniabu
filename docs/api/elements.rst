@@ -1,13 +1,12 @@
 .. currentmodule:: iniabu.elements
 
-=======================
-Elements Querying Class
-=======================
+===============
+Element Queries
+===============
 
-.. Todo Some information on the class
 
 :class:`Elements` Querying Class
-================================
+--------------------------------
 
 .. autoclass:: Elements
     :members:

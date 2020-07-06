@@ -1,11 +1,11 @@
 .. currentmodule:: iniabu.main
 
-========================
-Initial Abundance Module
-========================
+============================
+Initial Abundance Main Class
+============================
 
-:class:`IniAbu` Initial Abundance Module
-========================================
+:class:`IniAbu` Initial Abundance Class
+---------------------------------------
 
 .. autoclass:: IniAbu
     :members:

@@ -1,7 +1,5 @@
-Introduction
-------------
-
-What it does
+Installation and Usage
+======================
 
 
 Installation
@@ -85,49 +83,4 @@ Bracket-notation:
 ~~~~~~~~~~~~~~~~~
 
 
-Issues and feature requests
----------------------------
 
-If you find a bug or have other problems or questions
-with this project, have a look at the
-`GitHub issue page <https://github.com/galactic-forensics/iniabu/issues>`_.
-Your issue might already have been discussed.
-Otherwise feel free to open a new issue.
-Please be as detailed as possible.
-
-If you would like a new feature,
-please feel free to file a feature request.
-If you are interested in contributing
-this feature yourself, say so and we can
-help to get you started.
-
-
-Contributing
-------------
-
-Contributions to this project are welcome.
-Please see the
-`Developers Guide <dev>`_
-for detailed instructions on how to contribute.
-
-
-Relationship to previous package
---------------------------------
-This package is loosely based on a
-software package that was I wrote at
-Lawrence Livermore National Laboratory,
-and replaces that specific package,
-which can in it's archived form be found
-`here <https://github.com/LLNL/iniabu>`_.
-That package's latest release was v0.3.1
-and it was released under GPLv2.
-Note that only the basic idea behind
-the two packages are identical.
-The codebase for this version was
-rewritten from ground-up.
-
-This is a new and improved version
-that is also available as a PyPi package
-and replaces that older version.
-The new package is not backwards compatible
-and is initially released as v1.0.0.
