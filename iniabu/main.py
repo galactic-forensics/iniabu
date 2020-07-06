@@ -123,7 +123,8 @@ class IniAbu(object):
         Example:
             >>> from iniabu import ini  # loads with default linear units
             >>> ini.abundance_unit
-            "lin"
+            'lin'
+
             >>> ini.abundance_unit = "log"  # set logarithmic abundance unit
             >>> ini.element["H"].solar_abundance
             12.0
