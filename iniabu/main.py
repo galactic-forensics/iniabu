@@ -3,6 +3,8 @@
 This file contains the main `IniAbu` class.
 """
 
+import numpy as np
+
 from . import data
 from .elements import Elements
 from .isotopes import Isotopes
@@ -32,6 +34,7 @@ class IniAbu(object):
         """
         # init parameters
         self._database = None
+        self._abundance_unit = "lin"
 
         # set database
         self.database = database
@@ -103,6 +106,68 @@ class IniAbu(object):
     # PROPERTIES #
 
     @property
+    def abundance_unit(self):
+        """Get / Set the unit for the solar abundances.
+
+        Routine to easily switch the database between the **default** linear number
+        abundances, normed to Si with an abundance of 1e6 (``lin``, typically used
+        in cosmo- and geochemistry studies) or the logarithmic (``log``, typically used
+        in astronomy) abundance units, normed to H as 12.
+
+        :setter: Unit to set, either "lin" (default) or "log".
+        :type: str
+
+        :return: Currently set unit.
+        :rtype: str
+
+        Example:
+            >>> from iniabu import ini  # loads with default linear units
+            >>> ini.abundance_unit
+            "lin"
+            >>> ini.abundance_unit = "log"  # set logarithmic abundance unit
+            >>> ini.element["H"].solar_abundance
+            12.0
+        """
+        return self._abundance_unit
+
+    @abundance_unit.setter
+    def abundance_unit(self, s):
+        if s == "log":
+            # get hydrogen abundance
+            abu_h = self.element["H"].solar_abundance
+
+            # create a renormalized element dictionary
+            ele_keys = self._ele_dict.keys()
+            ele_entries = []
+
+            # fill keys, entries for dictionary formation
+            for key in ele_keys:
+                # original values
+                abu_key = self._ele_dict[key][0]
+                isos = self._ele_dict[key][1]
+                rel_abu = self._ele_dict[key][2]
+                # calculate new
+                abu_new = np.log10(abu_h / abu_key) + 12.0
+                tmp_entry = [abu_new, isos, rel_abu]
+                iso_abu_new = []
+                # isotope abundance
+                for rel_a in rel_abu:
+                    iso_abu_new.append(rel_a * abu_new)
+                tmp_entry.append(iso_abu_new)
+                ele_entries.append(tmp_entry)
+
+            # form new dictionary
+            self._ele_dict = dict(zip(ele_keys, ele_entries))
+
+            # re-make isotope dictionary
+            self._remake_iso_dict()
+
+            # set the abundance_unit identifier
+            self._abundance_unit = "log"
+        else:  # default to "lin"
+            self.database = self.database
+
+    @property
     def database(self):
         """Get / Set the current database.
 
@@ -123,6 +188,7 @@ class IniAbu(object):
     @database.setter
     def database(self, db):
         self._ele_dict, self._iso_dict = data.database_selector(db)
+        self._abundance_unit = "lin"
         self._database = db
 
     @property
@@ -158,3 +224,18 @@ class IniAbu(object):
         return self._iso_dict
 
     # METHODS #
+
+    def _remake_iso_dict(self):
+        """Re-make the isotope dictionary from the element dictionary.
+
+        Sets the isotope dictionary from the currently configured elementary dictionary.
+        """
+        iso_keys = []
+        iso_entries = []
+        for key in self._ele_dict.keys():
+            for it, iso in enumerate(self._ele_dict[key][1]):
+                iso_keys.append("{}-{}".format(key, iso))
+                rel_abu = self._ele_dict[key][2][it]
+                ss_abu = self._ele_dict[key][3][it]
+                iso_entries.append([rel_abu, ss_abu])
+        self._iso_dict = dict(zip(iso_keys, iso_entries))

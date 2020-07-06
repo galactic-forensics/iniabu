@@ -37,3 +37,31 @@ def test_init_database_invalid(ini_nist):
 def test_ele_dict(ini_default):
     """Test returning the elementary dictionary."""
     assert ini_default.ele_dict == data.lodders09_elements
+
+
+def test_abundance_unit_default(ini_default):
+    """Ensure that standard abundance unit is linear."""
+    assert ini_default.abundance_unit == "lin"
+
+
+def test_abundance_unit_log(ini_default):
+    """Ensure logarithmic abundance unit is set correctly."""
+    ini_default.abundance_unit = "log"
+    assert ini_default.abundance_unit == "log"
+    assert ini_default.element["H"].solar_abundance == 12.0
+
+
+def test_abundance_unit_log_lin(ini_default):
+    """Ensure linear abundance unit is set correctly after logarithmic (switch back)."""
+    ini_default.abundance_unit = "log"
+    ini_default.abundance_unit = "lin"
+    assert ini_default.abundance_unit == "lin"
+    assert ini_default.element["Si"].solar_abundance == pytest.approx(1e6, 1000.0)
+
+
+def test_abundance_unit_after_new_database(ini_default):
+    """Ensure abundance unit is reset to linear when new database is loaded."""
+    ini_default.abundance_unit = "log"
+    ini_default.database = "lodders09"
+    assert ini_default.abundance_unit == "lin"
+    assert ini_default.element["Si"].solar_abundance == pytest.approx(1e6, 1000.0)
