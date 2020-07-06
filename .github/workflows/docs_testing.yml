@@ -1,4 +1,4 @@
-name: doctests
+name: xdoctest
 
 on:
   push:

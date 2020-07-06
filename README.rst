@@ -1,18 +1,18 @@
-IniAbu
-!!!!!!
+The iniabu project
+!!!!!!!!!!!!!!!!!!
 
 .. image:: https://readthedocs.org/projects/iniabu/badge/?version=latest
     :target: https://iniabu.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
-.. image:: https://img.shields.io/pypi/v/iniabu?color=informational
+.. image:: https://img.shields.io/pypi/v/iniabu
     :target: https://pypi.org/project/iniabu/
     :alt: PyPi
 .. image:: https://github.com/galactic-forensics/iniabu/workflows/tests/badge.svg?branch=master
     :target: https://github.com/galactic-forensics/iniabu
     :alt: tests
-.. image:: https://github.com/galactic-forensics/iniabu/workflows/doctests/badge.svg?branch=master
-    :target: https://github.com/galactic-forensics/iniabu
-    :alt: doctests
+.. image:: https://github.com/galactic-forensics/iniabu/workflows/xdoctest/badge.svg?branch=master
+    :target: https://github.com/Erotemic/xdoctest
+    :alt: xdoctest
 .. image:: https://coveralls.io/repos/github/galactic-forensics/iniabu/badge.svg?branch=master
     :target: https://coveralls.io/github/galactic-forensics/iniabu?branch=master
     :alt: coverage
