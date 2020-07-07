@@ -6,7 +6,12 @@ import pytest
 from iniabu import ini
 import iniabu.elements
 import iniabu.utilities
-from iniabu.utilities import make_log_abundance_dictionaries, return_value_simplifier
+from iniabu.utilities import (
+    make_log_abundance_dictionaries,
+    return_as_ndarray,
+    return_list_simplifier,
+    return_string_as_list,
+)
 
 
 def test_proxy_list_index_error(ini_default):
@@ -55,8 +60,39 @@ def test_make_log_abundance_dictionaries():
     assert iso_dict_log["X-10"][1] == np.log10(0.1) + 12.0
 
 
+def test_return_number_as_ndarray_number():
+    """Turn number into a ndarray."""
+    assert (return_as_ndarray(3.0) == np.array(3.0)).all()
+
+
+def test_return_number_as_ndarray_list():
+    """Turn number into a ndarray."""
+    assert (return_as_ndarray(3.0) == np.array(3.0)).all()
+
+
+def test_return_number_as_ndarray_list_vals():
+    """Turn number into a ndarray."""
+    assert (return_as_ndarray([1, 2, 3]) == np.array([1, 2, 3])).all()
+
+
+def test_return_number_as_ndarray_ndarray():
+    """Turn number into a ndarray."""
+    arr = np.array([2, 3])
+    assert (return_as_ndarray(arr) == arr).all()
+
+
+def test_return_string_as_list_string():
+    """Ensures a string is turned into a list."""
+    assert return_string_as_list("s") == ["s"]
+
+
+def test_return_string_as_list_list():
+    """Ensures a list stays a list."""
+    assert return_string_as_list(["s1", "s2"]) == ["s1", "s2"]
+
+
 def test_return_value_simplifier():
     """Test return value simplifier routine."""
-    assert return_value_simplifier([]) is None
-    assert return_value_simplifier([3.14]) == 3.14
-    assert return_value_simplifier([1, 2, 3]) == [1, 2, 3]
+    assert return_list_simplifier([]) is None
+    assert return_list_simplifier([3.14]) == 3.14
+    assert return_list_simplifier([1, 2, 3]) == [1, 2, 3]

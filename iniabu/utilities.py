@@ -48,8 +48,8 @@ class ProxyList(object):
         # turn idx into a list
         if isinstance(idx, tuple):
             idx = list(idx)
-        if not isinstance(idx, list):
-            idx = [idx]
+        # turn into list if required
+        idx = return_string_as_list(idx)
 
         for it in idx:
             if it not in self._valid_set:
@@ -123,8 +123,40 @@ def make_log_abundance_dictionaries(element_dict):
     return element_dict_log, isotope_dict_log
 
 
-def return_value_simplifier(return_list):
-    """Simplifies standard return values.
+def return_as_ndarray(val):
+    """Return the input as a ndarray.
+
+    :param val: Input value.
+    :type val: int,float,list,tuple,ndarray
+
+    :return: Array of input value if not an array, otherwise return itself.
+    :rtype: ndarray
+    """
+    if isinstance(val, np.ndarray):
+        return val
+    if isinstance(val, list) or isinstance(val, tuple):
+        return np.array(return_list_simplifier(val))
+    else:
+        return np.array(val)
+
+
+def return_string_as_list(s):
+    """Return the input as a list.
+
+    :param s: Input value.
+    :type s: str,list
+
+    :return: List of input value if not a list, otherwise return itself.
+    :rtype: list
+    """
+    if isinstance(s, list):
+        return s
+    else:
+        return [s]
+
+
+def return_list_simplifier(return_list):
+    """Simplify standard return values.
 
     Specifically written for classes with multiple return types, such as
     :class:`iniabu.elements.Elements` and :class:`iniabu.isotopes.Isotopes`. If only

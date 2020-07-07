@@ -11,8 +11,27 @@ Utility classes and functions
     :members:
     :undoc-members:
 
-:func:`return_value_simplifier`
+
+:func:`make_log_abundance_dictionaries`
+---------------------------------------
+
+.. autofunction:: make_log_abundance_dictionaries
+
+
+:func:`return_as_ndarray`
+-------------------------
+
+.. autofunction:: return_as_ndarray
+
+
+:func:`return_string_as_list`
+-----------------------------
+
+.. autofunction:: return_string_as_list
+
+
+:func:`return_list_simplifier`
 -------------------------------
 
-.. autofunction:: return_value_simplifier
+.. autofunction:: return_list_simplifier
 

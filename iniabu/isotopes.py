@@ -6,7 +6,7 @@ This class manages the isotopes. It must be called from :class:`iniabu.IniAbu`.
 
 import numpy as np
 
-from .utilities import return_value_simplifier
+from .utilities import return_list_simplifier
 
 
 class Isotopes(object):
@@ -70,7 +70,7 @@ class Isotopes(object):
         for iso in self._isos:
             ret_arr.append(self._iso_dict[iso][0])
         ret_arr = np.array(ret_arr)
-        return return_value_simplifier(ret_arr)
+        return return_list_simplifier(ret_arr)
 
     @property
     def solar_abundance(self):
@@ -88,4 +88,4 @@ class Isotopes(object):
         for iso in self._isos:
             ret_arr.append(self._iso_dict[iso][1])
         ret_arr = np.array(ret_arr)
-        return return_value_simplifier(ret_arr)
+        return return_list_simplifier(ret_arr)

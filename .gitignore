@@ -46,5 +46,6 @@ lib64
 .coveralls.yml
 .coverage
 .tox
+.nox
 .pytest_cache
 htmlcov

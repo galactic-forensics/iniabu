@@ -6,7 +6,7 @@ This class manages the elements. It must be called from :class:`iniabu.IniAbu`.
 
 import numpy as np
 
-from .utilities import return_value_simplifier
+from .utilities import return_list_simplifier
 
 
 class Elements(object):
@@ -69,7 +69,7 @@ class Elements(object):
         ret_arr = []
         for ele in self._eles:
             ret_arr.append(np.array(self._ele_dict[ele][1], dtype=np.int))
-        return return_value_simplifier(ret_arr)
+        return return_list_simplifier(ret_arr)
 
     @property
     def isotopes_relative_abundance(self):
@@ -85,7 +85,7 @@ class Elements(object):
         ret_arr = []
         for ele in self._eles:
             ret_arr.append(np.array(self._ele_dict[ele][2], dtype=np.float))
-        return return_value_simplifier(ret_arr)
+        return return_list_simplifier(ret_arr)
 
     @property
     def isotopes_solar_abundance(self):
@@ -102,7 +102,7 @@ class Elements(object):
         ret_arr = []
         for ele in self._eles:
             ret_arr.append(np.array(self._ele_dict[ele][3], dtype=np.float))
-        return return_value_simplifier(ret_arr)
+        return return_list_simplifier(ret_arr)
 
     @property
     def solar_abundance(self):
@@ -120,4 +120,4 @@ class Elements(object):
         for ele in self._eles:
             ret_arr.append(self._ele_dict[ele][0])
         ret_arr = np.array(ret_arr)
-        return return_value_simplifier(ret_arr)
+        return return_list_simplifier(ret_arr)
