@@ -151,6 +151,7 @@ class IniAbu(object):
             >>> ini.database = "nist"  # change database to "nist"
             >>> ini.database
             'nist'
+            >>> ini.database = "lodders09"  # simple switch back!
         """
         return self._database
 
@@ -230,10 +231,164 @@ class IniAbu(object):
 
     # METHODS #
 
+    def bracket_element(self, nominator, denominator, value, mass_fraction=False):
+        """Calculate the bracket ratio for a given element ratio and a value.
+
+        Bracket notation is defined as:
+
+        result = log10(measured value) - log10(solar ratio)
+
+        Nominator and denominator have the same restrictions as for the
+        ``ratio_element`` method.
+        The same number of values must be supplied as there are element ratios defined.
+
+        :param nominator: Element(s) in nominator.
+        :type nominator: str,list
+        :param denominator: Element(s) in denominator.
+        :type denominator: str,list
+        :param value: Value(s) to calculate bracket notation value with respect to.
+        :type value: float,ndarray
+        :param mass_fraction: Are the given values in mass fractions? Defaults to False
+            (i.e., number fractions are returned).
+        :type mass_fraction: bool
+
+        :return: Bracket notation expression of given values with respect to the solar
+            system abundances.
+        :rtype: float,ndarray
+
+        :raises ValueError: Number of element ratios and number of values supplied are
+            mismatched.
+
+        Example:
+            >>> from iniabu import ini
+            >>> ini.bracket_element("Ne", "Si", 33)
+            1.0008802726402624
+        """
+        solar_ratios = return_as_ndarray(
+            self.ratio_element(nominator, denominator, mass_fraction=mass_fraction)
+        )
+        value = return_as_ndarray(value)
+
+        if solar_ratios.shape != value.shape:
+            raise ValueError(
+                "Length of requested element ratios does not match length of "
+                "provided values."
+            )
+
+        return np.log10(value) - np.log10(solar_ratios)
+
+    def bracket_isotope(self, nominator, denominator, value, mass_fraction=False):
+        """Calculate the bracket ratio for a given isotope ratio and a value.
+
+        Bracket notation is defined as:
+
+        result = log10(measured value) - log10(solar ratio)
+
+        Nominator and denominator have the same restrictions as for the
+        ``ratio_element`` method.
+        The same number of values must be supplied as there are element ratios defined.
+
+        :param nominator: Isotope(s) in nominator.
+        :type nominator: str,list
+        :param denominator: Isotope(s) in denominator.
+        :type denominator: str,list
+        :param value: Value(s) to calculate bracket notation value with respect to.
+        :type value: float,ndarray
+        :param mass_fraction: Are the given values in mass fractions? Defaults to False
+            (i.e., number fractions are returned).
+        :type mass_fraction: bool
+
+        :return: Bracket notation expression of given values with respect to the solar
+            system abundances.
+        :rtype: float,ndarray
+
+        :raises ValueError: Number of element ratios and number of values supplied are
+            mismatched.
+
+        Example:
+            >>> from iniabu import ini
+            >>> ini.bracket_isotope("Ne-21", "Ne-20", 2.397)
+            2.9999700012616572
+        """
+        solar_ratios = return_as_ndarray(
+            self.ratio_isotope(nominator, denominator, mass_fraction=mass_fraction)
+        )
+        value = return_as_ndarray(value)
+
+        if solar_ratios.shape != value.shape:
+            raise ValueError(
+                "Length of requested element ratios does not match length of "
+                "provided values."
+            )
+
+        return np.log10(value) - np.log10(solar_ratios)
+
+    def delta_element(
+        self, nominator, denominator, value, mass_fraction=False, delta_factor=1000.0
+    ):
+        """Calculate the delta-value for a given element ratio and a value.
+
+        The delta-value is defined as:
+
+        result = (measured value / solar ratio - 1)
+
+        By default, the delta-value is multiplied by 1000, thus, expressing it in
+        permil. Other factors can be chosen.
+
+        Nominator and denominator have the same restrictions as for the
+        ``ratio_element`` method.
+        The same number of values must be supplied as there are element ratios defined.
+
+        :param nominator: Element(s) in nominator.
+        :type nominator: str,list
+        :param denominator: Element(s) in denominator.
+        :type denominator: str,list
+        :param value: Value(s) to calculate delta-value with respect to.
+        :type value: float,ndarray
+        :param mass_fraction: Are the given values in mass fractions? Defaults to False
+            (i.e., number fractions are returned).
+        :type mass_fraction: bool
+        :param delta_factor: What value should the delta value be multiplied with?
+            Defaults to 1000 to return results in permil.
+        :param delta_factor: float
+
+        :return: Delta-values of given values with respect to the solar system
+            abundances, multiplied by delta_factor (by default, returns delta-values
+            in permil).
+        :rtype: float,ndarray
+
+        :raises ValueError: Number of element ratios and number of values supplied are
+            mismatched.
+
+        Example:
+            >>> from iniabu import ini
+            >>> ini.delta_element("Ne", "Si", 3.4)
+            32.39347210030586
+        """
+        solar_ratios = return_as_ndarray(
+            self.ratio_element(nominator, denominator, mass_fraction=mass_fraction)
+        )
+        value = return_as_ndarray(value)
+
+        if solar_ratios.shape != value.shape:
+            raise ValueError(
+                "Length of requested element ratios does not match length of "
+                "provided values."
+            )
+
+        return (value / solar_ratios - 1) * delta_factor
+
     def delta_isotope(
         self, nominator, denominator, value, mass_fraction=False, delta_factor=1000.0
     ):
         """Calculate the delta-value for a given isotope ratio and a value.
+
+        The delta-value is defined as:
+
+        result = (measured value / solar ratio - 1)
+
+        By default, the delta-value is multiplied by 1000, thus, expressing it in
+        permil. Other factors can be chosen.
 
         Nominator and denominator have the same restrictions as for the
         ``ratio_element`` method.
@@ -263,13 +418,13 @@ class IniAbu(object):
         Example:
             >>> from iniabu import ini
             >>> ini.delta_isotope("Ne-22", "Ne-20", 0.07, delta_factor=10000)
-            504.2762722568961
+            -480.0676021714623
 
             >>> # For more than 1 ratio
             >>> nominator_isos = ["Ne-21", "Ne-22"]
             >>> values = [0.01, 0.07]  # values to compare with
             >>> ini.delta_isotope(nominator_isos, "Ne-20", values, delta_factor=10000)
-            array([-7602.83442235,   504.27627226])
+            array([31715.93357271,  -480.06760217])
         """
         solar_ratios = return_as_ndarray(
             self.ratio_isotope(nominator, denominator, mass_fraction=mass_fraction)
@@ -282,7 +437,7 @@ class IniAbu(object):
                 "provided values."
             )
 
-        return (solar_ratios / value - 1) * delta_factor
+        return (value / solar_ratios - 1) * delta_factor
 
     def ratio_element(self, nominator, denominator, mass_fraction=False):
         """Get the ratios of given elements.

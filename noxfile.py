@@ -63,5 +63,5 @@ def safety(session):
 def xdoctest(session):
     """Test docstring examples with xdoctest."""
     args = session.posargs or ["all"]
-    session.install("xdoctest", "-r", "requirements.txt")
+    session.install("xdoctest[all]", "-r", "requirements.txt")
     session.run("python", "-m", "xdoctest", package, *args)

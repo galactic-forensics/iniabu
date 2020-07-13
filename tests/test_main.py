@@ -68,11 +68,53 @@ def test_abundance_unit_after_new_database(ini_default):
     assert ini_default.element["Si"].solar_abundance == pytest.approx(1e6, 1000.0)
 
 
+def test_bracket_element(ini_default):
+    """Calculate bracket notation for an element ratio."""
+    assert ini_default.bracket_element("Ne", "Si", 33) == pytest.approx(
+        1.0008802726402624, 0.001
+    )
+
+
+def test_bracket_element_shape_mismatch(ini_default):
+    """Raise Value error on shape mismatch between nd arrays."""
+    with pytest.raises(ValueError):
+        ini_default.bracket_element(["Ne", "Mg"], ["Si", "Si"], 33)
+
+
+def test_bracket_isotope(ini_default):
+    """Calculate bracket notation for an isotope ratio."""
+    assert ini_default.bracket_isotope("Ne-21", "Ne-20", 2.397) == pytest.approx(
+        2.9999700012616572, 0.001
+    )
+
+
+def test_bracket_isotope_shape_mismatch(ini_default):
+    """Raise Value error on shape mismatch between nd arrays."""
+    with pytest.raises(ValueError):
+        ini_default.bracket_isotope(["Ne-21", "Mg-25"], "Si", 33)
+
+
+def test_delta_element(ini_default):
+    """Calculate delta-value for an element ratio in various units."""
+    assert ini_default.delta_element("Ne", "Si", 3.4) == pytest.approx(
+        32.39347210030586, 0.001
+    )
+    assert ini_default.delta_element(
+        "Fe", "Ni", 10.0, delta_factor=10.0
+    ) == pytest.approx(-4.2106628615903485, 0.001)
+
+
+def test_delta_element_shape_mismatch(ini_default):
+    """Raise a ValueError on shape mismatch between nd arrays."""
+    with pytest.raises(ValueError):
+        ini_default.delta_element("Ne", "Si", [0.07, 0.09], delta_factor=10000)
+
+
 def test_delta_isotope(ini_default):
     """Calculate delta-value for an isotope ratio in epsilon units."""
     assert ini_default.delta_isotope(
         "Ne-22", "Ne-20", 0.07, delta_factor=10000
-    ) == pytest.approx(504.2762722568961, 0.001)
+    ) == pytest.approx(-480.0676021714623, 0.001)
 
 
 def test_delta_isotope_shape_mismatch(ini_default):
