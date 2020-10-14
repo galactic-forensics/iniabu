@@ -14,7 +14,7 @@ python_suite = ["3.8", "3.7", "3.6"]
 def black(session):
     """Autoformat all python files with black."""
     args = session.posargs or locations
-    session.install("black")
+    session.install("black==20.8b1")
     session.run("black", *args)
 
 
