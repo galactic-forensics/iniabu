@@ -176,6 +176,22 @@ run the following command from your terminal:
 
     $ nox -rs black
 
+As an alternative,
+the pre-commit hook can also be used
+to format your code using black.
+Check out section
+:ref:`section_hooks`
+for more information.
+
+.. caution:: Make sure that you use
+  the correct version of black,
+  especially when formatting
+  differently from using ``nox``
+  or the pre-commit hook.
+  You can find the currently used version
+  in the `noxfile.py`.
+
+
 .. _section_linting:
 
 
@@ -336,6 +352,35 @@ This will dump the ``html`` files
 for the documentation into the
 ``docs/_build`` folder.
 You can now locally browse them.
+
+
+.. _section_hooks:
+
+Pre-commit hooks
+~~~~~~~~~~~~~~~~
+
+Using pre-commit hooks
+your project can be tested
+for simple formatting mishaps.
+These will also be automatically corrected.
+Here,
+we use the
+`pre-commit framework <https://pre-commit.com>`_.
+If you want to set up pre-commit hooks,
+go to the folder and run the following command
+(after installing pre-commit using pip or pipx):
+
+.. code-block:: console
+
+  $ pre-commit install
+
+This will install the hooks
+that are defined in `.pre-commit-config.yaml`
+into your git repository.
+Note that a fairly standard pre-commit configuration is used.
+Black is pinned to a specific version,
+i.e., the same version as in the nox file itself.
+
 
 
 
