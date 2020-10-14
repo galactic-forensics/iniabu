@@ -24,4 +24,3 @@ are described in :doc:`utilities`.
     elements
     isotopes
     utilities
-

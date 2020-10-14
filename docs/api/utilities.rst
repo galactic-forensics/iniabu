@@ -34,4 +34,3 @@ Utility classes and functions
 -------------------------------
 
 .. autofunction:: return_list_simplifier
-
