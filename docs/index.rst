@@ -29,7 +29,7 @@ Introduction
 The goal of this project is to give you access
 to various published solar abundance tables of elements as isotopes
 from a Python terminal.
-As one can guess,
+As one might guess,
 ``iniabu`` stands for initial abundances.
 Functions that are useful for everyday's life as an
 astrophysicist, cosmo-, or geochemist,
@@ -61,6 +61,13 @@ We welcome all contributions,
 from simple typo fixes in the documentation,
 to feature contributions!
 
+.. note:: Currently the package is still in testing
+  and has not been released on PyPi as v1.0.0.
+  You can always check the badge above to see
+  which version is currently available on PyPi.
+  Please follow the instructions on the
+  :doc:`Installation and Usage <intro>`
+  page to see how to install the package from GitHub.
 
 
 Issues and feature requests
@@ -91,22 +98,20 @@ for detailed instructions on how to contribute.
 
 Relationship to previous package
 --------------------------------
-This package is loosely based on a
-software package that was I wrote at
+This package is in its idea based on a
+software package that was was written at
 Lawrence Livermore National Laboratory,
 and replaces that specific package,
 which can in it's archived form be found
 `here <https://github.com/LLNL/iniabu>`_.
 That package's latest release was v0.3.1
 and it was released under GPLv2.
-Note that only the basic idea behind
-the two packages are identical.
-The codebase for this version was
+Note that the codebase for this version was
 rewritten from ground-up.
 
-This is a new and improved version
-that is also available as a PyPi package
-and replaces that older version.
+This new and improved version
+is available on PyPi
+and replaces the previous version there.
 The new package is not backwards compatible
 and is initially released as v1.0.0.
 
