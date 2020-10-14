@@ -3,7 +3,7 @@
 import nox
 
 
-nox.options.sessions = "lint", "safety", "tests"
+nox.options.sessions = "lint", "safety", "tests", "xdoctest"
 
 package = "iniabu"
 locations = "iniabu", "tests", "noxfile.py", "docs/conf.py"
@@ -55,7 +55,9 @@ def safety(session):
     """Safety check for all dependencies."""
     session.install("safety", "-r", "requirements.txt", "-r", "dev-requirements.txt")
     session.run(
-        "safety", "check", "--full-report",
+        "safety",
+        "check",
+        "--full-report",
     )
 
 

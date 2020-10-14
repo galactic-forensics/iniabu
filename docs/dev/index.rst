@@ -386,7 +386,7 @@ must be normed such that their sum is unity.
 ``iso_dict`` Isotope dictionary
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The isotope dictionary ``iso_dict``
-is shaped in teh following structure:
+is shaped in the following structure:
 
 .. code-block:: python
 

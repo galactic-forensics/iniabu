@@ -18,6 +18,7 @@ __description__ = (
 # Todo
 __uri__ = "Todo Docs Link"
 __author__ = "Reto Trappitsch"
+__email__ = "reto@galactic-forensics.space"
 
 __license__ = "GPLv2"
 __copyright__ = "Copyright (c) 2020, Reto Trappitsch"
