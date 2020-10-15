@@ -7,10 +7,10 @@ nox.options.sessions = "lint", "safety", "tests", "xdoctest"
 
 package = "iniabu"
 locations = "iniabu", "tests", "noxfile.py", "docs/conf.py"
-python_suite = ["3.8", "3.7", "3.6"]
+python_suite = ["3.9", "3.8", "3.7", "3.6"]
 
 
-@nox.session(python="3.8")
+@nox.session(python="3.9")
 def black(session):
     """Autoformat all python files with black."""
     args = session.posargs or locations
@@ -18,14 +18,14 @@ def black(session):
     session.run("black", *args)
 
 
-@nox.session(python="3.8")
+@nox.session(python="3.9")
 def build(session):
     """Pack iniabu for release on PyPi."""
     session.install("flit")
     session.run("flit", "build")
 
 
-@nox.session(python="3.8")
+@nox.session(python="3.9")
 def docs(session):
     """Build the documentation."""
     session.install("sphinx", "sphinx_rtd_theme", "-r", "requirements.txt", "pytest")
@@ -50,7 +50,7 @@ def tests(session):
     session.run("pytest")
 
 
-@nox.session(python="3.8")
+@nox.session(python="3.9")
 def safety(session):
     """Safety check for all dependencies."""
     session.install("safety", "-r", "requirements.txt", "-r", "dev-requirements.txt")

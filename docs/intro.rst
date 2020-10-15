@@ -2,6 +2,22 @@ Installation and Usage
 ======================
 
 
+Dependencies
+------------
+
+This package is tested
+with python versions 3.6 - 3.9.
+It might work on older python version as well,
+however,
+compatibility is not guaranteed.
+
+The only dependency at the moment
+for running the ``iniabu`` package
+is ``numpy``.
+There is currently no pinned ``numpy`` version
+and the latest one should be working great.
+
+
 Installation
 ------------
 
