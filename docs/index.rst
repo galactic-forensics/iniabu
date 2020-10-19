@@ -123,6 +123,7 @@ Contents
    :maxdepth: 2
 
    intro
+   background
    license
    api/index
    dev/index

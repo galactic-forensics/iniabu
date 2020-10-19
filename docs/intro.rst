@@ -85,7 +85,8 @@ from your python session as:
 This is the recommended import
 and will be used throughout
 the rest of this documentation,
-unless otherwise noted.
+unless oth
+erwise noted.
 Here, the `ini` instance will be loaded
 with the default database
 (currently Lodders et al., 2009)
@@ -358,6 +359,10 @@ Some examples for isotope ratios:
 
 δ-values:
 ~~~~~~~~~
+
+.. note:: A detailed discussion
+  of δ-values can be found in the
+  :doc:`Background Information </dev/background>`
 
 The δ-value of a given isotope ratio,
 generally used in cosmo- and geochemistry,
