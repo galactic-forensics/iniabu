@@ -34,6 +34,8 @@ As one might guess,
 Functions that are useful for everyday's life as an
 astrophysicist, cosmo-, or geochemist,
 are here made available in an easy to use interface.
+You can find more information on the scientific background
+`here <https://iniabu.readthedocs.io/en/latest/background.html>`_.
 Aside from querying the databases,
 the ``iniabu`` tool allows you directly
 to calculate isotope ratios,
@@ -70,6 +72,17 @@ to feature contributions!
   Please follow the instructions on the
   `Installation and Usage <https://iniabu.readthedocs.io/en/latest/intro.html>`_
   page to see how to install the package from GitHub.
+
+Installation
+------------
+
+This package is not yet available on PyPi.
+You can install it however directly from GitHub:
+
+.. code-block:: console
+
+    $ pip install git+https://github.com/galactic-forensics/iniabu.git
+
 
 Issues and feature requests
 ---------------------------
