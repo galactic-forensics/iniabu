@@ -1,8 +1,10 @@
 """Test suite for ``elements.py``."""
 
+from hypothesis import given, strategies as st
 import numpy as np
 import pytest
 
+import iniabu.data
 import iniabu.elements
 
 
@@ -13,73 +15,111 @@ def test_elements_require_parent_class():
         iniabu.elements.Elements(None, None)
 
 
-def test_elements_eles_list(ini_default):
+@given(
+    ele1=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+    ele2=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+)
+def test_elements_eles_list(ini_default, ele1, ele2):
     """Test that the element list is correctly initialized."""
-    assert ini_default.element["Si"]._eles == ["Si"]
-    assert ini_default.element[["Fe", "Ni"]]._eles == ["Fe", "Ni"]
+    assert ini_default.element[ele1]._eles == [ele1]
+    assert ini_default.element[[ele1, ele2]]._eles == [ele1, ele2]
 
 
-def test_isotopes_a(ini_default):
+@given(
+    ele1=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+    ele2=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+)
+def test_isotopes_a(ini_default, ele1, ele2):
     """Test isotope atomic number returner."""
-    assert (ini_default.element["Si"].isotopes_a == np.array([28, 29, 30])).all()
+    assert (
+        ini_default.element[ele1].isotopes_a
+        == np.array(iniabu.data.lodders09_elements[ele1][1])
+    ).all()
 
-    left = ini_default.element[["Si", "Fe"]].isotopes_a
+    left = ini_default.element[[ele1, ele2]].isotopes_a
     right = [
-        np.array([28, 29, 30]),
-        np.array([54, 56, 57, 58]),
+        np.array(iniabu.data.lodders09_elements[ele1][1]),
+        np.array(iniabu.data.lodders09_elements[ele2][1]),
     ]
-    assert all([(i == j).all() for i, j in zip(left, right)])
+    np.testing.assert_equal(left, right)
 
 
-def test_isotopes_relative_abundance(ini_default):
+@given(
+    ele1=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+    ele2=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+)
+def test_isotopes_relative_abundance(ini_default, ele1, ele2):
     """Test isotope relative abundance returner."""
     assert (
-        ini_default.element["Si"].isotopes_relative_abundance
-        == np.array([0.9223, 0.04683, 0.03087])
+        ini_default.element[ele1].isotopes_relative_abundance
+        == np.array(iniabu.data.lodders09_elements[ele1][2])
     ).all()
 
-    left = ini_default.element[["Si", "Fe"]].isotopes_relative_abundance
+    left = ini_default.element[[ele1, ele2]].isotopes_relative_abundance
     right = [
-        np.array([0.9223, 0.04683, 0.03087]),
-        np.array([0.058449999999999995, 0.91754, 0.021191, 0.002819]),
+        np.array(iniabu.data.lodders09_elements[ele1][2]),
+        np.array(iniabu.data.lodders09_elements[ele2][2]),
     ]
-    assert all([(i == j).all() for i, j in zip(left, right)])
+    np.testing.assert_equal(left, right)
 
 
-def test_isotopes_solar_abundance(ini_default):
+@given(
+    ele1=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+    ele2=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+)
+def test_isotopes_solar_abundance(ini_default, ele1, ele2):
     """Test isotope solar abundance returner."""
     assert (
-        ini_default.element["Si"].isotopes_solar_abundance
-        == np.array([922000.0, 46800.0, 30900.0])
+        ini_default.element[ele1].isotopes_solar_abundance
+        == np.array(iniabu.data.lodders09_elements[ele1][3])
     ).all()
 
-    left = ini_default.element[["Si", "Fe"]].isotopes_solar_abundance
+    left = ini_default.element[[ele1, ele2]].isotopes_solar_abundance
     right = [
-        np.array([922000.0, 46800.0, 30900.0]),
-        np.array([49600.0, 778000.0, 18000.0, 2390.0]),
+        np.array(iniabu.data.lodders09_elements[ele1][3]),
+        np.array(iniabu.data.lodders09_elements[ele2][3]),
     ]
-    assert all([(i == j).all() for i, j in zip(left, right)])
+    np.testing.assert_equal(left, right)
 
 
-def test_isotopes_solar_abundance_nan(ini_nist):
+@given(
+    ele1=st.sampled_from(list(iniabu.data.nist15_elements.keys())),
+    ele2=st.sampled_from(list(iniabu.data.nist15_elements.keys())),
+)
+def test_isotopes_solar_abundance_nan(ini_nist, ele1, ele2):
     """Test isotope solar abundance returner when not available."""
     # make sure np.nan is returned for other databases
-    assert np.isnan(ini_nist.element["Si"].isotopes_solar_abundance).all()
+    assert np.isnan(ini_nist.element[ele1].isotopes_solar_abundance).all()
 
-    val = ini_nist.element[["Si", "Fe"]].isotopes_solar_abundance
+    val = ini_nist.element[[ele1, ele2]].isotopes_solar_abundance
     assert all([np.isnan(it).all() for it in val])
 
 
-def test_solar_abundance(ini_default):
+@given(
+    ele1=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+    ele2=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+)
+def test_solar_abundance(ini_default, ele1, ele2):
     """Test solar abundance property."""
-    assert ini_default.element["Si"].solar_abundance == 999700.0
     assert (
-        ini_default.element[["Fe", "Ni"]].solar_abundance
-        == np.array([847990.0, 49093.0])
-    ).all()
+        ini_default.element[ele1].solar_abundance
+        == iniabu.data.lodders09_elements[ele1][0]
+    )
+    left = ini_default.element[[ele1, ele2]].solar_abundance
+    right = np.array(
+        [
+            iniabu.data.lodders09_elements[ele1][0],
+            iniabu.data.lodders09_elements[ele2][0],
+        ]
+    )
+    np.testing.assert_equal(left, right)
 
 
-def test_solar_abundance_nan(ini_nist):
+@given(
+    ele1=st.sampled_from(list(iniabu.data.nist15_elements.keys())),
+    ele2=st.sampled_from(list(iniabu.data.nist15_elements.keys())),
+)
+def test_solar_abundance_nan(ini_nist, ele1, ele2):
     """Test solar abundance property when not available."""
-    assert np.isnan(ini_nist.element["Si"].solar_abundance)
-    assert np.isnan(ini_nist.element[["Si", "Fe", "Ni"]].solar_abundance).all()
+    assert np.isnan(ini_nist.element[ele1].solar_abundance)
+    assert np.isnan(ini_nist.element[[ele1, ele2]].solar_abundance).all()
