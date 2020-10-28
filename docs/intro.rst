@@ -85,8 +85,7 @@ from your python session as:
 This is the recommended import
 and will be used throughout
 the rest of this documentation,
-unless oth
-erwise noted.
+unless otherwise noted.
 Here, the `ini` instance will be loaded
 with the default database
 (currently Lodders et al., 2009)
