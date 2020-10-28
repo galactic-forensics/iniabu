@@ -19,8 +19,14 @@ from iniabu.utilities import (
 def test_proxy_list_index_error(ini_default):
     """Test ProxyList with invalid element."""
     # entry not in list
-    with pytest.raises(IndexError):
-        ini_default.element["invalid"]
+    item = "invalid"
+    with pytest.raises(IndexError) as err_info:
+        ini_default.element[item]
+    err_msg = err_info.value.args[0]
+    assert (
+        err_msg
+        == f"Item {item} out of range. Must be in {ini_default._ele_dict.keys()}."
+    )
 
 
 def test_proxy_list_tuple_initialization(ini_default):

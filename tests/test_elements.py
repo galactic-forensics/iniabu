@@ -11,8 +11,10 @@ import iniabu.elements
 def test_elements_require_parent_class():
     """Test that class requires an appropriate parent class."""
     # Parent class testing
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError) as err_info:
         iniabu.elements.Elements(None, None)
+    err_msg = err_info.value.args[0]
+    assert err_msg == "Elements class must be initialized from IniAbu."
 
 
 @given(
