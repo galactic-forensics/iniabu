@@ -45,6 +45,7 @@ lib64
 ## Unit test / coverage reports ##
 .coveralls.yml
 .coverage
+.hypothesis
 .tox
 .nox
 .pytest_cache
