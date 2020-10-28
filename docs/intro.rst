@@ -359,6 +359,10 @@ Some examples for isotope ratios:
 δ-values:
 ~~~~~~~~~
 
+.. note:: A detailed discussion
+  of δ-values can be found in the
+  :doc:`Background Information </dev/background>`
+
 The δ-value of a given isotope ratio,
 generally used in cosmo- and geochemistry,
 is defined as:

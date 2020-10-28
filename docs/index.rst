@@ -34,6 +34,8 @@ As one might guess,
 Functions that are useful for everyday's life as an
 astrophysicist, cosmo-, or geochemist,
 are here made available in an easy to use interface.
+You can find more information on the scientific background
+:doc:`here <background>`.
 Aside from querying the databases,
 the ``iniabu`` tool allows you directly
 to calculate isotope ratios,
@@ -123,6 +125,7 @@ Contents
    :maxdepth: 2
 
    intro
+   background
    license
    api/index
    dev/index
