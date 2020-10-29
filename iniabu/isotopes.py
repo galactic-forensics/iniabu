@@ -6,6 +6,7 @@ This class manages the isotopes. It must be called from :class:`iniabu.IniAbu`.
 
 import numpy as np
 
+from . import data
 from .utilities import return_list_simplifier
 
 
@@ -54,6 +55,18 @@ class Isotopes(object):
             self._iso_dict = parent.iso_dict
 
     # PROPERTIES #
+
+    @property
+    def mass(self):
+        """Get the mass of an isotope.
+
+        :return: Mass of an isotope.
+        :rtype: float,ndarray<float>
+        """
+        ret_arr = []
+        for iso in self._isos:
+            ret_arr.append(data.isotopes_mass[iso])
+        return return_list_simplifier(ret_arr)
 
     @property
     def relative_abundance(self):

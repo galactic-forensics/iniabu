@@ -6,6 +6,7 @@ This class manages the elements. It must be called from :class:`iniabu.IniAbu`.
 
 import numpy as np
 
+from . import data
 from .utilities import return_list_simplifier
 
 
@@ -102,6 +103,25 @@ class Elements(object):
         ret_arr = []
         for ele in self._eles:
             ret_arr.append(np.array(self._ele_dict[ele][3], dtype=np.float))
+        return return_list_simplifier(ret_arr)
+
+    @property
+    def mass(self):
+        """Get the mass of an element.
+
+        Returns the mass of an element depending on the specified composition. The mass
+        is calculated as the weighted sum of the individual isotope masses, weighted
+        by there respective abundances.
+
+        :return: Mass of an element.
+        :rtype: float,ndarray<float>
+        """
+        ret_arr = []
+        for ele in self._eles:
+            isos = [f"{ele}-{a}" for a in self._ele_dict[ele][1]]
+            isos_abu = np.array([abu for abu in self._ele_dict[ele][2]])
+            isos_mass = np.array([data.isotopes_mass[iso] for iso in isos])
+            ret_arr.append(np.sum(isos_abu * isos_mass))
         return return_list_simplifier(ret_arr)
 
     @property
