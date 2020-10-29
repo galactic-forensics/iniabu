@@ -317,7 +317,7 @@ class IniAbu(object):
 
         if solar_ratios.shape != value.shape:
             raise ValueError(
-                "Length of requested element ratios does not match length of "
+                "Length of requested isotope ratios does not match length of "
                 "provided values."
             )
 
