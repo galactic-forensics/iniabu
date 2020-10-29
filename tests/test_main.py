@@ -363,10 +363,7 @@ def test_ratio_isotope_isos_isos_length_mismatch(ini_default):
     iso2=st.sampled_from(list(data.lodders09_isotopes.keys())),
 )
 def test_ratio_isotope_ele_iso(ini_default, ele1, iso2):
-    """Calculae isotope ratios for all isotopes of an element versus one isotope.
-
-    Private methods used here are tested elsewhere for functionality.
-    """
+    """Calculae isotope ratios for all isotopes of an element versus one isotope."""
     all_isos = ini_default._get_all_isotopes(ele1)
     val_exp = np.empty(len(all_isos))
     for it, iso in enumerate(all_isos):
