@@ -30,6 +30,22 @@ def test_isotopes_isos_list(ini_default, iso1, iso2):
     iso1=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
     iso2=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
 )
+def test_mass(ini_default, iso1, iso2):
+    """Get the mass of an isotope."""
+    mass_expected = iniabu.data.isotopes_mass[iso1]
+    assert ini_default.isotope[iso1].mass == mass_expected
+
+    masses_expected = np.array(
+        [iniabu.data.isotopes_mass[iso1], iniabu.data.isotopes_mass[iso2]]
+    )
+    masses_gotten = ini_default.isotope[[iso1, iso2]].mass
+    np.testing.assert_equal(masses_gotten, masses_expected)
+
+
+@given(
+    iso1=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
+    iso2=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
+)
 def test_relative_abundance(ini_default, iso1, iso2):
     """Test isotope relative abundance returner."""
     assert (

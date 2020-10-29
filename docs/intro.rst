@@ -71,8 +71,8 @@ i.e., as not a number.
 Usage
 -----
 
-Importing the module:
-~~~~~~~~~~~~~~~~~~~~~
+Importing the module
+~~~~~~~~~~~~~~~~~~~~
 
 Once installed,
 you can simply import the package
@@ -103,8 +103,8 @@ the following import could be used:
     >>> db2 = iniabu.IniAbu(database="asplund09")
 
 
-Loading a data base:
-~~~~~~~~~~~~~~~~~~~~
+Loading a data base
+~~~~~~~~~~~~~~~~~~~
 
 Switching the data base from a given instance `ini`
 can be easily accomplished.
@@ -118,8 +118,8 @@ by calling:
 
 
 
-Putting the solar abundances into logarithmic mode:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Putting the solar abundances into logarithmic mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Isotopic abundances can easily be switched between
 linear and logarithmic units.
@@ -160,8 +160,8 @@ the following command can be used:
 By default,
 linear values are used.
 
-Element and isotope properties:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Element and isotope properties
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Properties of an element are independent from the loaded database
 and are taken from the
 `NIST database <https://www.nist.gov/pml/atomic-weights-and-isotopic-compositions-relative-atomic-masses>`_.
@@ -185,6 +185,10 @@ can be loaded into a variable as following:
 The following properties can now be queried
 from the element:
 
+- The mass of the element,
+  calculated using the isotope masses
+  and the currently loaded abundances,
+  using `mass`.
 - The solar abundance of the element itself using `solar_abundance`,
   normed as discussed above
 - The mass number of its (stable) isotopes using `isotopes_a`
@@ -203,8 +207,8 @@ one could run the following statement:
 
 
 
-Querying an isotope:
-~~~~~~~~~~~~~~~~~~~~
+Querying an isotope
+~~~~~~~~~~~~~~~~~~~
 
 To query an isotope's properties
 with respect to teh solar abundance,
@@ -222,6 +226,7 @@ as following:
 The following properties can then
 be queried from this isotope:
 
+- The mass of a specific isotope using `mass`.
 - The solar abundance of the isotope itself using `solar_abundance`,
   normed as discussed above
 - The relative abundance of the specific isotope
@@ -243,8 +248,8 @@ one could run the following two commands in python:
   0.058449999999999995
 
 
-Element and isotope ratios:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Element and isotope ratios
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This function is used to calculate element and isotope ratios.
 Sure, the same can be accomplished by simply
@@ -356,8 +361,8 @@ Some examples for isotope ratios:
 
 
 
-δ-values:
-~~~~~~~~~
+δ-values
+~~~~~~~~
 
 .. note:: A detailed discussion
   of δ-values can be found in the
@@ -464,8 +469,8 @@ Some examples for calculating δ-values for elements:
     array([696.48894668,  30.26124356])
 
 
-Bracket-notation:
-~~~~~~~~~~~~~~~~~
+Bracket-notation
+~~~~~~~~~~~~~~~~
 
 The bracket notation,
 generally used in astronomy,

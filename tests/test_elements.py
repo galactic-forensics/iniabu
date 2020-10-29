@@ -101,6 +101,27 @@ def test_isotopes_solar_abundance_nan(ini_nist, ele1, ele2):
     ele1=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
     ele2=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
 )
+def test_mass(ini_default, ele1, ele2):
+    """Query the mass of an element."""
+    isos1 = [f"{ele1}-{a}" for a in ini_default.ele_dict[ele1][1]]
+    isos_masses1 = np.array([iniabu.data.isotopes_mass[iso] for iso in isos1])
+    isos_abus1 = np.array(ini_default.ele_dict[ele1][2])
+    mass_expected1 = np.sum(isos_masses1 * isos_abus1)
+    assert ini_default.element[ele1].mass == mass_expected1
+
+    isos2 = [f"{ele2}-{a}" for a in ini_default.ele_dict[ele2][1]]
+    isos_masses2 = np.array([iniabu.data.isotopes_mass[iso] for iso in isos2])
+    isos_abus2 = np.array(ini_default.ele_dict[ele2][2])
+    mass_expected2 = np.sum(isos_masses2 * isos_abus2)
+    masses_expected = np.array([mass_expected1, mass_expected2])
+    masses_gotten = ini_default.element[[ele1, ele2]].mass
+    np.testing.assert_equal(masses_gotten, masses_expected)
+
+
+@given(
+    ele1=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+    ele2=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+)
 def test_solar_abundance(ini_default, ele1, ele2):
     """Test solar abundance property."""
     assert (
