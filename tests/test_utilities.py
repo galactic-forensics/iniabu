@@ -56,7 +56,7 @@ def test_proxy_list_length(ini_default):
     assert ini.element.__len__() == length
 
 
-@given(abu_x=st.floats(allow_infinity=False, min_value=0, exclude_min=True))
+@given(abu_x=st.floats(min_value=0.001, allow_infinity=False))
 def test_make_log_abundance_dictionaries(abu_x):
     """Ensure that logarithmic abundance dictionaries are made in correct form."""
     ele_dict_lin = {

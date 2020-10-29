@@ -57,30 +57,33 @@ def test_abundance_unit_default(ini_default):
 
 
 @given(ele=st.sampled_from(list(data.lodders09_elements.keys())))
-def test_abundance_unit_log(ini_default, ele):
+def test_abundance_unit_log(ele):
     """Ensure logarithmic abundance unit is set correctly."""
-    ini_default.abundance_unit = "log"
-    assert ini_default.abundance_unit == "log"
-    assert ini_default.element[ele].solar_abundance == ini_default.ele_dict_log[ele][0]
+    ini = iniabu.IniAbu()
+    ini.abundance_unit = "log"
+    assert ini.abundance_unit == "log"
+    assert ini.element[ele].solar_abundance == ini.ele_dict_log[ele][0]
 
 
 @given(ele=st.sampled_from(list(data.lodders09_elements.keys())))
-def test_abundance_unit_log_lin(ini_default, ele):
+def test_abundance_unit_log_lin(ele):
     """Ensure linear abundance unit is set correctly after logarithmic (switch back)."""
-    ini_default.abundance_unit = "log"
-    assert ini_default.element[ele].solar_abundance == ini_default.ele_dict_log[ele][0]
-    ini_default.abundance_unit = "lin"
-    assert ini_default.abundance_unit == "lin"
-    assert ini_default.element[ele].solar_abundance == ini_default.ele_dict[ele][0]
+    ini = iniabu.IniAbu()
+    ini.abundance_unit = "log"
+    assert ini.element[ele].solar_abundance == ini.ele_dict_log[ele][0]
+    ini.abundance_unit = "lin"
+    assert ini.abundance_unit == "lin"
+    assert ini.element[ele].solar_abundance == ini.ele_dict[ele][0]
 
 
 @given(ele=st.sampled_from(list(data.lodders09_elements.keys())))
-def test_abundance_unit_after_new_database(ini_default, ele):
+def test_abundance_unit_after_new_database(ele):
     """Ensure abundance unit is reset to linear when new database is loaded."""
-    ini_default.abundance_unit = "log"
-    ini_default.database = "lodders09"
-    assert ini_default.abundance_unit == "lin"
-    assert ini_default.element[ele].solar_abundance == data.lodders09_elements[ele][0]
+    ini = iniabu.IniAbu()
+    ini.abundance_unit = "log"
+    ini.database = "lodders09"
+    assert ini.abundance_unit == "lin"
+    assert ini.element[ele].solar_abundance == data.lodders09_elements[ele][0]
 
 
 @given(
@@ -136,8 +139,8 @@ def test_bracket_isotope_shape_mismatch(ini_default):
 @given(
     ele1=st.sampled_from(list(data.lodders09_elements.keys())),
     ele2=st.sampled_from(list(data.lodders09_elements.keys())),
-    value=st.floats(min_value=0, exclude_min=True),
-    factor=st.floats(min_value=0, exclude_min=True),
+    value=st.floats(min_value=0, exclude_min=True, max_value=1e6),
+    factor=st.floats(min_value=0, exclude_min=True, max_value=1e9),
 )
 def test_delta_element(ini_default, ele1, ele2, value, factor):
     """Calculate delta-value for an element ratio in various units."""
@@ -169,8 +172,8 @@ def test_delta_element_shape_mismatch(ini_default):
 @given(
     iso1=st.sampled_from(list(data.lodders09_isotopes.keys())),
     iso2=st.sampled_from(list(data.lodders09_isotopes.keys())),
-    value=st.floats(min_value=0, exclude_min=True),
-    factor=st.floats(min_value=0, exclude_min=True),
+    value=st.floats(min_value=0, exclude_min=True, max_value=1e6),
+    factor=st.floats(min_value=0, exclude_min=True, max_value=1e9),
 )
 def test_delta_isotope(ini_default, iso1, iso2, value, factor):
     """Calculate delta-value for an isotope ratio."""
@@ -222,11 +225,12 @@ def test_ratio_element_ele_ele_nist_db(ini_nist, ele1, ele2):
     ele1=st.sampled_from(list(data.lodders09_elements.keys())),
     ele2=st.sampled_from(list(data.lodders09_elements.keys())),
 )
-def test_ratio_element_ele_ele_from_log(ini_default, ele1, ele2):
+def test_ratio_element_ele_ele_from_log(ele1, ele2):
     """Calculate element ratio for element vs. element."""
-    val_exp = ini_default.ele_dict[ele1][0] / ini_default.ele_dict[ele2][0]
-    ini_default.abundance_unit = "log"
-    assert ini_default.ratio_element(ele1, ele2) == val_exp
+    ini = iniabu.IniAbu()
+    val_exp = ini.ele_dict[ele1][0] / ini.ele_dict[ele2][0]
+    ini.abundance_unit = "log"
+    assert ini.ratio_element(ele1, ele2) == val_exp
 
 
 @given(
@@ -305,11 +309,12 @@ def test_ratio_isotope_iso_iso(ini_default, iso1, iso2):
     iso1=st.sampled_from(list(data.lodders09_isotopes.keys())),
     iso2=st.sampled_from(list(data.lodders09_isotopes.keys())),
 )
-def test_ratio_isotope_iso_iso_from_log(ini_default, iso1, iso2):
+def test_ratio_isotope_iso_iso_from_log(iso1, iso2):
     """Calculate isotope ratio when database is in logarithmic state."""
-    val_exp = ini_default.iso_dict[iso1][0] / ini_default.iso_dict[iso2][0]
-    ini_default.abundance_unit = "log"
-    assert ini_default.ratio_isotope(iso1, iso2) == val_exp
+    ini = iniabu.IniAbu()
+    val_exp = ini.iso_dict[iso1][0] / ini.iso_dict[iso2][0]
+    ini.abundance_unit = "log"
+    assert ini.ratio_isotope(iso1, iso2) == val_exp
 
 
 @given(
