@@ -51,38 +51,38 @@ def test_ele_dict(ini_default):
     assert ini_default.ele_dict == data.lodders09_elements
 
 
-def test_abundance_unit_default(ini_default):
+def test_unit_default(ini_default):
     """Ensure that standard abundance unit is linear."""
-    assert ini_default.abundance_unit == "lin"
+    assert ini_default.unit == "num_lin"
 
 
 @given(ele=st.sampled_from(list(data.lodders09_elements.keys())))
-def test_abundance_unit_log(ele):
+def test_unit_log(ele):
     """Ensure logarithmic abundance unit is set correctly."""
     ini = iniabu.IniAbu()
-    ini.abundance_unit = "log"
-    assert ini.abundance_unit == "log"
+    ini.unit = "num_log"
+    assert ini.unit == "num_log"
     assert ini.element[ele].solar_abundance == ini.ele_dict_log[ele][0]
 
 
 @given(ele=st.sampled_from(list(data.lodders09_elements.keys())))
-def test_abundance_unit_log_lin(ele):
+def test_unit_log_lin(ele):
     """Ensure linear abundance unit is set correctly after logarithmic (switch back)."""
     ini = iniabu.IniAbu()
-    ini.abundance_unit = "log"
+    ini.unit = "num_log"
     assert ini.element[ele].solar_abundance == ini.ele_dict_log[ele][0]
-    ini.abundance_unit = "lin"
-    assert ini.abundance_unit == "lin"
+    ini.unit = "num_lin"
+    assert ini.unit == "num_lin"
     assert ini.element[ele].solar_abundance == ini.ele_dict[ele][0]
 
 
 @given(ele=st.sampled_from(list(data.lodders09_elements.keys())))
-def test_abundance_unit_after_new_database(ele):
+def test_unit_after_new_database(ele):
     """Ensure abundance unit is reset to linear when new database is loaded."""
     ini = iniabu.IniAbu()
-    ini.abundance_unit = "log"
+    ini.unit = "num_log"
     ini.database = "lodders09"
-    assert ini.abundance_unit == "lin"
+    assert ini.unit == "num_lin"
     assert ini.element[ele].solar_abundance == data.lodders09_elements[ele][0]
 
 
@@ -229,7 +229,7 @@ def test_ratio_element_ele_ele_from_log(ele1, ele2):
     """Calculate element ratio for element vs. element."""
     ini = iniabu.IniAbu()
     val_exp = ini.ele_dict[ele1][0] / ini.ele_dict[ele2][0]
-    ini.abundance_unit = "log"
+    ini.unit = "num_log"
     assert ini.ratio_element(ele1, ele2) == val_exp
 
 
@@ -313,7 +313,7 @@ def test_ratio_isotope_iso_iso_from_log(iso1, iso2):
     """Calculate isotope ratio when database is in logarithmic state."""
     ini = iniabu.IniAbu()
     val_exp = ini.iso_dict[iso1][0] / ini.iso_dict[iso2][0]
-    ini.abundance_unit = "log"
+    ini.unit = "num_log"
     assert ini.ratio_isotope(iso1, iso2) == val_exp
 
 

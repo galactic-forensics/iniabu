@@ -1,5 +1,7 @@
 """Test suite for ``utilities.py``."""
 
+import copy
+
 from hypothesis import given, strategies as st
 import numpy as np
 import pytest
@@ -9,7 +11,9 @@ import iniabu.data
 import iniabu.elements
 import iniabu.utilities
 from iniabu.utilities import (
+    make_isotope_dictionary,
     make_log_abundance_dictionaries,
+    make_mass_fraction_dictionary,
     return_as_ndarray,
     return_list_simplifier,
     return_string_as_list,
@@ -57,6 +61,21 @@ def test_proxy_list_length(ini_default):
 
 
 @given(abu_x=st.floats(min_value=0.001, allow_infinity=False))
+def test_make_isotope_dictionary(abu_x):
+    """Create an isotope dictionary form an elementary dictionary."""
+    ele_dict = {
+        "H": [10000.0, [1, 2], [0.8, 0.2], [8000.0, 2000.0]],
+        "X": [abu_x, [10], [1.0], [abu_x]],
+    }
+    iso_dict_expected = {
+        "H-1": [0.8, 8000.0],
+        "H-2": [0.2, 2000.0],
+        "X-10": [1.0, abu_x],
+    }
+    assert make_isotope_dictionary(ele_dict) == iso_dict_expected
+
+
+@given(abu_x=st.floats(min_value=0.001, allow_infinity=False))
 def test_make_log_abundance_dictionaries(abu_x):
     """Ensure that logarithmic abundance dictionaries are made in correct form."""
     ele_dict_lin = {
@@ -75,6 +94,65 @@ def test_make_log_abundance_dictionaries(abu_x):
     assert iso_dict_log["H-1"][1] == np.log10(0.8) + 12.0
     assert iso_dict_log["H-2"][1] == np.log10(0.2) + 12.0
     assert iso_dict_log["X-10"][1] == np.log10(abu_x / abu_h) + 12.0
+
+
+def test_make_mass_fraction_dictionaries():
+    """Ensure that mass fraction dictionaries are made in correct form."""
+    ele_dict = {
+        "H": [10000.0, [1, 2], [0.8, 0.2], [8000.0, 2000.0]],
+        "He": [200.0, [3, 4], [0.01, 0.99], [2.0, 198.0]],
+    }
+    # create mass fraction dictionary that is expected
+    all_sum = 0.0
+    for key in ele_dict.keys():
+        for it, iso in enumerate(ele_dict[key][1]):
+            all_sum += iniabu.data.isotopes_mass[f"{key}-{iso}"] * ele_dict[key][3][it]
+    ele_dict_expected = {
+        "H": [
+            None,
+            [1, 2],
+            [0.8, 0.2],
+            [
+                8000.0 * iniabu.data.isotopes_mass["H-1"] / all_sum,
+                2000.0 * iniabu.data.isotopes_mass["H-2"] / all_sum,
+            ],
+        ],
+        "He": [
+            None,
+            [3, 4],
+            [0.01, 0.99],
+            [
+                2.0 * iniabu.data.isotopes_mass["He-3"] / all_sum,
+                198.0 * iniabu.data.isotopes_mass["He-4"] / all_sum,
+            ],
+        ],
+    }
+    # add element abundances
+    ele_dict_expected["H"][0] = sum(ele_dict_expected["H"][3])
+    ele_dict_expected["He"][0] = sum(ele_dict_expected["He"][3])
+    # isotope dict expected
+    iso_dict_expected = make_isotope_dictionary(ele_dict_expected)
+    # test
+    ele_dict_gotten, iso_dict_gotten = make_mass_fraction_dictionary(ele_dict)
+    assert ele_dict_gotten == ele_dict_expected
+    assert iso_dict_gotten == iso_dict_expected
+
+
+def test_make_mass_fraction_dictionaries_ele_dict_untouched():
+    """Ensure that mass_fraction_dictionary routine does not overwrite input.
+
+    This simply makes sure that a deepcopy is made and not just a simple copy for the
+    dictionary. Will trigger elsewhere too, however, this test is better and faster
+    to recognize the problem with deepcopy versus copy.
+    """
+    ele_dict = {
+        "H": [10000.0, [1, 2], [0.8, 0.2], [8000.0, 2000.0]],
+        "He": [200.0, [3, 4], [0.01, 0.99], [2.0, 198.0]],
+    }
+    ele_dict_backup = copy.deepcopy(ele_dict)
+    # run the routine
+    _ = make_mass_fraction_dictionary(ele_dict)
+    assert ele_dict == ele_dict_backup
 
 
 @given(value=st.floats(allow_nan=False))

@@ -25,7 +25,7 @@ class Elements(object):
         designed to be initialized by :class:`iniabu.IniAbu`.
     """
 
-    def __init__(self, parent, eles, log_abu=False, *args, **kwargs):
+    def __init__(self, parent, eles, unit="num_lin", *args, **kwargs):
         """Initialize the Elements class.
 
         Checks for initialization from the proper parent class and sets up the required
@@ -35,8 +35,8 @@ class Elements(object):
         :type parent: class:`iniabu.IniAbu`
         :param eles: Element dictionary.
         :type eles: dict
-        :param log_abu: Use logarithmic (astronomical definition) for solar abundance?
-        :type log_abu: True
+        :param unit: Units used for return.
+        :type log_abu: str
         :param *args: Variable length argument list.
         :param **kwargs: Arbitrary keyword arguments.
 
@@ -49,10 +49,12 @@ class Elements(object):
 
         # set the variables
         self._eles = eles
-        if log_abu:
+        if unit == "num_lin":
+            self._ele_dict = parent.ele_dict
+        elif unit == "num_log":
             self._ele_dict = parent.ele_dict_log
         else:
-            self._ele_dict = parent.ele_dict
+            raise NotImplementedError
 
     # PROPERTIES #
 

@@ -25,7 +25,7 @@ class Isotopes(object):
         designed to be initialized by :class:`iniabu.IniAbu`
     """
 
-    def __init__(self, parent, isos, log_abu=False, *args, **kwargs):
+    def __init__(self, parent, isos, unit="num_lin", *args, **kwargs):
         """Initialize the Isotopes class.
 
         Checks for initialization from the proper parent class and sets up the required
@@ -35,8 +35,8 @@ class Isotopes(object):
         :type parent: class:`iniabu.IniAbu`
         :param isos: Isotope dictionary.
         :type isos: dict
-        :param log_abu: Use logarithmic (astronomical definition) for solar abundance?
-        :type log_abu: True
+        :param unit: Units used for return.
+        :type log_abu: str
         :param *args: Variable length argument list.
         :param **kwargs: Arbitrary keyword arguments.
 
@@ -49,10 +49,12 @@ class Isotopes(object):
 
         # set the variables
         self._isos = isos
-        if log_abu:
+        if unit == "num_lin":
+            self._iso_dict = parent.iso_dict
+        elif unit == "num_log":
             self._iso_dict = parent.iso_dict_log
         else:
-            self._iso_dict = parent.iso_dict
+            raise NotImplementedError
 
     # PROPERTIES #
 

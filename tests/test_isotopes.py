@@ -88,7 +88,7 @@ def test_solar_abundance(ini_default, iso1, iso2):
 )
 def test_solar_abundance_log(ini_default, iso1, iso2):
     """Test isotope solar abundance returner."""
-    ini_default.abundance_unit = "log"
+    ini_default.unit = "num_log"
     assert (
         ini_default.isotope[iso1].solar_abundance == ini_default.iso_dict_log[iso1][1]
     )

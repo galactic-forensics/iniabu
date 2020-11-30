@@ -90,6 +90,12 @@ Here, the `ini` instance will be loaded
 with the default database
 (currently Lodders et al., 2009)
 
+.. note:: To use `mass_fraction` mode by default
+  you can import the module in the following way:
+
+  .. code-block:: python
+    from iniabu import inimf
+
 In case multiple databases
 are required at the same time,
 e.g., `db1` using Lodders et al. (2009)
@@ -118,20 +124,22 @@ by calling:
 
 
 
-Putting the solar abundances into logarithmic mode
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Available abundance units
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Isotopic abundances can easily be switched between
-linear and logarithmic units.
-Here, linear means that the abundance units
-are linear with respect to each other.
-All abundances are normalized
+Abundance units can easily be switched between
+linear number abundances,
+logarithmic number abundances,
+and mass fraction units.
+
+In the linear number abundances case
+all abundances are linear with respect to each other
+and are normalized
 such that the abundance of silicon
 is equal to 10\ :sup:`6` by number.
-All abundances are defined as number fractions
-with respect to each other.
 
-The logarithmic abundances
+
+The logarithmic number abundances
 are generally used in astronomy.
 For an element X,
 the logarithmic abundance is defined
@@ -139,26 +147,58 @@ with respect to the abundance of hydrogen as:
 
 .. math::
 
-    \log_{10}(\epsilon_X) = \log_{10} \left(\frac{\mathrm{N}_\mathrm{X}}{\mathrm{N}_\mathrm{H}}\right) + 12
+  \log_{10}(\epsilon_X) = \log_{10} \left(\frac{\mathrm{N}_\mathrm{X}}{\mathrm{N}_\mathrm{H}}\right) + 12
+
+Mass fraction values
+are common in nucleosynthesis calculations.
+To return mass fraction values
+the database can be switched to `mass_fraction`.
+The abundances are then defined as following:
+
+.. math::
+
+  X_{i} = \frac{N_{i} m_{i}}{\rho N_{A}} \\
+
+Here :math:`X_{i}` is the mass fraction
+of element :math:`i`,
+:math:`N_{i}` its number abundance,
+:math:`m_{i}` its molecular mass,
+and :math:`N_{N}` Avogadro's constant.
+The density :math:`\rho`
+is defined as:
+
+.. math::
+
+  \rho = \frac{1}{N_{A}} \sum_i N_{i} m_{i}
 
 To switch a given database between
-linear (`lin`) and logarithmic (`log`) mode,
+linear number abundance (`num_lin`),
+logarithmic number abundance (`num_log`) mode,
+and mass fraction mode (`mass_fraction`
 the following property can be set:
 
 .. code-block:: python
 
-    >>> ini.abundance_unit == "log"
+    >>> ini.unit == "num_log"
 
+In this case,
+we would switch to logarithmic number abundance mode.
 To check what abundance unit is currently set,
 the following command can be used:
 
 .. code-block:: python
 
-    >>> ini.abundance_unit
-    "log"
+    >>> ini.unit
+    "num_log"
 
 By default,
-linear values are used.
+linear number abundance values are used.
+
+.. note:: To use `mass_fraction` mode by default
+  you can import the module in the following way:
+
+  .. code-block:: python
+    from iniabu import inimf
 
 Element and isotope properties
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

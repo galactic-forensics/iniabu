@@ -24,7 +24,7 @@ class IniAbu(object):
     Todo Example
     """
 
-    def __init__(self, database="lodders09"):
+    def __init__(self, database="lodders09", unit="num_lin"):
         """Initialize IniAbu.
 
         Load and set the default database.
@@ -32,10 +32,12 @@ class IniAbu(object):
         :param database: Database to initialize the class with, defaults to
             ``lodders09``.
         :type database: str
+        :param unit: Units to use for initialization.
+        :type unit: str
         """
         # init parameters
         self._database = None
-        self._log_abu = False
+        self._unit = unit
 
         # set database
         self.database = database
@@ -73,7 +75,7 @@ class IniAbu(object):
             >>> ini.element["He"].isotopes_solar_abundance
             array([1.03e+06, 2.51e+09])
         """
-        return ProxyList(self, Elements, self._ele_dict.keys(), log_abu=self._log_abu)
+        return ProxyList(self, Elements, self._ele_dict.keys(), unit=self._unit)
 
     @property
     def isotope(self):
@@ -102,39 +104,9 @@ class IniAbu(object):
             >>> ini.isotope[["H-2", "He-3"]].relative_abundance
             array([1.94e-05, 1.66e-04])
         """
-        return ProxyList(self, Isotopes, self._iso_dict.keys(), log_abu=self._log_abu)
+        return ProxyList(self, Isotopes, self._iso_dict.keys(), unit=self._unit)
 
     # PROPERTIES #
-
-    @property
-    def abundance_unit(self):
-        """Get / Set the unit for the solar abundances.
-
-        Routine to easily switch the database between the **default** linear number
-        abundances, normed to Si with an abundance of 1e6 (``lin``, typically used
-        in cosmo- and geochemistry studies) or the logarithmic (``log``, typically used
-        in astronomy) abundance units, normed to H as 12.
-
-        :setter: Unit to set, either "lin" (default) or "log".
-        :type: str
-
-        :return: Currently set unit.
-        :rtype: str
-
-        Example:
-            >>> from iniabu import ini  # loads with default linear units
-            >>> ini.abundance_unit
-            'lin'
-
-            >>> ini.abundance_unit = "log"  # set logarithmic abundance unit
-            >>> ini.element["H"].solar_abundance
-            12.0
-        """
-        return "log" if self._log_abu else "lin"
-
-    @abundance_unit.setter
-    def abundance_unit(self, s):
-        self._log_abu = True if s == "log" else False
 
     @property
     def database(self):
@@ -162,7 +134,12 @@ class IniAbu(object):
             self._ele_dict_log,
             self._iso_dict_log,
         ) = utilities.make_log_abundance_dictionaries(self._ele_dict)
-        self.abundance_unit = "lin"
+        self._ele_dict_mf, self._iso_dict_mf = utilities.make_mass_fraction_dictionary(
+            self._ele_dict
+        )
+
+        # todo: remove next line -> keep the units
+        self.unit = "num_lin"
         self._database = db
 
     @property
@@ -228,6 +205,42 @@ class IniAbu(object):
         :rtype: dict
         """
         return self._iso_dict_log
+
+    @property
+    def unit(self):
+        """Get / Set the unit for the solar abundances.
+
+        Routine to easily switch the database between the **default** linear number
+        abundances, normed to Si with an abundance of 1e6 (``num_lin``, typically used
+        in cosmo- and geochemistry studies), the logarithmic (``num_log``, typically
+        used in astronomy) abundance units, normed to H as 12, or mass fractions
+        ``massf``, normed such that all elements sum up to unity.
+
+        :setter: Unit to set, either "num_lin" (default), "num_log", or "mass_fraction".
+        :type: str
+
+        :return: Currently set unit.
+        :rtype: str
+
+        :raises ValueError: The unit being set is not valid.
+
+        Example:
+            >>> from iniabu import ini  # loads with default linear units
+            >>> ini.unit
+            'num_lin'
+
+            >>> ini.unit = "num_log"  # set logarithmic abundance unit
+            >>> ini.element["H"].solar_abundance
+            12.0
+        """
+        return self._unit
+
+    @unit.setter
+    def unit(self, s):
+        if s == "num_lin" or "num_log" or "mass_fraction":
+            self._unit = s
+        else:
+            raise ValueError(f"Your selected unit {s} is not a valid unit.")
 
     # METHODS #
 
@@ -500,15 +513,15 @@ class IniAbu(object):
             )
 
         # remember current unit of abundances, then set to linear
-        current_abundance_unit = self.abundance_unit
-        self.abundance_unit = "lin"
+        current_abundance_unit = self.unit
+        self.unit = "num_lin"
 
         # get the values back:
         nominator_value = self.element[nominator].solar_abundance
         denominator_value = self.element[denominator].solar_abundance
 
         # return database to previous state
-        self.abundance_unit = current_abundance_unit
+        self.unit = current_abundance_unit
 
         ratio = nominator_value / denominator_value
 
@@ -588,15 +601,15 @@ class IniAbu(object):
             denominator = self._get_major_isotope(denominator)
 
         # remember current unit of abundances, then set to linear
-        current_abundance_unit = self.abundance_unit
-        self.abundance_unit = "lin"
+        current_abundance_unit = self.unit
+        self.unit = "num_lin"
 
         # get the values back:
         nominator_value = self.isotope[nominator].relative_abundance
         denominator_value = self.isotope[denominator].relative_abundance
 
         # return database to previous state
-        self.abundance_unit = current_abundance_unit
+        self.unit = current_abundance_unit
 
         ratio = nominator_value / denominator_value
 
