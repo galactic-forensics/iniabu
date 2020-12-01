@@ -4,7 +4,8 @@
 from .main import IniAbu
 
 ini = IniAbu()
-
+inimf = IniAbu(unit="mass_fraction")
+inilog = IniAbu(unit="num_log")
 
 # Package information
 __version__ = "0.10.0"

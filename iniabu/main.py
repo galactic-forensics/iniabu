@@ -37,10 +37,12 @@ class IniAbu(object):
         """
         # init parameters
         self._database = None
-        self._unit = unit
 
         # set database
         self.database = database
+
+        # set unit
+        self.unit = unit
 
     # PROXY LISTS #
 
@@ -221,8 +223,6 @@ class IniAbu(object):
 
         :return: Currently set unit.
         :rtype: str
-
-        :raises ValueError: The unit being set is not valid.
 
         Example:
             >>> from iniabu import ini  # loads with default linear units

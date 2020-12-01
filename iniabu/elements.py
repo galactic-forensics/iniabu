@@ -26,7 +26,7 @@ class Elements(object):
     """
 
     def __init__(self, parent, eles, unit="num_lin", *args, **kwargs):
-        """Initialize the Elements class.
+        """Initialize the Elements class.  # noqa: DAR401.
 
         Checks for initialization from the proper parent class and sets up the required
         dictionaries to be used later.
@@ -36,7 +36,7 @@ class Elements(object):
         :param eles: Element dictionary.
         :type eles: dict
         :param unit: Units used for return.
-        :type log_abu: str
+        :type unit: str
         :param *args: Variable length argument list.
         :param **kwargs: Arbitrary keyword arguments.
 
@@ -54,7 +54,7 @@ class Elements(object):
         elif unit == "num_log":
             self._ele_dict = parent.ele_dict_log
         else:
-            raise NotImplementedError
+            raise NotImplementedError  # todo also remove noaq
 
     # PROPERTIES #
 
