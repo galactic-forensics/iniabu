@@ -179,6 +179,23 @@ class IniAbu(object):
         return self._ele_dict_log
 
     @property
+    def ele_dict_mf(self):
+        """Get the element dictionary with mass fractions.
+
+        The dictionary keys are element symbols, e.g., "H". The entries for the element
+        dictionary are a list containing the following entries (in order):
+
+        - Solar abundance (mass fractions)
+        - ndarray with mass numbers of all isotopes
+        - ndarray with relative abundances of all isotopes
+        - ndarray with solar abundances of all isotopes (mass fractions)
+
+        :return: Element dictionary
+        :rtype: dict
+        """
+        return self._ele_dict_mf
+
+    @property
     def iso_dict(self):
         """Get the isotope dictionary.
 
@@ -209,6 +226,21 @@ class IniAbu(object):
         return self._iso_dict_log
 
     @property
+    def iso_dict_mf(self):
+        """Get the isotope dictionary in mass fractions.
+
+        The dictionary keys are isotope symbols, e.g., "H-1". The entries for the
+        isotope dictionary are a list containing the following entries (in order):
+
+        - Relative abundance
+        - Solar abundance (mass fractions)
+
+        :return: Isotope dictionary
+        :rtype: dict
+        """
+        return self._iso_dict_mf
+
+    @property
     def unit(self):
         """Get / Set the unit for the solar abundances.
 
@@ -237,7 +269,7 @@ class IniAbu(object):
 
     @unit.setter
     def unit(self, s):
-        if s == "num_lin" or "num_log" or "mass_fraction":
+        if s == "num_lin" or s == "num_log" or s == "mass_fraction":
             self._unit = s
         else:
             raise ValueError(f"Your selected unit {s} is not a valid unit.")

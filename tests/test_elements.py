@@ -17,6 +17,16 @@ def test_elements_require_parent_class():
     assert err_msg == "Elements class must be initialized from IniAbu."
 
 
+def test_elements_wrong_unit():
+    """Raise NotImplementedError if a wrong unit is selected."""
+    parent = iniabu.IniAbu()  # fake a correct parent
+    unit = "random_unit"
+    with pytest.raises(NotImplementedError) as err_info:
+        iniabu.elements.Elements(parent, "Si", unit=unit)
+    err_msg = err_info.value.args[0]
+    assert err_msg == f"The chosen unit {unit} is currently not implemented."
+
+
 @given(
     ele1=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
     ele2=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
@@ -80,6 +90,45 @@ def test_isotopes_solar_abundance(ini_default, ele1, ele2):
     right = [
         np.array(iniabu.data.lodders09_elements[ele1][3]),
         np.array(iniabu.data.lodders09_elements[ele2][3]),
+    ]
+    np.testing.assert_equal(left, right)
+
+
+@given(
+    ele1=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+    ele2=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+)
+def test_isotopes_solar_abundance_log(ele1, ele2):
+    """Test isotope solar abundance returner."""
+    ini = iniabu.IniAbu(unit="num_log")
+    assert (
+        ini.element[ele1].isotopes_solar_abundance
+        == np.array(ini.ele_dict_log[ele1][3])
+    ).all()
+
+    left = ini.element[[ele1, ele2]].isotopes_solar_abundance
+    right = [
+        np.array(ini.ele_dict_log[ele1][3]),
+        np.array(ini.ele_dict_log[ele2][3]),
+    ]
+    np.testing.assert_equal(left, right)
+
+
+@given(
+    ele1=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+    ele2=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+)
+def test_isotopes_solar_abundance_mf(ele1, ele2):
+    """Test isotope solar abundance returner."""
+    ini = iniabu.IniAbu(unit="mass_fraction")
+    assert (
+        ini.element[ele1].isotopes_solar_abundance == np.array(ini.ele_dict_mf[ele1][3])
+    ).all()
+
+    left = ini.element[[ele1, ele2]].isotopes_solar_abundance
+    right = [
+        np.array(ini.ele_dict_mf[ele1][3]),
+        np.array(ini.ele_dict_mf[ele2][3]),
     ]
     np.testing.assert_equal(left, right)
 

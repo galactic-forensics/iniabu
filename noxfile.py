@@ -8,9 +8,10 @@ nox.options.sessions = "lint", "safety", "tests", "xdoctest"
 package = "iniabu"
 locations = "iniabu", "tests", "noxfile.py", "docs/conf.py"
 python_suite = ["3.9", "3.8", "3.7", "3.6"]
+python_main = "3.9"
 
 
-@nox.session(python="3.9")
+@nox.session(python=python_main)
 def black(session):
     """Autoformat all python files with black."""
     args = session.posargs or locations
@@ -18,14 +19,14 @@ def black(session):
     session.run("black", *args)
 
 
-@nox.session(python="3.9")
+@nox.session(python=python_main)
 def build(session):
     """Pack iniabu for release on PyPi."""
     session.install("flit")
     session.run("flit", "build")
 
 
-@nox.session(python="3.9")
+@nox.session(python=python_main)
 def docs(session):
     """Build the documentation."""
     session.install("sphinx", "sphinx_rtd_theme", "-r", "requirements.txt", "pytest")
@@ -35,7 +36,7 @@ def docs(session):
     )  # as for readthedocs.io
 
 
-@nox.session(python=python_suite)
+@nox.session(python=python_main)
 def lint(session):
     """Lint project using ``flake8``."""
     args = session.posargs or locations
@@ -50,7 +51,7 @@ def tests(session):
     session.run("pytest")
 
 
-@nox.session(python="3.9")
+@nox.session(python=python_main)
 def safety(session):
     """Safety check for all dependencies."""
     session.install("safety", "-r", "requirements.txt", "-r", "dev-requirements.txt")

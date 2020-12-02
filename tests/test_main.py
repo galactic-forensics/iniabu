@@ -66,6 +66,15 @@ def test_unit_log(ele):
 
 
 @given(ele=st.sampled_from(list(data.lodders09_elements.keys())))
+def test_unit_mf(ele):
+    """Ensure mass fraction unit is set correctly."""
+    ini = iniabu.IniAbu()
+    ini.unit = "mass_fraction"
+    assert ini.unit == "mass_fraction"
+    assert ini.element[ele].solar_abundance == ini.ele_dict_mf[ele][0]
+
+
+@given(ele=st.sampled_from(list(data.lodders09_elements.keys())))
 def test_unit_log_lin(ele):
     """Ensure linear abundance unit is set correctly after logarithmic (switch back)."""
     ini = iniabu.IniAbu()
@@ -74,6 +83,15 @@ def test_unit_log_lin(ele):
     ini.unit = "num_lin"
     assert ini.unit == "num_lin"
     assert ini.element[ele].solar_abundance == ini.ele_dict[ele][0]
+
+
+def test_unit_invalid(ini_default):
+    """Raise a ValueError if invalid unit is set."""
+    unit = "invalid_unit"
+    with pytest.raises(ValueError) as err_info:
+        ini_default.unit = unit
+    err_msg = err_info.value.args[0]
+    assert err_msg == f"Your selected unit {unit} is not a valid unit."
 
 
 @given(ele=st.sampled_from(list(data.lodders09_elements.keys())))

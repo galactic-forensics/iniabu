@@ -26,7 +26,7 @@ class Elements(object):
     """
 
     def __init__(self, parent, eles, unit="num_lin", *args, **kwargs):
-        """Initialize the Elements class.  # noqa: DAR401.
+        """Initialize the Elements class.
 
         Checks for initialization from the proper parent class and sets up the required
         dictionaries to be used later.
@@ -42,6 +42,7 @@ class Elements(object):
 
         :raises TypeError: The class was not initialized with :class:`iniabu.IniAbu`
             as the parent.
+        :raises NotImplementedError: An unavailable unit was selected.
         """
         # check for correct parent
         if parent.__class__.__name__ != "IniAbu":
@@ -53,8 +54,12 @@ class Elements(object):
             self._ele_dict = parent.ele_dict
         elif unit == "num_log":
             self._ele_dict = parent.ele_dict_log
+        elif unit == "mass_fraction":
+            self._ele_dict = parent.ele_dict_mf
         else:
-            raise NotImplementedError  # todo also remove noaq
+            raise NotImplementedError(
+                f"The chosen unit {unit} is currently not implemented."
+            )
 
     # PROPERTIES #
 
