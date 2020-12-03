@@ -140,7 +140,7 @@ def test_make_mass_fraction_dictionaries():
         "H": [
             None,
             [1, 2],
-            [0.8, 0.2],
+            [None, None],
             [
                 8000.0 * iniabu.data.isotopes_mass["H-1"] / all_sum,
                 2000.0 * iniabu.data.isotopes_mass["H-2"] / all_sum,
@@ -149,16 +149,21 @@ def test_make_mass_fraction_dictionaries():
         "He": [
             None,
             [3, 4],
-            [0.01, 0.99],
+            [None, None],
             [
                 2.0 * iniabu.data.isotopes_mass["He-3"] / all_sum,
                 198.0 * iniabu.data.isotopes_mass["He-4"] / all_sum,
             ],
         ],
     }
-    # add element abundances
-    ele_dict_expected["H"][0] = sum(ele_dict_expected["H"][3])
-    ele_dict_expected["He"][0] = sum(ele_dict_expected["He"][3])
+    # fill `None` values
+    for ele in ele_dict_expected.keys():
+        # Solar System abundance
+        mf_abu_sum = sum(ele_dict_expected[ele][3])
+        ele_dict_expected[ele][0] = mf_abu_sum
+        # Relative isotope ratios
+        for it, mf_abu_iso in enumerate(ele_dict_expected[ele][3]):
+            ele_dict_expected[ele][2][it] = mf_abu_iso / mf_abu_sum
     # isotope dict expected
     iso_dict_expected = make_isotope_dictionary(ele_dict_expected)
     # test
