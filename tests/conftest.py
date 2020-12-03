@@ -12,6 +12,12 @@ def ini_default():
 
 
 @pytest.fixture(scope="module")
+def ini_mf():
+    """Return ``ini`` initialized with default database and mass fractions."""
+    return iniabu.IniAbu(unit="mass_fraction")
+
+
+@pytest.fixture(scope="module")
 def ini_nist():
     """Return ``ini`` initialized with NIST database (no solar abundances)."""
     return iniabu.IniAbu(database="nist")

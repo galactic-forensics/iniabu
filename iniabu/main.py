@@ -3,13 +3,14 @@
 This file contains the main `IniAbu` class.
 """
 
+
 import numpy as np
 
 from . import data
 from . import utilities
 from .elements import Elements
 from .isotopes import Isotopes
-from .utilities import ProxyList, return_as_ndarray, return_string_as_list
+from .utilities import linear_units, ProxyList, return_as_ndarray, return_string_as_list
 
 
 class IniAbu(object):
@@ -276,7 +277,7 @@ class IniAbu(object):
 
     # METHODS #
 
-    def bracket_element(self, nominator, denominator, value, mass_fraction=False):
+    def bracket_element(self, nominator, denominator, value, mass_fraction=None):
         """Calculate the bracket ratio for a given element ratio and a value.
 
         Bracket notation is defined as:
@@ -293,8 +294,10 @@ class IniAbu(object):
         :type denominator: str,list
         :param value: Value(s) to calculate bracket notation value with respect to.
         :type value: float,ndarray
-        :param mass_fraction: Are the given values in mass fractions? Defaults to False
-            (i.e., number fractions are returned).
+        :param mass_fraction: Are the given values in mass fractions? Defaults to None,
+            which makes it dependent on the units that are currently loaded. The loaded
+            setting can be overwritten by setting `mass_fraction=True` or
+            `mass_fraction=False`.
         :type mass_fraction: bool
 
         :return: Bracket notation expression of given values with respect to the solar
@@ -322,7 +325,7 @@ class IniAbu(object):
 
         return np.log10(value) - np.log10(solar_ratios)
 
-    def bracket_isotope(self, nominator, denominator, value, mass_fraction=False):
+    def bracket_isotope(self, nominator, denominator, value, mass_fraction=None):
         """Calculate the bracket ratio for a given isotope ratio and a value.
 
         Bracket notation is defined as:
@@ -339,8 +342,10 @@ class IniAbu(object):
         :type denominator: str,list
         :param value: Value(s) to calculate bracket notation value with respect to.
         :type value: float,ndarray
-        :param mass_fraction: Are the given values in mass fractions? Defaults to False
-            (i.e., number fractions are returned).
+        :param mass_fraction: Are the given values in mass fractions? Defaults to None,
+            which makes it dependent on the units that are currently loaded. The loaded
+            setting can be overwritten by setting `mass_fraction=True` or
+            `mass_fraction=False`.
         :type mass_fraction: bool
 
         :return: Bracket notation expression of given values with respect to the solar
@@ -369,7 +374,7 @@ class IniAbu(object):
         return np.log10(value) - np.log10(solar_ratios)
 
     def delta_element(
-        self, nominator, denominator, value, mass_fraction=False, delta_factor=1000.0
+        self, nominator, denominator, value, mass_fraction=None, delta_factor=1000.0
     ):
         """Calculate the delta-value for a given element ratio and a value.
 
@@ -390,8 +395,10 @@ class IniAbu(object):
         :type denominator: str,list
         :param value: Value(s) to calculate delta-value with respect to.
         :type value: float,ndarray
-        :param mass_fraction: Are the given values in mass fractions? Defaults to False
-            (i.e., number fractions are returned).
+        :param mass_fraction: Are the given values in mass fractions? Defaults to None,
+            which makes it dependent on the units that are currently loaded. The loaded
+            setting can be overwritten by setting `mass_fraction=True` or
+            `mass_fraction=False`.
         :type mass_fraction: bool
         :param delta_factor: What value should the delta value be multiplied with?
             Defaults to 1000 to return results in permil.
@@ -424,7 +431,7 @@ class IniAbu(object):
         return (value / solar_ratios - 1) * delta_factor
 
     def delta_isotope(
-        self, nominator, denominator, value, mass_fraction=False, delta_factor=1000.0
+        self, nominator, denominator, value, mass_fraction=None, delta_factor=1000.0
     ):
         """Calculate the delta-value for a given isotope ratio and a value.
 
@@ -445,8 +452,10 @@ class IniAbu(object):
         :type denominator: str,list
         :param value: Value(s) to calculate delta-value with respect to.
         :type value: float,ndarray
-        :param mass_fraction: Are the given values in mass fractions? Defaults to False
-            (i.e., number fractions are returned).
+        :param mass_fraction: Are the given values in mass fractions? Defaults to None,
+            which makes it dependent on the units that are currently loaded. The loaded
+            setting can be overwritten by setting `mass_fraction=True` or
+            `mass_fraction=False`.
         :type mass_fraction: bool
         :param delta_factor: What value should the delta value be multiplied with?
             Defaults to 1000 to return results in permil.
@@ -484,7 +493,7 @@ class IniAbu(object):
 
         return (value / solar_ratios - 1) * delta_factor
 
-    def ratio_element(self, nominator, denominator, mass_fraction=False):
+    def ratio_element(self, nominator, denominator, mass_fraction=None):
         """Get the ratios of given elements.
 
         Nominator and denominator can be element names or lists of element names (if
@@ -495,8 +504,10 @@ class IniAbu(object):
         :type nominator: str,list
         :param denominator: Element or list of elements in denominator of ratio.
         :type denominator: str,list
-        :param mass_fraction: Should mass fractions be returned? Defaults to False
-            (i.e., number fractions are returned).
+        :param mass_fraction: Are the given values in mass fractions? Defaults to None,
+            which makes it dependent on the units that are currently loaded. The loaded
+            setting can be overwritten by setting `mass_fraction=True` or
+            `mass_fraction=False`.
         :type mass_fraction: bool
 
         :return: The element ratio or a numpy array of the requested ratios.
@@ -544,21 +555,15 @@ class IniAbu(object):
                 "is not allowed."
             )
 
-        # remember current unit of abundances, then set to linear
-        current_abundance_unit = self.unit
-        self.unit = "num_lin"
-
-        # get the values back:
-        nominator_value = self.element[nominator].solar_abundance
-        denominator_value = self.element[denominator].solar_abundance
-
-        # return database to previous state
-        self.unit = current_abundance_unit
+        # get the values back, use linear units if required:
+        with linear_units(self, mass_fraction=mass_fraction) as ini_tmp:
+            nominator_value = ini_tmp.element[nominator].solar_abundance
+            denominator_value = ini_tmp.element[denominator].solar_abundance
 
         ratio = nominator_value / denominator_value
 
-        # correct if mass_fraction is true
-        if mass_fraction:
+        # correct if mass_fraction is true and not in mass_fraction notation already
+        if mass_fraction and self.unit != "mass_fraction":
             # get masses
             nominator_masses = [data.elements_mass[ele] for ele in nominator]
             denominator_masses = [data.elements_mass[ele] for ele in denominator]
@@ -566,16 +571,14 @@ class IniAbu(object):
             corr_factor = utilities.return_list_simplifier(
                 np.array(denominator_masses) / np.array(nominator_masses)
             )
-            ratio *= corr_factor
+            ratio /= corr_factor
 
         return ratio
 
-    def ratio_isotope(self, nominator, denominator, mass_fraction=False):
+    def ratio_isotope(self, nominator, denominator, mass_fraction=None):
         """Get the ratios of given isotopes.
 
-        Grabs the isotope ratios for nominator / denominator. By default, number
-        fractions are returned, however, mass fractions return is possible by setting
-        "mass_fraction=True".
+        Grabs the isotope ratios for nominator / denominator.
         If a list of nominator isotopes is given but only one denominator isotope,
         the ratio with that denominator is formed for each isotope. If both parameters
         are given as lists, they must be of equal length.
@@ -588,8 +591,10 @@ class IniAbu(object):
             "Si-29". Alternatively, an element can be given, i.e., "Si". In that case,
             the most abundant isotope is chosen. Lists of elements are not allowed.
         :type denominator: str,list
-        :param mass_fraction: Should mass fractions be returned? Defaults to False
-            (i.e., number fractions are returned).
+        :param mass_fraction: Are the given values in mass fractions? Defaults to None,
+            which makes it dependent on the units that are currently loaded. The loaded
+            setting can be overwritten by setting `mass_fraction=True` or
+            `mass_fraction=False`.
         :type mass_fraction: bool
 
         :return: The isotope ratio or a numpy array of the requested ratios.
@@ -632,21 +637,15 @@ class IniAbu(object):
         if isinstance(denominator, str) and denominator in self._ele_dict.keys():
             denominator = self._get_major_isotope(denominator)
 
-        # remember current unit of abundances, then set to linear
-        current_abundance_unit = self.unit
-        self.unit = "num_lin"
-
         # get the values back:
-        nominator_value = self.isotope[nominator].relative_abundance
-        denominator_value = self.isotope[denominator].relative_abundance
-
-        # return database to previous state
-        self.unit = current_abundance_unit
+        with linear_units(self, mass_fraction=mass_fraction) as ini_tmp:
+            nominator_value = ini_tmp.isotope[nominator].relative_abundance
+            denominator_value = ini_tmp.isotope[denominator].relative_abundance
 
         ratio = nominator_value / denominator_value
 
-        # correct if mass_fraction is true
-        if mass_fraction:
+        # correct if mass_fraction is true and not in mass_fraction notation already
+        if mass_fraction and self.unit != "mass_fraction":
             # turn into list if necessary
             nominator = return_string_as_list(nominator)
             denominator = return_string_as_list(denominator)
@@ -657,7 +656,7 @@ class IniAbu(object):
             corr_factor = utilities.return_list_simplifier(
                 np.array(denominator_masses) / np.array(nominator_masses)
             )
-            ratio *= corr_factor
+            ratio /= corr_factor
 
         return ratio
 

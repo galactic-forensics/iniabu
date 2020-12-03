@@ -11,6 +11,7 @@ import iniabu.data
 import iniabu.elements
 import iniabu.utilities
 from iniabu.utilities import (
+    linear_units,
     make_isotope_dictionary,
     make_log_abundance_dictionaries,
     make_mass_fraction_dictionary,
@@ -58,6 +59,34 @@ def test_proxy_list_length(ini_default):
     # test proxy list length
     length = len(ini_default.ele_dict.keys())
     assert ini.element.__len__() == length
+
+
+# FUNCTIONS #
+
+
+def test_linear_units_switch(ini_mf):
+    """Ensure context manager works properly when unit switch required."""
+    ini_log = iniabu.IniAbu(unit="num_log")
+    # test coming from mass logarithmic unit
+    with linear_units(ini_log, mass_fraction=None) as ini:
+        assert ini.unit == "num_lin"
+    assert ini_log.unit == "num_log"
+    # mass fraction and mass_fraction is False (switch to linear)
+    with linear_units(ini_mf, mass_fraction=False) as ini:
+        assert ini.unit == "num_lin"
+    assert ini_mf.unit == "mass_fraction"
+
+
+def test_linear_units_no_switch(ini_default, ini_mf):
+    """Ensure context manager works properly when no unit switch required."""
+    # test coming from linear
+    with linear_units(ini_default, mass_fraction=None) as ini:
+        assert ini.unit == "num_lin"
+    assert ini_default.unit == "num_lin"
+    # test coming from mass fraction
+    with linear_units(ini_mf, mass_fraction=None) as ini:
+        assert ini.unit == "mass_fraction"
+    assert ini_mf.unit == "mass_fraction"
 
 
 @given(abu_x=st.floats(min_value=0.001, allow_infinity=False))

@@ -1,5 +1,6 @@
 """Utility functions."""
 
+from contextlib import contextmanager
 import copy
 
 import numpy as np
@@ -69,6 +70,34 @@ class ProxyList(object):
 
 
 # FUNCTIONS #
+
+
+@contextmanager
+def linear_units(ini, mass_fraction):
+    """Context manager to turn current instants units linear if logarithmic.
+
+    This is used mainly for ratio calculation, since logarithmic cannot be ratioed
+    to each other.
+
+    :param ini: Initialized iniabu instance
+    :type ini: `IniAbu`
+    :param mass_fraction: Mass fraction variable passed on from last routine
+    :type mass_fraction: bool or None
+
+    :yield: `ini` as with adjusted units (if necessary)
+    :ytype: `IniAbu` instance
+    """
+    current_units = ini.unit
+
+    try:  # change units if necessary
+        if current_units == "num_log":
+            ini.unit = "num_lin"
+        # to avoid rounding err
+        elif current_units == "mass_fraction" and mass_fraction is False:
+            ini.unit = "num_lin"
+        yield ini
+    finally:  # reset units
+        ini.unit = current_units
 
 
 def make_isotope_dictionary(element_dict):
