@@ -524,7 +524,7 @@ class IniAbu(object):
 
             >>> # Calculate same ratio as mass fraction
             >>> ini.ratio_element("H", "He", mass_fraction=True)
-            40.96035314200997
+            2.597460199709773
 
             >>> # Calculate ratios with multiple elements
             >>> ini.ratio_element(["H", "He", "Al"], ["Si"])
@@ -619,7 +619,16 @@ class IniAbu(object):
 
             >>> # repeat this calculation assuming mass fractions
             >>> ini.ratio_isotope(["Ne-21", "Ne-22"], "Ne", mass_fraction=True)
-            array([0.00228282, 0.0668463 ])
+            array([0.00251724, 0.08088183])
+
+            >>> from iniabu import inimf
+            >>> # calculate Ne-21 / Ne-20 isotope ratio using mass fractions
+            >>> inimf.ratio_isotope("Ne-21", "Ne-20")
+            0.002515409891030499
+
+            >>> # calculate the same ratio in number fractions
+            >>> inimf.ratio_isotope("Ne-21", "Ne-20", mass_fraction=False)
+            0.0023971655776491205
         """
         # check for equal length if nominator and denominator are lists
         if not isinstance(nominator, str) and not isinstance(denominator, str):

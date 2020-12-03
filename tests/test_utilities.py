@@ -167,6 +167,18 @@ def test_make_mass_fraction_dictionaries():
     assert iso_dict_gotten == iso_dict_expected
 
 
+@given(ele=st.sampled_from(list(iniabu.data.lodders09_elements.keys())))
+def test_make_mass_fraction_dictionary_iso_relative_abundances(ini_default, ele):
+    """Ensure relative isotope abundances by weight."""
+    abu_sum = sum(ini_default.ele_dict_mf[ele][3])
+    for it, abu_mf in enumerate(ini_default.ele_dict_mf[ele][3]):
+        abu_rel_mf = ini_default.ele_dict_mf[ele][2][it]
+        abu_rel_mf_expected = abu_mf / abu_sum
+        assert abu_rel_mf == pytest.approx(abu_rel_mf_expected)
+    # relative abundances sum to unity test
+    assert sum(ini_default.ele_dict_mf[ele][2]) == pytest.approx(1.0)
+
+
 def test_make_mass_fraction_dictionaries_ele_dict_untouched():
     """Ensure that mass_fraction_dictionary routine does not overwrite input.
 

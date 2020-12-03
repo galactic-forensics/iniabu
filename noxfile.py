@@ -62,7 +62,7 @@ def safety(session):
     )
 
 
-@nox.session(python=python_suite)
+@nox.session(python=python_main)
 def xdoctest(session):
     """Test docstring examples with xdoctest."""
     args = session.posargs or ["all"]

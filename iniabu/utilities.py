@@ -192,7 +192,7 @@ def make_mass_fraction_dictionary(element_dict):
             iso_mass = data.isotopes_mass[f"{key}-{iso}"]
             abu_sum += iso_abu * iso_mass
 
-    # make element mass fraction dictionary
+    # make element mass fraction dictionary make abundance
     element_dict_mf = copy.deepcopy(element_dict)
     for key in ele_keys:
         ele_abu_mf = 0.0
@@ -203,6 +203,12 @@ def make_mass_fraction_dictionary(element_dict):
             ele_abu_mf += iso_abu_mf
             element_dict_mf[key][3][it] = iso_abu_mf
         element_dict_mf[key][0] = ele_abu_mf
+
+    # # correct relative isotope abundances to be relative by weight!
+    for key in ele_keys:
+        abu_sum = sum(element_dict_mf[key][3])
+        for it, sol_abu_val in enumerate(element_dict_mf[key][3]):
+            element_dict_mf[key][2][it] = sol_abu_val / abu_sum
 
     # make isotope mass fraction dictionary
     isotope_dict_mf = make_isotope_dictionary(element_dict_mf)

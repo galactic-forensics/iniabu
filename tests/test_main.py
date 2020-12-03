@@ -46,9 +46,15 @@ def test_init_database_invalid():
     )
 
 
+# TEST THE DICTIONARIES #
+
+
 def test_ele_dict(ini_default):
     """Return the elementary dictionary."""
     assert ini_default.ele_dict == data.lodders09_elements
+
+
+# TEST UNITS USED #
 
 
 def test_unit_default(ini_default):
