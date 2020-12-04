@@ -17,6 +17,8 @@ class Elements(object):
 
     Example:
         >>> from iniabu import ini
+        >>> ini.unit
+        'num_lin'
         >>> element = ini.element["Si"]
         >>> element.solar_abundance
         999700.0

@@ -38,12 +38,16 @@ class IniAbu(object):
         """
         # init parameters
         self._database = None
+        self._is_initializing = True  # to avoid message printing
 
         # set database
         self.database = database
 
         # set unit
         self.unit = unit
+
+        # done with init
+        self._is_initializing = False
 
     # PROXY LISTS #
 
@@ -115,6 +119,9 @@ class IniAbu(object):
     def database(self):
         """Get / Set the current database.
 
+        Setting a new database does not change the units that are currently loaded.
+        You will get a message printed on what these units are.
+
         :setter: Database to set.
         :type: str
 
@@ -141,9 +148,14 @@ class IniAbu(object):
             self._ele_dict
         )
 
-        # todo: remove next line -> keep the units
-        self.unit = "num_lin"
         self._database = db
+
+        # print message on what was loaded:
+        if not self._is_initializing:
+            print(
+                f"iniabu loaded database: '{self.database}', current units: "
+                f"'{self.unit}'"
+            )
 
     @property
     def ele_dict(self):
@@ -259,12 +271,15 @@ class IniAbu(object):
 
         Example:
             >>> from iniabu import ini  # loads with default linear units
-            >>> ini.unit
-            'num_lin'
-
             >>> ini.unit = "num_log"  # set logarithmic abundance unit
+            >>> ini.unit
+            'num_log'
             >>> ini.element["H"].solar_abundance
             12.0
+
+            >>> ini.unit = "num_lin"  # set back to default
+            >>> ini.unit
+            'num_lin'
         """
         return self._unit
 

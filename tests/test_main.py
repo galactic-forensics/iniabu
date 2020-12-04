@@ -100,16 +100,6 @@ def test_unit_invalid(ini_default):
     assert err_msg == f"Your selected unit {unit} is not a valid unit."
 
 
-@given(ele=st.sampled_from(list(data.lodders09_elements.keys())))
-def test_unit_after_new_database(ele):
-    """Ensure abundance unit is reset to linear when new database is loaded."""
-    ini = iniabu.IniAbu()
-    ini.unit = "num_log"
-    ini.database = "lodders09"
-    assert ini.unit == "num_lin"
-    assert ini.element[ele].solar_abundance == data.lodders09_elements[ele][0]
-
-
 @given(
     ele1=st.sampled_from(list(data.lodders09_elements.keys())),
     ele2=st.sampled_from(list(data.lodders09_elements.keys())),
