@@ -44,21 +44,23 @@ To do so, type in your terminal:
 Available databases
 -------------------
 Several databases are available to work with.
-The default database is called ``lodders09``
+The default database is called "lodders09"
 and is based on
 `Lodders et al. (2009) <https://doi.org/10.1007/978-3-540-88055-4_34>`_.
 Further databases,
 listed by the string used to call them,
 are as following:
 
-- ``asplund09``: `Asplund et al. (2009) <https://doi.org/10.1146/annurev.astro.46.060407.145222>`_
-- ``lodders09`` (default): `Lodders et al. (2009) <https://doi.org/10.1007/978-3-540-88055-4_34>`_
-- ``nist``: `NIST database <https://www.nist.gov/pml/atomic-weights-and-isotopic-compositions-relative-atomic-masses>`_
+- "asplund09": `Asplund et al. (2009) <https://doi.org/10.1146/annurev.astro.46.060407.145222>`_
+- "lodders09" (default): `Lodders et al. (2009) <https://doi.org/10.1007/978-3-540-88055-4_34>`_
+- "nist": `NIST database <https://www.nist.gov/pml/atomic-weights-and-isotopic-compositions-relative-atomic-masses>`_
 
 The solar abundances of all databases
 were converted to number abundances
-and are relative to `Si = 1e6`.
-Conversion to dex, as described below, is possible.
+and are relative to Si = 10\ :sup:`6`.
+Conversion to other units,
+as described below,
+is possible.
 
 *Note*: Not all databases mentioned here
 contain the solar abundances.
@@ -86,41 +88,58 @@ This is the recommended import
 and will be used throughout
 the rest of this documentation,
 unless otherwise noted.
-Here, the `ini` instance will be loaded
+Here, the :code:`ini` instance will be loaded
 with the default database
 (currently Lodders et al., 2009)
+and using linear,
+number abundances.
+Alternatively you can directly import
+the database using number, logarithmic abundances
+or mass fractions.
+The respective imports for these are:
 
-.. note:: To use `mass_fraction` mode by default
-  you can import the module in the following way:
+.. code-block:: python
 
-  .. code-block:: python
-    from iniabu import inimf
+  >>> from iniabu import inilog  # number logarithmic abundances
+  >>> from iniabu import inimf  # mass fraction
+
 
 In case multiple databases
 are required at the same time,
-e.g., `db1` using Lodders et al. (2009)
-and `db2` using Asplund et al. (2009) values,
+e.g., :code:`db1` using Lodders et al. (2009)
+and :code:`db2` using Asplund et al. (2009) values and number logarithmic units,
 the following import could be used:
 
 .. code-block:: python
 
     >>> import iniabu
     >>> db1 = iniabu.IniAbu(database="lodders09")
-    >>> db2 = iniabu.IniAbu(database="asplund09")
+    >>> db2 = iniabu.IniAbu(database="asplund09", unit="num_log")
 
 
 Loading a data base
 ~~~~~~~~~~~~~~~~~~~
 
-Switching the data base from a given instance `ini`
+Switching the data base from a given instance :code:`ini`
 can be easily accomplished.
-For example, the `asplund09` database
+For example, the "asplund09" database
 can easily be loaded into a given instance
 by calling:
 
 .. code-block:: python
 
     >>> ini.database = "asplund09"
+
+.. note:: Switching a database does not reset the units.
+  For example: If "lodders09" is loaded
+  using mass fractions and you load
+  "asplund09" as the new database,
+  the units will stay the same that are used by default.
+  A message will be printed to reflect this.
+
+  .. code-block:: python
+    >>> ini.database = 'asplund09'
+    iniabu loaded database: 'asplund09', current units: 'mass_fraction'
 
 
 
@@ -172,9 +191,9 @@ is defined as:
   \rho = \frac{1}{N_{A}} \sum_i N_{i} m_{i}
 
 To switch a given database between
-linear number abundance (`num_lin`),
-logarithmic number abundance (`num_log`) mode,
-and mass fraction mode (`mass_fraction`
+linear number abundance ("num_lin"),
+logarithmic number abundance ("num_log") mode,
+and mass fraction mode ("mass_fraction")
 the following property can be set:
 
 .. code-block:: python
@@ -194,10 +213,12 @@ the following command can be used:
 By default,
 linear number abundance values are used.
 
-.. note:: To use `mass_fraction` mode by default
-  you can import the module in the following way:
+.. note:: To use "num_log" or
+  "mass_fraction" mode by default
+  you can import the module in the following ways:
 
   .. code-block:: python
+    from iniabu import inilog
     from iniabu import inimf
 
 Element and isotope properties
@@ -228,12 +249,12 @@ from the element:
 - The mass of the element,
   calculated using the isotope masses
   and the currently loaded abundances,
-  using `mass`.
-- The solar abundance of the element itself using `solar_abundance`,
+  using ``mass``.
+- The solar abundance of the element itself using ``solar_abundance``,
   normed as discussed above
-- The mass number of its (stable) isotopes using `isotopes_a`
-- The relative abundances of its (stable) isotopes using `isotopes_relative_abundance`
-- The solar abundances of its (stable) isotopes using `isotopes_solar_abundance`
+- The mass number of its (stable) isotopes using ``isotopes_a``
+- The relative abundances of its (stable) isotopes using ``isotopes_relative_abundance``
+- The solar abundances of its (stable) isotopes using ``isotopes_solar_abundance``
 
 For example,
 to query the solar abundance of iron
@@ -266,11 +287,11 @@ as following:
 The following properties can then
 be queried from this isotope:
 
-- The mass of a specific isotope using `mass`.
-- The solar abundance of the isotope itself using `solar_abundance`,
+- The mass of a specific isotope using ``mass``.
+- The solar abundance of the isotope itself using ``solar_abundance``,
   normed as discussed above
 - The relative abundance of the specific isotope
-  with respect to the element using `relative_abundance`.
+  with respect to the element using ``relative_abundance``.
   *Note*: All isotopes of an element
   would sum up to a relative abundance of 1.
 
@@ -325,10 +346,22 @@ The functions to calculate these ratios are called
 Below are some examples
 that describe some standard usage of these routines:
 
+.. caution:: In these examples we assume
+  that the database is loaded with "num_lin" units.
+  If you are using "mass_fraction" units,
+  you will get "mass_fraction" units back,
+  even if you do not set :code:`mass_fraction=True`.
+  However,
+  you could overwrite this behavior
+  (the same way you can return `mass_fractions`
+  even if you are in "num_lin" mode)
+  by setting :code:`mass_fraction=False`.
+
 Some examples for elemental ratios:
 
 - Calculate He to Pb ratio
   using number fraction and mass fraction:
+  Here we assume that number, linear units are loaded:
 
   .. code-block:: python
 
@@ -361,7 +394,8 @@ Some examples for isotope ratios:
 - Calculate the isotope ratios
   of :sup:`6`\Li to :sup:`7`\Li
   as number fractions
-  and as mass fractions:
+  and as mass fractions.
+  Here we assume that number, linear units are loaded:
 
   .. code-block:: python
 
@@ -430,30 +464,31 @@ The factor :math:`f` is by default set to 1000.
 This means that δ-values are by default
 returned as parts-per-thousand (‰).
 Choosing a different factor can be done
-by setting the keyword argument `delta_factor` accordingly.
+by setting the keyword argument ``delta_factor`` accordingly.
 
-Furthermore, the keyword argument `mass_fraction`
+Furthermore, the keyword argument ``mass_fraction``
 can also be used as for ratios.
-If the provided measured / observed / ... value is given as a mass ratio,
-`mass_fraction` should be set to `True`.
+Setting this keyword to ``True``
+or ``False`` allows the user
+to overwrite the behavior of the loaded units.
 
 While δ-values are commonly calculated for isotopes of one individual element,
 the routine allows to calculate δ-values between isotopes of different elements.
 To calculate a δ-values of two elements,
-the `delta_element` function should be used.
+the ``delta_element`` function should be used.
 The equation given above represents a specific,
 but most commonly used case.
 
-Finally: The `delta_isotope`
-and `delta_element` functions
+Finally: The ``delta_isotope``
+and ``delta_element`` functions
 have the same features
 for specifying the nominator and denominator
-as the `ratio_isotope`
-and `ratio_element` functions mentioned above.
+as the ``ratio_isotope``
+and ``ratio_element`` functions mentioned above.
 
 .. caution:: The values must be given in the same shape
   as the number of ratios provided.
-  Otherwise the routine will return a `ValueError`
+  Otherwise the routine will return a ``ValueError``
   specifying that there was a length mismatch.
 
 Some examples for calculating δ-values for isotopes:
@@ -490,7 +525,8 @@ Some examples for calculating δ-values for isotopes:
 - Calculate the δ-value for :sup:`84`\Sr
   with respect to the major Sr isotope (:sup:`86`\Sr).
   The measurement value is provided as a mass fraction
-  (assumption).
+  (assumption),
+  but the database is loaded using number, linear units:
 
   .. code-block:: python
 
@@ -537,14 +573,14 @@ While bracket notation is commonly used with elements,
 there is no mathematical reason to prohibit using it for isotopes.
 Therefore,
 two routines are provided,
-namely `bracket_element` and `bracket_isotope`.
+namely ``bracket_element`` and ``bracket_isotope``.
 
-Finally: The `bracket_element`
-and `bracket_isotope` functions
+Finally: The ``bracket_element``
+and ``bracket_isotope`` functions
 have the same features
 for specifying the nominator and denominator
-as the `ratio_isotope`
-and `ratio_element` functions mentioned above.
+as the ``ratio_isotope``
+and ``ratio_element`` functions mentioned above.
 
 
 Some examples for calculating bracket notation values for elements:
@@ -552,7 +588,8 @@ Some examples for calculating bracket notation values for elements:
 - Calculate bracket notation value
   for Fe / H for a given measurement.
   First we calculate it as a number fraction (default setting)
-  then as a mass fraction.
+  then as a mass fraction while having the database loaded
+  in number linear mode.
 
   .. code-block:: python
 
@@ -576,7 +613,7 @@ Some examples for calculating bracket notation values for isotopes:
 
 - Calculate a bracket notation values for multiple isotopes.
   Here for all Si isotopes with respect to :sup:`28`\Si.
-  *Note*: See `ratio_isotopes` for a detailed description
+  *Note*: See ``ratio_isotopes`` for a detailed description
   of the possibilities.
 
   .. code-block:: python
