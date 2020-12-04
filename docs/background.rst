@@ -16,18 +16,18 @@ Databases
 
 Currently,
 the default database that is loaded
-is `lodders09`.
+is "lodders09".
 
-`lodders09`
+"lodders09"
 ~~~~~~~~~~~
 
-The database named `lodders09`
+The database named "lodders09"
 is based on the work by
 `Lodders et al. (2009) <https://doi.org/10.1007/978-3-540-88055-4_34>`_.
 This database is **loaded by default**,
 unless a different database is specified.
 
-The measurements loaded when `lodders09` is selected
+The measurements loaded when "lodders09" is selected
 are the data in Table 10
 for elements and isotopes.
 The elemental abundances are simply gained
@@ -40,11 +40,25 @@ equal to 10\ :sup:`6`.
 The solar abundances loaded with Lodders et al. (2009)
 are nuclide abundances 4.56 Ga ago.
 
+.. note:: The nuclide abundance
+  of :sup:`138`\La in Table 10
+  of Lodders et al. (2009)
+  is given as 0.000.
+  This seems to be an error originating
+  too few significant figures.
+  Using the atom percentages
+  and the nuclide abundance for
+  :sup:`139`\La,
+  we calculated a nuclide abundance
+  of 0.0004 for :sup:`138`\La
+  and used this calculated abundance
+  for our database.
 
-`asplund09`
+
+"asplund09"
 ~~~~~~~~~~~
 
-The database named `asplund09`
+The database named "asplund09"
 is based on the work by
 `Asplund et al. (2009) <https://doi.org/10.1146/annurev.astro.46.060407.145222>`_.
 
@@ -63,10 +77,10 @@ with some updates discussed in Section 3.10
 of Asplund et al. (2009).
 
 
-`nist`
+"nist"
 ~~~~~~
 
-The database named `nist`
+The database named "nist"
 is based on the online-available abundance table
 of the National Institute of Standards and Technology.
 The database can be found

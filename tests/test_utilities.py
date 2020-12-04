@@ -1,5 +1,7 @@
 """Test suite for ``utilities.py``."""
 
+import copy
+
 from hypothesis import given, strategies as st
 import numpy as np
 import pytest
@@ -9,7 +11,10 @@ import iniabu.data
 import iniabu.elements
 import iniabu.utilities
 from iniabu.utilities import (
+    linear_units,
+    make_isotope_dictionary,
     make_log_abundance_dictionaries,
+    make_mass_fraction_dictionary,
     return_as_ndarray,
     return_list_simplifier,
     return_string_as_list,
@@ -56,6 +61,49 @@ def test_proxy_list_length(ini_default):
     assert ini.element.__len__() == length
 
 
+# FUNCTIONS #
+
+
+def test_linear_units_switch(ini_mf):
+    """Ensure context manager works properly when unit switch required."""
+    ini_log = iniabu.IniAbu(unit="num_log")
+    # test coming from mass logarithmic unit
+    with linear_units(ini_log, mass_fraction=None) as ini:
+        assert ini.unit == "num_lin"
+    assert ini_log.unit == "num_log"
+    # mass fraction and mass_fraction is False (switch to linear)
+    with linear_units(ini_mf, mass_fraction=False) as ini:
+        assert ini.unit == "num_lin"
+    assert ini_mf.unit == "mass_fraction"
+
+
+def test_linear_units_no_switch(ini_default, ini_mf):
+    """Ensure context manager works properly when no unit switch required."""
+    # test coming from linear
+    with linear_units(ini_default, mass_fraction=None) as ini:
+        assert ini.unit == "num_lin"
+    assert ini_default.unit == "num_lin"
+    # test coming from mass fraction
+    with linear_units(ini_mf, mass_fraction=None) as ini:
+        assert ini.unit == "mass_fraction"
+    assert ini_mf.unit == "mass_fraction"
+
+
+@given(abu_x=st.floats(min_value=0.001, allow_infinity=False))
+def test_make_isotope_dictionary(abu_x):
+    """Create an isotope dictionary form an elementary dictionary."""
+    ele_dict = {
+        "H": [10000.0, [1, 2], [0.8, 0.2], [8000.0, 2000.0]],
+        "X": [abu_x, [10], [1.0], [abu_x]],
+    }
+    iso_dict_expected = {
+        "H-1": [0.8, 8000.0],
+        "H-2": [0.2, 2000.0],
+        "X-10": [1.0, abu_x],
+    }
+    assert make_isotope_dictionary(ele_dict) == iso_dict_expected
+
+
 @given(abu_x=st.floats(min_value=0.001, allow_infinity=False))
 def test_make_log_abundance_dictionaries(abu_x):
     """Ensure that logarithmic abundance dictionaries are made in correct form."""
@@ -75,6 +123,82 @@ def test_make_log_abundance_dictionaries(abu_x):
     assert iso_dict_log["H-1"][1] == np.log10(0.8) + 12.0
     assert iso_dict_log["H-2"][1] == np.log10(0.2) + 12.0
     assert iso_dict_log["X-10"][1] == np.log10(abu_x / abu_h) + 12.0
+
+
+def test_make_mass_fraction_dictionaries():
+    """Ensure that mass fraction dictionaries are made in correct form."""
+    ele_dict = {
+        "H": [10000.0, [1, 2], [0.8, 0.2], [8000.0, 2000.0]],
+        "He": [200.0, [3, 4], [0.01, 0.99], [2.0, 198.0]],
+    }
+    # create mass fraction dictionary that is expected
+    all_sum = 0.0
+    for key in ele_dict.keys():
+        for it, iso in enumerate(ele_dict[key][1]):
+            all_sum += iniabu.data.isotopes_mass[f"{key}-{iso}"] * ele_dict[key][3][it]
+    ele_dict_expected = {
+        "H": [
+            None,
+            [1, 2],
+            [None, None],
+            [
+                8000.0 * iniabu.data.isotopes_mass["H-1"] / all_sum,
+                2000.0 * iniabu.data.isotopes_mass["H-2"] / all_sum,
+            ],
+        ],
+        "He": [
+            None,
+            [3, 4],
+            [None, None],
+            [
+                2.0 * iniabu.data.isotopes_mass["He-3"] / all_sum,
+                198.0 * iniabu.data.isotopes_mass["He-4"] / all_sum,
+            ],
+        ],
+    }
+    # fill `None` values
+    for ele in ele_dict_expected.keys():
+        # Solar System abundance
+        mf_abu_sum = sum(ele_dict_expected[ele][3])
+        ele_dict_expected[ele][0] = mf_abu_sum
+        # Relative isotope ratios
+        for it, mf_abu_iso in enumerate(ele_dict_expected[ele][3]):
+            ele_dict_expected[ele][2][it] = mf_abu_iso / mf_abu_sum
+    # isotope dict expected
+    iso_dict_expected = make_isotope_dictionary(ele_dict_expected)
+    # test
+    ele_dict_gotten, iso_dict_gotten = make_mass_fraction_dictionary(ele_dict)
+    assert ele_dict_gotten == ele_dict_expected
+    assert iso_dict_gotten == iso_dict_expected
+
+
+@given(ele=st.sampled_from(list(iniabu.data.lodders09_elements.keys())))
+def test_make_mass_fraction_dictionary_iso_relative_abundances(ini_default, ele):
+    """Ensure relative isotope abundances by weight."""
+    abu_sum = sum(ini_default.ele_dict_mf[ele][3])
+    for it, abu_mf in enumerate(ini_default.ele_dict_mf[ele][3]):
+        abu_rel_mf = ini_default.ele_dict_mf[ele][2][it]
+        abu_rel_mf_expected = abu_mf / abu_sum
+        assert abu_rel_mf == pytest.approx(abu_rel_mf_expected)
+    # relative abundances sum to unity test
+    assert sum(ini_default.ele_dict_mf[ele][2]) == pytest.approx(1.0)
+
+
+def test_make_mass_fraction_dictionaries_ele_dict_untouched():
+    """Ensure that mass_fraction_dictionary routine does not overwrite input.
+
+    This simply makes sure that a deepcopy is made and not just a simple copy for the
+    dictionary. Will trigger elsewhere too, however, this test is better and faster
+    to recognize the problem with deepcopy versus copy.
+    """
+    ele_dict = {
+        "H": [10000.0, [1, 2], [0.8, 0.2], [8000.0, 2000.0]],
+        "He": [200.0, [3, 4], [0.01, 0.99], [2.0, 198.0]],
+    }
+    ele_dict_backup = copy.deepcopy(ele_dict)
+    # run the routine
+    _ = make_mass_fraction_dictionary(ele_dict)
+    assert ele_dict == ele_dict_backup
 
 
 @given(value=st.floats(allow_nan=False))

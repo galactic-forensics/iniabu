@@ -17,6 +17,8 @@ class Elements(object):
 
     Example:
         >>> from iniabu import ini
+        >>> ini.unit
+        'num_lin'
         >>> element = ini.element["Si"]
         >>> element.solar_abundance
         999700.0
@@ -25,7 +27,7 @@ class Elements(object):
         designed to be initialized by :class:`iniabu.IniAbu`.
     """
 
-    def __init__(self, parent, eles, log_abu=False, *args, **kwargs):
+    def __init__(self, parent, eles, unit="num_lin", *args, **kwargs):
         """Initialize the Elements class.
 
         Checks for initialization from the proper parent class and sets up the required
@@ -35,13 +37,14 @@ class Elements(object):
         :type parent: class:`iniabu.IniAbu`
         :param eles: Element dictionary.
         :type eles: dict
-        :param log_abu: Use logarithmic (astronomical definition) for solar abundance?
-        :type log_abu: True
+        :param unit: Units used for return.
+        :type unit: str
         :param *args: Variable length argument list.
         :param **kwargs: Arbitrary keyword arguments.
 
         :raises TypeError: The class was not initialized with :class:`iniabu.IniAbu`
             as the parent.
+        :raises NotImplementedError: An unavailable unit was selected.
         """
         # check for correct parent
         if parent.__class__.__name__ != "IniAbu":
@@ -49,10 +52,16 @@ class Elements(object):
 
         # set the variables
         self._eles = eles
-        if log_abu:
-            self._ele_dict = parent.ele_dict_log
-        else:
+        if unit == "num_lin":
             self._ele_dict = parent.ele_dict
+        elif unit == "num_log":
+            self._ele_dict = parent.ele_dict_log
+        elif unit == "mass_fraction":
+            self._ele_dict = parent.ele_dict_mf
+        else:
+            raise NotImplementedError(
+                f"The chosen unit {unit} is currently not implemented."
+            )
 
     # PROPERTIES #
 
@@ -78,7 +87,8 @@ class Elements(object):
 
         Returns a list with the relative abundances of all isotopes of the given
         element. If more than one element is selected, a list of numpy float ndarrays is
-        returned. Note: All relative abundances sum up up to unity.
+        returned. Note: All relative abundances sum up up to unity. If you are using
+        "mass_fractions" as units, relative abundances will also be in mass fractions.
 
         :return: Relative abundance of all isotopes
         :rtype: ndarray,list<ndarray>

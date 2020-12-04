@@ -25,7 +25,7 @@ class Isotopes(object):
         designed to be initialized by :class:`iniabu.IniAbu`
     """
 
-    def __init__(self, parent, isos, log_abu=False, *args, **kwargs):
+    def __init__(self, parent, isos, unit="num_lin", *args, **kwargs):
         """Initialize the Isotopes class.
 
         Checks for initialization from the proper parent class and sets up the required
@@ -35,13 +35,14 @@ class Isotopes(object):
         :type parent: class:`iniabu.IniAbu`
         :param isos: Isotope dictionary.
         :type isos: dict
-        :param log_abu: Use logarithmic (astronomical definition) for solar abundance?
-        :type log_abu: True
+        :param unit: Units used for return.
+        :type unit: str
         :param *args: Variable length argument list.
         :param **kwargs: Arbitrary keyword arguments.
 
         :raises TypeError: The class was not initialized with :class:`iniabu.IniAbu`
             as the parent.
+        :raises NotImplementedError: An unavailable unit was selected.
         """
         # check for correct parent
         if parent.__class__.__name__ != "IniAbu":
@@ -49,10 +50,16 @@ class Isotopes(object):
 
         # set the variables
         self._isos = isos
-        if log_abu:
-            self._iso_dict = parent.iso_dict_log
-        else:
+        if unit == "num_lin":
             self._iso_dict = parent.iso_dict
+        elif unit == "num_log":
+            self._iso_dict = parent.iso_dict_log
+        elif unit == "mass_fraction":
+            self._iso_dict = parent.iso_dict_mf
+        else:
+            raise NotImplementedError(
+                f"The chosen unit {unit} is currently not implemented."
+            )
 
     # PROPERTIES #
 
@@ -74,7 +81,8 @@ class Isotopes(object):
 
         Returns the relative abundance of the selected isotope(s). Returns the result
         either as a ``float`` or as a numpy ``ndarray``. Note: All relative abundances
-        sum up up to unity.
+        sum up up to unity. If you are using "mass_fractions" as units, relative
+        abundances will also be in mass fractions.
 
         :return: Relative abundance of isotope(s)
         :rtype: float,ndarray

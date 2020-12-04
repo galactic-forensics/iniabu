@@ -4,7 +4,8 @@
 from .main import IniAbu
 
 ini = IniAbu()
-
+inimf = IniAbu(unit="mass_fraction")
+inilog = IniAbu(unit="num_log")
 
 # Package information
 __version__ = "0.10.0"
@@ -15,8 +16,7 @@ __description__ = (
     "metrics, e.g., delta-values, dex, etc."
 )
 
-# Todo
-__uri__ = "Todo Docs Link"
+__uri__ = "https://iniabu.readthedocs.io/en/latest/"
 __author__ = "Reto Trappitsch"
 __email__ = "reto@galactic-forensics.space"
 

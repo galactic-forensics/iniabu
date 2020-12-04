@@ -1,6 +1,11 @@
 """Utility functions."""
 
+from contextlib import contextmanager
+import copy
+
 import numpy as np
+
+from . import data
 
 # CLASSES #
 
@@ -67,6 +72,54 @@ class ProxyList(object):
 # FUNCTIONS #
 
 
+@contextmanager
+def linear_units(ini, mass_fraction):
+    """Context manager to turn current instants units linear if logarithmic.
+
+    This is used mainly for ratio calculation, since logarithmic cannot be ratioed
+    to each other.
+
+    :param ini: Initialized iniabu instance
+    :type ini: `IniAbu`
+    :param mass_fraction: Mass fraction variable passed on from last routine
+    :type mass_fraction: bool or None
+
+    :yield: `ini` as with adjusted units (if necessary)
+    :ytype: `IniAbu` instance
+    """
+    current_units = ini.unit
+
+    try:  # change units if necessary
+        if current_units == "num_log":
+            ini.unit = "num_lin"
+        # to avoid rounding err
+        elif current_units == "mass_fraction" and mass_fraction is False:
+            ini.unit = "num_lin"
+        yield ini
+    finally:  # reset units
+        ini.unit = current_units
+
+
+def make_isotope_dictionary(element_dict):
+    """Make an isotope dictionary from an element dictionary.
+
+    :param element_dict: Element dictionary.
+    :type element_dict: dict
+
+    :return: Isotope dictionaries with same abundances as element dictionary.
+    :rtype: dict
+    """
+    iso_keys = []
+    iso_entries = []
+    for key in element_dict.keys():
+        for it, iso in enumerate(element_dict[key][1]):
+            iso_keys.append("{}-{}".format(key, iso))
+            rel_abu = element_dict[key][2][it]
+            ss_abu = element_dict[key][3][it]
+            iso_entries.append([rel_abu, ss_abu])
+    return dict(zip(iso_keys, iso_entries))
+
+
 def make_log_abundance_dictionaries(element_dict):
     """Make element and isotope dictionaries for logarithmic abundances.
 
@@ -110,17 +163,57 @@ def make_log_abundance_dictionaries(element_dict):
     element_dict_log = dict(zip(ele_keys, ele_entries))
 
     # isotope dictionary
-    iso_keys = []
-    iso_entries = []
-    for key in element_dict_log.keys():
-        for it, iso in enumerate(element_dict_log[key][1]):
-            iso_keys.append("{}-{}".format(key, iso))
-            rel_abu = element_dict_log[key][2][it]
-            ss_abu = element_dict_log[key][3][it]
-            iso_entries.append([rel_abu, ss_abu])
-    isotope_dict_log = dict(zip(iso_keys, iso_entries))
+    isotope_dict_log = make_isotope_dictionary(element_dict_log)
 
     return element_dict_log, isotope_dict_log
+
+
+def make_mass_fraction_dictionary(element_dict):
+    """Make element and isotope dictionaries for mass fractions.
+
+    This routine takes an element dictionary with linear abundances, normed to Si
+    equals 1e6, and returns new dictionaries with mass fractions. The mass fraction
+    Xi of an isotope i is defined as Xi = Ni mi / sum(Ni mi). Here, Ni is the number
+    abundance of a element / isotope i and mi is its mass.
+
+    :param element_dict: Element dictionary.
+    :type element_dict: dict
+
+    :return: Element and isotope dictionaries with mass fractions.
+    :rtype: dict,dict
+    """
+    ele_keys = element_dict.keys()
+
+    # create the sum of all using isotopes and isotope masses
+    abu_sum = 0.0
+    for key in ele_keys:
+        for it, iso in enumerate(element_dict[key][1]):
+            iso_abu = element_dict[key][3][it]
+            iso_mass = data.isotopes_mass[f"{key}-{iso}"]
+            abu_sum += iso_abu * iso_mass
+
+    # make element mass fraction dictionary make abundance
+    element_dict_mf = copy.deepcopy(element_dict)
+    for key in ele_keys:
+        ele_abu_mf = 0.0
+        for it, iso in enumerate(element_dict_mf[key][1]):
+            iso_abu = element_dict_mf[key][3][it]
+            iso_mass = data.isotopes_mass[f"{key}-{iso}"]
+            iso_abu_mf = iso_abu * iso_mass / abu_sum
+            ele_abu_mf += iso_abu_mf
+            element_dict_mf[key][3][it] = iso_abu_mf
+        element_dict_mf[key][0] = ele_abu_mf
+
+    # # correct relative isotope abundances to be relative by weight!
+    for key in ele_keys:
+        abu_sum = sum(element_dict_mf[key][3])
+        for it, sol_abu_val in enumerate(element_dict_mf[key][3]):
+            element_dict_mf[key][2][it] = sol_abu_val / abu_sum
+
+    # make isotope mass fraction dictionary
+    isotope_dict_mf = make_isotope_dictionary(element_dict_mf)
+
+    return element_dict_mf, isotope_dict_mf
 
 
 def return_as_ndarray(val):

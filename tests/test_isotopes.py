@@ -16,6 +16,16 @@ def test_isotopes_require_parent_class():
     assert err_msg == "Isotopes class must be initialized from IniAbu."
 
 
+def test_isotopes_wrong_unit():
+    """Raise NotImplementedError if a wrong unit is selected."""
+    parent = iniabu.IniAbu()  # fake a correct parent
+    unit = "random_unit"
+    with pytest.raises(NotImplementedError) as err_info:
+        iniabu.isotopes.Isotopes(parent, "Si-28", unit=unit)
+    err_msg = err_info.value.args[0]
+    assert err_msg == f"The chosen unit {unit} is currently not implemented."
+
+
 @given(
     iso1=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
     iso2=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
@@ -87,14 +97,29 @@ def test_solar_abundance(ini_default, iso1, iso2):
     iso2=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
 )
 def test_solar_abundance_log(ini_default, iso1, iso2):
-    """Test isotope solar abundance returner."""
-    ini_default.abundance_unit = "log"
+    """Test isotope solar abundance returner - log units."""
+    ini_default.unit = "num_log"
     assert (
         ini_default.isotope[iso1].solar_abundance == ini_default.iso_dict_log[iso1][1]
     )
     left = ini_default.isotope[[iso1, iso2]].solar_abundance
     right = np.array(
         [ini_default.iso_dict_log[iso1][1], ini_default.iso_dict_log[iso2][1]]
+    )
+    np.testing.assert_equal(left, right)
+
+
+@given(
+    iso1=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
+    iso2=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
+)
+def test_solar_abundance_mf(ini_default, iso1, iso2):
+    """Test isotope solar abundance returner - mass fraction."""
+    ini_default.unit = "mass_fraction"
+    assert ini_default.isotope[iso1].solar_abundance == ini_default.iso_dict_mf[iso1][1]
+    left = ini_default.isotope[[iso1, iso2]].solar_abundance
+    right = np.array(
+        [ini_default.iso_dict_mf[iso1][1], ini_default.iso_dict_mf[iso2][1]]
     )
     np.testing.assert_equal(left, right)
 
