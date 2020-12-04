@@ -81,7 +81,8 @@ class Isotopes(object):
 
         Returns the relative abundance of the selected isotope(s). Returns the result
         either as a ``float`` or as a numpy ``ndarray``. Note: All relative abundances
-        sum up up to unity.
+        sum up up to unity. If you are using "mass_fractions" as units, relative
+        abundances will also be in mass fractions.
 
         :return: Relative abundance of isotope(s)
         :rtype: float,ndarray

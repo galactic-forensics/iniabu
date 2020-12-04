@@ -63,15 +63,24 @@ as described below,
 is possible.
 
 *Note*: Not all databases mentioned here
-contain the solar abundances.
-If an operation that you are trying to perform
-requires the solar abundance to be available,
-the result will be return as an ``np.nan``,
+contain the solar abundances for every isotope.
+If an operation you are trying to perform
+encounters a solar abundance value that is not availagle
+in the currently loaded database,
+the result will be returned as an ``np.nan``,
 i.e., as not a number.
 
 
 Usage
 -----
+
+Here we give a short overview of the ``iniabu`` module.
+Please also have a look at the
+:doc:`API Reference <api/index>`.
+There,
+each module is described in detail,
+often with examples on how to use the specific function.
+
 
 Importing the module
 ~~~~~~~~~~~~~~~~~~~~
@@ -117,8 +126,8 @@ the following import could be used:
     >>> db2 = iniabu.IniAbu(database="asplund09", unit="num_log")
 
 
-Loading a data base
-~~~~~~~~~~~~~~~~~~~
+Loading a database
+~~~~~~~~~~~~~~~~~~
 
 Switching the data base from a given instance :code:`ini`
 can be easily accomplished.
@@ -138,6 +147,7 @@ by calling:
   A message will be printed to reflect this.
 
   .. code-block:: python
+
     >>> ini.database = 'asplund09'
     iniabu loaded database: 'asplund09', current units: 'mass_fraction'
 
@@ -218,8 +228,13 @@ linear number abundance values are used.
   you can import the module in the following ways:
 
   .. code-block:: python
-    from iniabu import inilog
-    from iniabu import inimf
+
+    from iniabu import inilog  # "num_log" units
+    from iniabu import inimf  # "mass_fraction" units
+
+.. note:: If you use "mass_fraction" units,
+  the relative abundances of the isotopes
+  are also given in mass fractions!
 
 Element and isotope properties
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -241,7 +256,7 @@ can be loaded into a variable as following:
 
 .. code-block:: python
 
-    >>> ele = ini.element['Si']
+    >>> ele = ini.element["Si"]
 
 The following properties can now be queried
 from the element:
@@ -253,7 +268,11 @@ from the element:
 - The solar abundance of the element itself using ``solar_abundance``,
   normed as discussed above
 - The mass number of its (stable) isotopes using ``isotopes_a``
-- The relative abundances of its (stable) isotopes using ``isotopes_relative_abundance``
+- The relative abundances of its (stable) isotopes using
+  ``isotopes_relative_abundance``.
+  If you are using "mass_fractions" as units,
+  the relative abundances will also be given
+  as mass fractions!
 - The solar abundances of its (stable) isotopes using ``isotopes_solar_abundance``
 
 For example,
@@ -262,7 +281,7 @@ one could run the following statement:
 
 .. code-block:: python
 
-   >>> ele = ini.element['Fe']
+   >>> ele = ini.element["Fe"]
    >>> ele.solar_abundance
    847990.0
 
@@ -282,7 +301,7 @@ as following:
 
 .. code-block:: python
 
-    >>> iso = ini.isotope['Fe-54']
+    >>> iso = ini.isotope["Fe-54"]
 
 The following properties can then
 be queried from this isotope:
@@ -294,6 +313,9 @@ be queried from this isotope:
   with respect to the element using ``relative_abundance``.
   *Note*: All isotopes of an element
   would sum up to a relative abundance of 1.
+  If you are using "mass_fractions" as units,
+  the relative abundances will also be given
+  as mass fractions!
 
 For example:
 To query the solar and the relative abundances
@@ -302,7 +324,7 @@ one could run the following two commands in python:
 
 .. code-block:: python
 
-  >>> iso = ini.isotope['Fe-54']
+  >>> iso = ini.isotope["Fe-54"]
   >>> iso.solar_abundance
   49600.0
   >>> iso.relative_abundance
@@ -342,7 +364,7 @@ Some additional benefits when calculating isotope ratios:
   using these ratios.
 
 The functions to calculate these ratios are called
-`ratio_element` and `ratio_isotope`.
+``ratio_element`` and ``ratio_isotope``.
 Below are some examples
 that describe some standard usage of these routines:
 
@@ -365,9 +387,9 @@ Some examples for elemental ratios:
 
   .. code-block:: python
 
-    >>> ini.ratio_element('He', 'Pb')  # number fraction
+    >>> ini.ratio_element("He", "Pb")  # number fraction
     759537205.0816697
-    >>> ini.ratio_element('He', 'Pb', mass_fraction=True)
+    >>> ini.ratio_element("He", "Pb", mass_fraction=True)
     39321659726.58637
 
 - Calculate multiple element ratios
@@ -376,7 +398,7 @@ Some examples for elemental ratios:
 
   .. code-block:: python
 
-    >>> ini.ratio_element(['Fe', 'Ni'], 'Si')
+    >>> ini.ratio_element(["Fe", "Ni"], "Si")
     array([0.84824447, 0.04910773])
 
 - Calculate multiple element ratios
@@ -385,7 +407,7 @@ Some examples for elemental ratios:
 
   .. code-block:: python
 
-    >>> ini.ratio_element(['Si', 'Ni'], ['Fe', 'Zr'])
+    >>> ini.ratio_element(["Si", "Ni"], ["Fe", "Zr"])
     array([1.17890541e+00, 4.55450413e+03])
 
 
@@ -399,9 +421,9 @@ Some examples for isotope ratios:
 
   .. code-block:: python
 
-    >>> ini.ratio_isotope('Li-6', 'Li-7')  # number fractions by default
+    >>> ini.ratio_isotope("Li-6", "Li-7")  # number fractions by default
     0.08212225817272835
-    >>> ini.ratio_isotope('Li-6', 'Li-7', mass_fraction=True)
+    >>> ini.ratio_isotope("Li-6", "Li-7", mass_fraction=True)
     0.09578691181324486
 
 - Calculate isotope fractions of :sup:`3`\He to :sup:`4`\He
@@ -409,7 +431,7 @@ Some examples for isotope ratios:
 
   .. code-block:: python
 
-    >>> ini.ratio_isotope(['He-3', 'Ne-21'], ['He-4', 'Ne-20'])
+    >>> ini.ratio_isotope(["He-3", "Ne-21"], ["He-4", "Ne-20"])
     array([0.00016603, 0.00239717])
 
 - Calculate the isotope ratios of all Si isotopes
@@ -426,11 +448,11 @@ Some examples for isotope ratios:
 
   .. code-block:: python
 
-    >>> ini.ratio_isotope(['Si-28', 'Si-29', 'Si-30'], 'Si-28')  # Method 1
+    >>> ini.ratio_isotope(["Si-28", "Si-29", "Si-30"], "Si-28")  # Method 1
     array([1.        , 0.05077524, 0.03347067])
-    >>> ini.ratio_isotope('Si', 'Si-28')  # Method 2
+    >>> ini.ratio_isotope("Si", "Si-28")  # Method 2
     array([1.        , 0.05077524, 0.03347067])
-    >>> ini.ratio_isotope('Si', 'Si')  # Method 3
+    >>> ini.ratio_isotope("Si", "Si")  # Method 3
     array([1.        , 0.05077524, 0.03347067])
 
 
@@ -440,7 +462,7 @@ Some examples for isotope ratios:
 
 .. note:: A detailed discussion
   of δ-values can be found in the
-  :doc:`Background Information </dev/background>`
+  :doc:`Background Information <background>`
 
 The δ-value of a given isotope ratio,
 generally used in cosmo- and geochemistry,
@@ -500,9 +522,9 @@ Some examples for calculating δ-values for isotopes:
 
   .. code-block:: python
 
-    >>> ini.delta_isotope('Si-30', 'Si-28', 0.04)  # parts per thousand (default)
+    >>> ini.delta_isotope("Si-30", "Si-28", 0.04)  # parts per thousand (default)
     195.0761256883704
-    >>> ini.delta_isotope('Si-30', 'Si-28', 0.04, delta_factor=100)  # percent
+    >>> ini.delta_isotope("Si-30", "Si-28", 0.04, delta_factor=100)  # percent
     19.50761256883704
 
 - Calculate multiple δ-values as mass fractions.
@@ -515,11 +537,11 @@ Some examples for calculating δ-values for isotopes:
   .. code-block:: python
 
     >>> msr = [1., 0.01, 0.04]  # measurement
-    >>> ini.delta_isotope(['Si-28', 'Si-29', 'Si-30'], 'Si-28', msr)
+    >>> ini.delta_isotope(["Si-28", "Si-29", "Si-30"], "Si-28", msr)
     array([   0.        , -803.05359812,  195.07612569])
-    >>> ini.delta_isotope('Si', 'Si-28', msr)
+    >>> ini.delta_isotope("Si", "Si-28", msr)
     array([   0.        , -803.05359812,  195.07612569])
-    >>> ini.delta_isotope('Si', 'Si', msr)
+    >>> ini.delta_isotope("Si", "Si", msr)
     array([   0.        , -803.05359812,  195.07612569])
 
 - Calculate the δ-value for :sup:`84`\Sr
@@ -530,7 +552,7 @@ Some examples for calculating δ-values for isotopes:
 
   .. code-block:: python
 
-    >>> ini.delta_isotope('Sr-84', 'Sr', 0.01, mass_fraction=True)
+    >>> ini.delta_isotope("Sr-84", "Sr", 0.01, mass_fraction=True)
     414.3962670607242
 
 
@@ -541,7 +563,7 @@ Some examples for calculating δ-values for elements:
 
   .. code-block:: python
 
-    >>>  ini.delta_element(['Si', 'Ne'], 'Fe', [2, 4])
+    >>>  ini.delta_element(["Si", "Ne"], "Fe", [2, 4])
     array([696.48894668,  30.26124356])
 
 
@@ -593,9 +615,9 @@ Some examples for calculating bracket notation values for elements:
 
   .. code-block:: python
 
-    >>> ini.bracket_element('Fe', 'H', 0.005)  # number fraction
+    >>> ini.bracket_element("Fe", "H", 0.005)  # number fraction
     2.183887471873783
-    >>> ini.bracket_element('Fe', 'H', 0.005, mass_fraction=True)  # mass fraction
+    >>> ini.bracket_element("Fe", "H", 0.005, mass_fraction=True)  # mass fraction
     3.9274378849968263
 
 - Calculate bracket notation value
@@ -604,7 +626,7 @@ Some examples for calculating bracket notation values for elements:
 
   .. code-block:: python
 
-    >>> ini.bracket_element(['O', 'Fe'], 'H', [0.02, 0.005])
+    >>> ini.bracket_element(["O", "Fe"], "H", [0.02, 0.005])
     array([1.51740521, 2.18388747])
 
 
@@ -619,9 +641,9 @@ Some examples for calculating bracket notation values for isotopes:
   .. code-block:: python
 
     >>> msr = [1., 0.01, 0.04]
-    >>>  ini.bracket_isotope(['Si-28', 'Si-29', 'Si-30'], 'Si-28', msr)
+    >>>  ini.bracket_isotope(["Si-28", "Si-29", "Si-30"], "Si-28", msr)
     array([ 0.        , -0.70565195,  0.07739557])
-    >>> ini.bracket_isotope('Si', 'Si-28', msr)
+    >>> ini.bracket_isotope("Si", "Si-28", msr)
     array([ 0.        , -0.70565195,  0.07739557])
-    >>> ini.bracket_isotope('Si', 'Si', msr)
+    >>> ini.bracket_isotope("Si", "Si", msr)
     array([ 0.        , -0.70565195,  0.07739557])

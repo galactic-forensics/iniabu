@@ -87,7 +87,8 @@ class Elements(object):
 
         Returns a list with the relative abundances of all isotopes of the given
         element. If more than one element is selected, a list of numpy float ndarrays is
-        returned. Note: All relative abundances sum up up to unity.
+        returned. Note: All relative abundances sum up up to unity. If you are using
+        "mass_fractions" as units, relative abundances will also be in mass fractions.
 
         :return: Relative abundance of all isotopes
         :rtype: ndarray,list<ndarray>
