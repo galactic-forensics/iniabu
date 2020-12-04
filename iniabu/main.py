@@ -624,7 +624,7 @@ class IniAbu(object):
             >>> from iniabu import inimf
             >>> # calculate Ne-21 / Ne-20 isotope ratio using mass fractions
             >>> inimf.ratio_isotope("Ne-21", "Ne-20")
-            0.002515409891030499
+            0.0025154098910304987
 
             >>> # calculate the same ratio in number fractions
             >>> inimf.ratio_isotope("Ne-21", "Ne-20", mass_fraction=False)
