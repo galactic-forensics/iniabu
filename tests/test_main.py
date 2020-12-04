@@ -1,5 +1,7 @@
 """Test suite for ``main.py``."""
 
+import builtins
+
 from hypothesis import given, strategies as st
 import numpy as np
 import pytest
@@ -8,7 +10,7 @@ import iniabu
 import iniabu.data as data
 
 
-# DATABASE SANITY CHECKS #
+# DATABASE CHECKS #
 
 
 def test_init_database_default(ini_default):
@@ -43,6 +45,22 @@ def test_init_database_invalid():
         err_msg
         == f"The database {invalid_db} could not be found. Make sure it is a valid "
         f"option or choose one of the available ones."
+    )
+
+
+@pytest.mark.parametrize("unit", ("num_lin", "num_log", "mass_fraction"))
+def test_database_print(unit, mocker):
+    """Ensure message is print out when database is changed."""
+    ini = iniabu.IniAbu()
+    spy_print = mocker.spy(builtins, "print")  # put spy on print
+    # change unit
+    ini.unit = unit
+    # now load the nist database for example
+    db_new = "nist"
+    ini.database = db_new
+
+    spy_print.assert_called_with(
+        f"iniabu loaded database: '{db_new}', current " f"units: '{unit}'"
     )
 
 

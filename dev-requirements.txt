@@ -7,5 +7,6 @@ flake8-docstrings
 flake8-import-order
 hypothesis
 pytest
-pytest-sugar
 pytest-cov
+pytest-mock
+pytest-sugar
