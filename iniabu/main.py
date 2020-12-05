@@ -663,8 +663,8 @@ class IniAbu(object):
 
         # get the values back:
         with linear_units(self, mass_fraction=mass_fraction) as ini_tmp:
-            nominator_value = ini_tmp.isotope[nominator].relative_abundance
-            denominator_value = ini_tmp.isotope[denominator].relative_abundance
+            nominator_value = ini_tmp.isotope[nominator].solar_abundance
+            denominator_value = ini_tmp.isotope[denominator].solar_abundance
 
         ratio = nominator_value / denominator_value
 
