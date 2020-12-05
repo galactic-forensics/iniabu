@@ -12,9 +12,9 @@ import iniabu.elements
 import iniabu.utilities
 from iniabu.utilities import (
     linear_units,
-    make_isotope_dictionary,
-    make_log_abundance_dictionaries,
-    make_mass_fraction_dictionary,
+    make_iso_dict,
+    make_log_abu_dict,
+    make_mf_dict,
     return_as_ndarray,
     return_list_simplifier,
     return_string_as_list,
@@ -26,7 +26,7 @@ def test_proxy_list_index_error(ini_default):
     # entry not in list
     item = "invalid"
     with pytest.raises(IndexError) as err_info:
-        ini_default.element[item]
+        ini_default.ele[item]
     err_msg = err_info.value.args[0]
     assert (
         err_msg
@@ -43,13 +43,13 @@ def test_proxy_list_tuple_initialization(ini_default):
     for it, ele in enumerate(elements):
         val_exp[it] = iniabu.data.lodders09_elements[ele][0]
     # result from routine to be tested
-    val_get = ini_default.element[elements].solar_abundance
+    val_get = ini_default.ele[elements].abu_solar
     np.testing.assert_equal(val_exp, val_get)
 
 
 def test_proxy_list_generator(ini_default):
     """Test that generator of ProxyList returns the correct object type."""
-    gen = ini_default.element.__iter__()
+    gen = ini_default.ele.__iter__()
     val = next(gen)
     assert isinstance(val, iniabu.elements.Elements)
 
@@ -58,7 +58,7 @@ def test_proxy_list_length(ini_default):
     """Test that length of the ProxyList."""
     # test proxy list length
     length = len(ini_default.ele_dict.keys())
-    assert ini.element.__len__() == length
+    assert ini.ele.__len__() == length
 
 
 # FUNCTIONS #
@@ -90,7 +90,7 @@ def test_linear_units_no_switch(ini_default, ini_mf):
 
 
 @given(abu_x=st.floats(min_value=0.001, allow_infinity=False))
-def test_make_isotope_dictionary(abu_x):
+def test_make_iso_dict(abu_x):
     """Create an isotope dictionary form an elementary dictionary."""
     ele_dict = {
         "H": [10000.0, [1, 2], [0.8, 0.2], [8000.0, 2000.0]],
@@ -101,18 +101,18 @@ def test_make_isotope_dictionary(abu_x):
         "H-2": [0.2, 2000.0],
         "X-10": [1.0, abu_x],
     }
-    assert make_isotope_dictionary(ele_dict) == iso_dict_expected
+    assert make_iso_dict(ele_dict) == iso_dict_expected
 
 
 @given(abu_x=st.floats(min_value=0.001, allow_infinity=False))
-def test_make_log_abundance_dictionaries(abu_x):
+def test_make_log_abu_dict(abu_x):
     """Ensure that logarithmic abundance dictionaries are made in correct form."""
     ele_dict_lin = {
         "H": [10000.0, [1, 2], [0.8, 0.2], [8000.0, 2000.0]],
         "X": [abu_x, [10], [1.0], [abu_x]],
     }
     # get logarithmic dictionaries
-    ele_dict_log, iso_dict_log = make_log_abundance_dictionaries(ele_dict_lin)
+    ele_dict_log, iso_dict_log = make_log_abu_dict(ele_dict_lin)
     # assert elements
     abu_h = ele_dict_lin["H"][0]
     assert ele_dict_log["H"][0] == 12.0
@@ -125,7 +125,7 @@ def test_make_log_abundance_dictionaries(abu_x):
     assert iso_dict_log["X-10"][1] == np.log10(abu_x / abu_h) + 12.0
 
 
-def test_make_mass_fraction_dictionaries():
+def test_make_mf_dict():
     """Ensure that mass fraction dictionaries are made in correct form."""
     ele_dict = {
         "H": [10000.0, [1, 2], [0.8, 0.2], [8000.0, 2000.0]],
@@ -165,9 +165,9 @@ def test_make_mass_fraction_dictionaries():
         for it, mf_abu_iso in enumerate(ele_dict_expected[ele][3]):
             ele_dict_expected[ele][2][it] = mf_abu_iso / mf_abu_sum
     # isotope dict expected
-    iso_dict_expected = make_isotope_dictionary(ele_dict_expected)
+    iso_dict_expected = make_iso_dict(ele_dict_expected)
     # test
-    ele_dict_gotten, iso_dict_gotten = make_mass_fraction_dictionary(ele_dict)
+    ele_dict_gotten, iso_dict_gotten = make_mf_dict(ele_dict)
     assert ele_dict_gotten == ele_dict_expected
     assert iso_dict_gotten == iso_dict_expected
 
@@ -184,7 +184,7 @@ def test_make_mass_fraction_dictionary_iso_relative_abundances(ini_default, ele)
     assert sum(ini_default.ele_dict_mf[ele][2]) == pytest.approx(1.0)
 
 
-def test_make_mass_fraction_dictionaries_ele_dict_untouched():
+def test_make_mf_dict_ele_dict_untouched():
     """Ensure that mass_fraction_dictionary routine does not overwrite input.
 
     This simply makes sure that a deepcopy is made and not just a simple copy for the
@@ -197,7 +197,7 @@ def test_make_mass_fraction_dictionaries_ele_dict_untouched():
     }
     ele_dict_backup = copy.deepcopy(ele_dict)
     # run the routine
-    _ = make_mass_fraction_dictionary(ele_dict)
+    _ = make_mf_dict(ele_dict)
     assert ele_dict == ele_dict_backup
 
 

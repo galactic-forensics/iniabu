@@ -19,8 +19,8 @@ class Elements(object):
         >>> from iniabu import ini
         >>> ini.unit
         'num_lin'
-        >>> element = ini.element["Si"]
-        >>> element.solar_abundance
+        >>> element = ini.ele["Si"]
+        >>> element.abu_solar
         999700.0
 
     .. warning:: This class should NOT be manually created by the user. It is
@@ -66,7 +66,25 @@ class Elements(object):
     # PROPERTIES #
 
     @property
-    def isotopes_a(self):
+    def abu_solar(self):
+        """Get solar abundance of element(s).
+
+        Returns the solar abundance of the selected element(s). Returns the result
+        either as a ``float`` or as a numpy ``ndarray``. Note: Not all databases contain
+        this information. If the information is not available, these values will be
+        filled with ``np.nan``.
+
+        :return: Solar abundance of element(s)
+        :rtype: float,ndarray
+        """
+        ret_arr = []
+        for ele in self._eles:
+            ret_arr.append(self._ele_dict[ele][0])
+        ret_arr = np.array(ret_arr)
+        return return_list_simplifier(ret_arr)
+
+    @property
+    def iso_a(self):
         """Get the atomic number(s) of all isotopes.
 
         Returns the atomic number(s) of all isotopes of this element as a numpy integer
@@ -82,7 +100,7 @@ class Elements(object):
         return return_list_simplifier(ret_arr)
 
     @property
-    def isotopes_relative_abundance(self):
+    def iso_abu_rel(self):
         """Get relative abundance of all isotopes.
 
         Returns a list with the relative abundances of all isotopes of the given
@@ -99,7 +117,7 @@ class Elements(object):
         return return_list_simplifier(ret_arr)
 
     @property
-    def isotopes_solar_abundance(self):
+    def iso_abu_solar(self):
         """Get solar abundances of all isotopes.
 
         Returns a list with the solar abundances of all isotopes of the given element.
@@ -132,22 +150,4 @@ class Elements(object):
             isos_abu = np.array([abu for abu in self._ele_dict[ele][2]])
             isos_mass = np.array([data.isotopes_mass[iso] for iso in isos])
             ret_arr.append(np.sum(isos_abu * isos_mass))
-        return return_list_simplifier(ret_arr)
-
-    @property
-    def solar_abundance(self):
-        """Get solar abundance of element(s).
-
-        Returns the solar abundance of the selected element(s). Returns the result
-        either as a ``float`` or as a numpy ``ndarray``. Note: Not all databases contain
-        this information. If the information is not available, these values will be
-        filled with ``np.nan``.
-
-        :return: Solar abundance of element(s)
-        :rtype: float,ndarray
-        """
-        ret_arr = []
-        for ele in self._eles:
-            ret_arr.append(self._ele_dict[ele][0])
-        ret_arr = np.array(ret_arr)
         return return_list_simplifier(ret_arr)

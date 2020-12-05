@@ -100,7 +100,7 @@ def linear_units(ini, mass_fraction):
         ini.unit = current_units
 
 
-def make_isotope_dictionary(element_dict):
+def make_iso_dict(element_dict):
     """Make an isotope dictionary from an element dictionary.
 
     :param element_dict: Element dictionary.
@@ -120,7 +120,7 @@ def make_isotope_dictionary(element_dict):
     return dict(zip(iso_keys, iso_entries))
 
 
-def make_log_abundance_dictionaries(element_dict):
+def make_log_abu_dict(element_dict):
     """Make element and isotope dictionaries for logarithmic abundances.
 
     This routine takes an element dictionary with linear abundances, normed to Si
@@ -163,12 +163,12 @@ def make_log_abundance_dictionaries(element_dict):
     element_dict_log = dict(zip(ele_keys, ele_entries))
 
     # isotope dictionary
-    isotope_dict_log = make_isotope_dictionary(element_dict_log)
+    isotope_dict_log = make_iso_dict(element_dict_log)
 
     return element_dict_log, isotope_dict_log
 
 
-def make_mass_fraction_dictionary(element_dict):
+def make_mf_dict(element_dict):
     """Make element and isotope dictionaries for mass fractions.
 
     This routine takes an element dictionary with linear abundances, normed to Si
@@ -211,7 +211,7 @@ def make_mass_fraction_dictionary(element_dict):
             element_dict_mf[key][2][it] = sol_abu_val / abu_sum
 
     # make isotope mass fraction dictionary
-    isotope_dict_mf = make_isotope_dictionary(element_dict_mf)
+    isotope_dict_mf = make_iso_dict(element_dict_mf)
 
     return element_dict_mf, isotope_dict_mf
 
