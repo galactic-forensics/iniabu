@@ -373,7 +373,7 @@ class IniAbu(object):
         Example:
             >>> from iniabu import ini
             >>> ini.bracket_isotope("Ne-21", "Ne-20", 2.397)
-            2.9999700012616572
+            3.0002854858741057
         """
         solar_ratios = return_as_ndarray(
             self.ratio_isotope(nominator, denominator, mass_fraction=mass_fraction)
@@ -487,13 +487,13 @@ class IniAbu(object):
         Example:
             >>> from iniabu import ini
             >>> ini.delta_isotope("Ne-22", "Ne-20", 0.07, delta_factor=10000)
-            -480.0676021714623
+            -479.9999999999993
 
             >>> # For more than 1 ratio
             >>> nominator_isos = ["Ne-21", "Ne-22"]
             >>> values = [0.01, 0.07]  # values to compare with
             >>> ini.delta_isotope(nominator_isos, "Ne-20", values, delta_factor=10000)
-            array([31715.93357271,  -480.06760217])
+            array([31746.24829468,  -480.        ])
         """
         solar_ratios = return_as_ndarray(
             self.ratio_isotope(nominator, denominator, mass_fraction=mass_fraction)
@@ -622,28 +622,28 @@ class IniAbu(object):
             >>> from iniabu import ini
             >>> # calculate Ne-21 / Ne-20 isotope ratio
             >>> ini.ratio_isotope("Ne-21", "Ne-20")
-            0.0023971655776491205
+            0.002395424836601307
 
             >>> # calculate isotope ratios for all Ne isotopes versus Ne-20
             >>> ini.ratio_isotope("Ne", "Ne-20")
-            array([1.        , 0.00239717, 0.07352993])
+            array([1.        , 0.00239542, 0.07352941])
 
             >>> # Isotope ratios for Ne-21 and Ne-22 versus most abundant Ne isotope
             >>> ini.ratio_isotope(["Ne-21", "Ne-22"], "Ne")
-            array([0.00239717, 0.07352993])
+            array([0.00239542, 0.07352941])
 
             >>> # repeat this calculation assuming mass fractions
             >>> ini.ratio_isotope(["Ne-21", "Ne-22"], "Ne", mass_fraction=True)
-            array([0.00251724, 0.08088183])
+            array([0.00251541, 0.08088125])
 
             >>> from iniabu import inimf
             >>> # calculate Ne-21 / Ne-20 isotope ratio using mass fractions
             >>> inimf.ratio_isotope("Ne-21", "Ne-20")
-            0.0025154098910304987
+            0.002515409891030499
 
             >>> # calculate the same ratio in number fractions
             >>> inimf.ratio_isotope("Ne-21", "Ne-20", mass_fraction=False)
-            0.0023971655776491205
+            0.002395424836601307
         """
         # check for equal length if nominator and denominator are lists
         if not isinstance(nominator, str) and not isinstance(denominator, str):
