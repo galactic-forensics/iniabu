@@ -151,7 +151,7 @@ def test_bracket_element_shape_mismatch(ini_default):
 def test_bracket_isotope(ini_default, iso1, iso2, value):
     """Calculate bracket notation for an isotope ratio."""
     val_exp = np.log10(value) - np.log10(
-        ini_default.iso_dict[iso1][0] / ini_default.iso_dict[iso2][0]
+        ini_default.iso_dict[iso1][1] / ini_default.iso_dict[iso2][1]
     )
     val_get = ini_default.bracket_isotope(iso1, iso2, value)
     assert val_get == val_exp
@@ -211,13 +211,14 @@ def test_delta_isotope(ini_default, iso1, iso2, value, factor):
     """Calculate delta-value for an isotope ratio."""
     # default factor = 1000
     val_exp = (
-        value / (ini_default.iso_dict[iso1][0] / ini_default.iso_dict[iso2][0]) - 1
+        value / (ini_default.iso_dict[iso1][1] / ini_default.iso_dict[iso2][1]) - 1
     ) * 1000
     val_get = ini_default.delta_isotope(iso1, iso2, value)
     assert val_get == val_exp
     # with a factor
+    # fixme next line can be simplified by just adjusting val_exp / 1000 * factor
     val_exp_fct = (
-        value / (ini_default.iso_dict[iso1][0] / ini_default.iso_dict[iso2][0]) - 1
+        value / (ini_default.iso_dict[iso1][1] / ini_default.iso_dict[iso2][1]) - 1
     ) * factor
     val_get_fct = ini_default.delta_isotope(iso1, iso2, value, delta_factor=factor)
     assert val_get_fct == val_exp_fct
@@ -367,7 +368,7 @@ def test_ratio_element_ele_ele_mf_notation_no_mf(ini_mf, ini_default, ele1, ele2
 )
 def test_ratio_isotope_iso_iso(ini_default, iso1, iso2):
     """Calculate isotope ratio for one nominator and one denominator isotope."""
-    val_exp = ini_default.iso_dict[iso1][0] / ini_default.iso_dict[iso2][0]
+    val_exp = ini_default.iso_dict[iso1][1] / ini_default.iso_dict[iso2][1]
     assert ini_default.ratio_isotope(iso1, iso2) == val_exp
 
 
@@ -378,7 +379,7 @@ def test_ratio_isotope_iso_iso(ini_default, iso1, iso2):
 def test_ratio_isotope_iso_iso_from_log(iso1, iso2):
     """Calculate isotope ratio when database is in logarithmic state."""
     ini = iniabu.IniAbu()
-    val_exp = ini.iso_dict[iso1][0] / ini.iso_dict[iso2][0]
+    val_exp = ini.iso_dict[iso1][1] / ini.iso_dict[iso2][1]
     ini.unit = "num_log"
     assert ini.ratio_isotope(iso1, iso2) == val_exp
 
@@ -392,8 +393,8 @@ def test_ratio_isotope_isos_iso(ini_default, iso1, iso2, iso3):
     """Calculate isotope ratio for several nominators and one denominator isotope."""
     val_exp = np.array(
         [
-            ini_default.iso_dict[iso1][0] / ini_default.iso_dict[iso3][0],
-            ini_default.iso_dict[iso2][0] / ini_default.iso_dict[iso3][0],
+            ini_default.iso_dict[iso1][1] / ini_default.iso_dict[iso3][1],
+            ini_default.iso_dict[iso2][1] / ini_default.iso_dict[iso3][1],
         ]
     )
     np.testing.assert_equal(ini_default.ratio_isotope([iso1, iso2], iso3), val_exp)
@@ -409,8 +410,8 @@ def test_ratio_isotope_isos_isos(ini_default, iso1, iso2, iso3, iso4):
     """Calculate isotope ratios for several nominators and denominators."""
     val_exp = np.array(
         [
-            ini_default.iso_dict[iso1][0] / ini_default.iso_dict[iso3][0],
-            ini_default.iso_dict[iso2][0] / ini_default.iso_dict[iso4][0],
+            ini_default.iso_dict[iso1][1] / ini_default.iso_dict[iso3][1],
+            ini_default.iso_dict[iso2][1] / ini_default.iso_dict[iso4][1],
         ]
     )
     np.testing.assert_equal(
@@ -438,7 +439,7 @@ def test_ratio_isotope_ele_iso(ini_default, ele1, iso2):
     all_isos = ini_default._get_all_isotopes(ele1)
     val_exp = np.empty(len(all_isos))
     for it, iso in enumerate(all_isos):
-        val_exp[it] = ini_default.iso_dict[iso][0] / ini_default.iso_dict[iso2][0]
+        val_exp[it] = ini_default.iso_dict[iso][1] / ini_default.iso_dict[iso2][1]
     np.testing.assert_equal(ini_default.ratio_isotope(ele1, iso2), val_exp)
 
 
@@ -449,9 +450,9 @@ def test_ratio_isotope_ele_iso(ini_default, ele1, iso2):
 def test_ratio_isotope_iso_iso_mass_fraction_true(ini_default, iso1, iso2):
     """Calculate isotope ratio as mass fraction from num_lin units."""
     val_exp = (
-        ini_default.iso_dict[iso1][0]
+        ini_default.iso_dict[iso1][1]
         * data.isotopes_mass[iso1]
-        / (ini_default.iso_dict[iso2][0] * data.isotopes_mass[iso2])
+        / (ini_default.iso_dict[iso2][1] * data.isotopes_mass[iso2])
     )
     np.testing.assert_allclose(
         ini_default.ratio_isotope(iso1, iso2, mass_fraction=True), val_exp
@@ -464,7 +465,7 @@ def test_ratio_isotope_iso_iso_mass_fraction_true(ini_default, iso1, iso2):
 )
 def test_ratio_isotope_iso_iso_mf_mass_fraction(ini_mf, iso1, iso2):
     """Calculate isotope ratio as mass fraction from mass_fraction units."""
-    val_exp = ini_mf.iso_dict_mf[iso1][0] / ini_mf.iso_dict_mf[iso2][0]
+    val_exp = ini_mf.iso_dict_mf[iso1][1] / ini_mf.iso_dict_mf[iso2][1]
     np.testing.assert_allclose(
         ini_mf.ratio_isotope(iso1, iso2, mass_fraction=True), val_exp
     )
@@ -479,7 +480,7 @@ def test_ratio_isotope_iso_iso_mf_mass_fraction(ini_mf, iso1, iso2):
 )
 def test_ratio_isotope_iso_iso_mf_num_fraction(ini_mf, iso1, iso2):
     """Calculate isotope ratio as number fraction from mass_fraction units."""
-    val_exp = ini_mf.iso_dict[iso1][0] / ini_mf.iso_dict[iso2][0]
+    val_exp = ini_mf.iso_dict[iso1][1] / ini_mf.iso_dict[iso2][1]
     np.testing.assert_allclose(
         ini_mf.ratio_isotope(iso1, iso2, mass_fraction=False), val_exp
     )
@@ -495,16 +496,16 @@ def test_ratio_isotope_isos_ele_mass_fraction_true(ini_default, iso1, iso2, ele)
     iso_denominator = ini_default._get_major_isotope(ele)
     val_exp = np.array(
         [
-            ini_default.iso_dict[iso1][0]
+            ini_default.iso_dict[iso1][1]
             * data.isotopes_mass[iso1]
             / (
-                ini_default.iso_dict[iso_denominator][0]
+                ini_default.iso_dict[iso_denominator][1]
                 * data.isotopes_mass[iso_denominator]
             ),
-            ini_default.iso_dict[iso2][0]
+            ini_default.iso_dict[iso2][1]
             * data.isotopes_mass[iso2]
             / (
-                ini_default.iso_dict[iso_denominator][0]
+                ini_default.iso_dict[iso_denominator][1]
                 * data.isotopes_mass[iso_denominator]
             ),
         ]
@@ -520,7 +521,7 @@ def test_ratio_isotope_isos_ele_mass_fraction_true(ini_default, iso1, iso2, ele)
 def test_ratio_isotope_iso_ele(ini_default, iso, ele):
     """Calculate isotope ratio for one isotope and an element (i.e., major isotope)."""
     iso_denominator = ini_default._get_major_isotope(ele)
-    val_exp = ini_default.iso_dict[iso][0] / ini_default.iso_dict[iso_denominator][0]
+    val_exp = ini_default.iso_dict[iso][1] / ini_default.iso_dict[iso_denominator][1]
     assert ini_default.ratio_isotope(iso, ele) == val_exp
 
 
