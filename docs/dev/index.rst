@@ -3,6 +3,14 @@
 Developer Reference
 ===================
 
+First off,
+please make sure you have read and understood
+our code of conduct.
+We expect everybody to adhere to it.
+You can find this project's
+code of condact
+`here <https://github.com/galactic-forensics/iniabu/blob/master/CODE_OF_CONDUCT.md>`_.
+
 To get started with developing,
 fork the github repository and
 clone it into a local directory.
@@ -92,7 +100,7 @@ Test driven development
 Testing of the ``iniabu`` package is done using ``pytest``
 and automated using ``nox``.
 To run a full test using ``nox``,
-Python 3.6, 3.7, and 3.8,
+Python 3.6, 3.7, 3.8, and 3.9,
 must be available in the environment.
 A full nox test, which includes
 linting, safety, and tests
@@ -221,17 +229,6 @@ from the terminal by typing:
 
     $ nox -rs lint
 
-For developing purposes,
-the ``nox`` session can also be limited
-to just run with one specific Python version,
-e.g., with Python 3.8.
-To do so,
-type on the terminal:
-
-.. code-block:: console
-
-    $ nox -rs lint -p 3.8
-
 To fix linting issues,
 read the output of the linter carefully.
 If absolutely required,
@@ -250,9 +247,6 @@ Testing
 ~~~~~~~
 
 Project testing is done with ``pytest``.
-An overview of all implemented tests
-can be found in the :doc:`/tests` section.
-
 The following ``pytest`` plugins
 are defined in the ``dev-requirements.txt`` file:
 
@@ -276,9 +270,9 @@ you can type the following into the terminal:
 
     $ nox -rs tests
 
-Again, adding the option ``-p 3.8``
+Again, adding the option ``-p 3.9``
 would limit the test to
-Python 3.8 only.
+Python 3.9 only.
 
 
 Docstring example testing
@@ -487,7 +481,7 @@ Then adjust the subroutines and associated asserts.
 At least make sure that tests exist for:
 
 - Data integrity
-- Solar abundance of Si is 1e6
+- Solar abundance of Si is 10\ :sup:`6`
 - Relative abundances of all isotopes sum to unity
 
 Finally, add a new test in ``test_main.py``
