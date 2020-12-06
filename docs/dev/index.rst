@@ -251,6 +251,7 @@ The following ``pytest`` plugins
 are defined in the ``dev-requirements.txt`` file:
 
 * ``pytest-cov`` to test code coverage.
+* ``pytest-mock`` to mock out certain parts of the code base.
 * ``pytest-sugar`` to display nicely formatted output.
 
 The ``pytest.ini`` file configures
@@ -273,6 +274,18 @@ you can type the following into the terminal:
 Again, adding the option ``-p 3.9``
 would limit the test to
 Python 3.9 only.
+
+**Hypothesis**
+
+Where adequate,
+make use of the
+`hypothesis <https://hypothesis.readthedocs.io/en/latest/>`_
+package for writing your tests.
+Have a look at the existing tests
+for input on what to test for.
+Hypothesis allows for simple edge case testing
+and often catches errors
+that might otherwise go through.
 
 
 Docstring example testing
