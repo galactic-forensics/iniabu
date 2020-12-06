@@ -52,7 +52,7 @@ class IniAbu(object):
     # PROXY LISTS #
 
     @property
-    def element(self):
+    def ele(self):
         """Get information for a specific element.
 
         Calls the :class`iniabu.elements.Elements`. This handler represents a convenient
@@ -65,27 +65,27 @@ class IniAbu(object):
         Example:
             >>> from iniabu import ini
             >>> # get the solar abundance of silicon
-            >>> ini.element["Si"].solar_abundance
+            >>> ini.ele["Si"].abu_solar
             999700.0
 
             >>> # get a numpy array of the solar abundance of two elements
-            >>> ini.element[["Fe", "Ni"]].solar_abundance
+            >>> ini.ele[["Fe", "Ni"]].abu_solar
             array([847990.,  49093.])
 
             >>> # get a list of all atomic numbers for isotopes of helium
-            >>> ini.element["He"].isotopes_a
+            >>> ini.ele["He"].iso_a
             array([3, 4])
 
             >>> # similarly, query isotopes relative abundances, and solar abundances
-            >>> ini.element["He"].isotopes_relative_abundance
+            >>> ini.ele["He"].iso_abu_rel
             array([1.66000e-04, 9.99834e-01])
-            >>> ini.element["He"].isotopes_solar_abundance
+            >>> ini.ele["He"].iso_abu_solar
             array([1.03e+06, 2.51e+09])
         """
         return ProxyList(self, Elements, self._ele_dict.keys(), unit=self._unit)
 
     @property
-    def isotope(self):
+    def iso(self):
         """Get information for a specific isotope.
 
         Calls the :class`iniabu.isotopes.Isotopes`. This handler represents a convenient
@@ -98,17 +98,17 @@ class IniAbu(object):
         Example:
             >>> from iniabu import ini
             >>> # get the solar abundance of Si-28
-            >>> ini.isotope["Si-28"].solar_abundance
+            >>> ini.iso["Si-28"].abu_solar
             922000.0
 
             >>> # get a numpy array of the solar abundance of two isotopes
-            >>> ini.isotope[["Fe-56", "Ni-60"]].solar_abundance
+            >>> ini.iso[["Fe-56", "Ni-60"]].abu_solar
             array([778000.,  12900.])
 
             >>> # similarly, query relative abundance(s) of isotope(s)
-            >>> ini.isotope["He-4"].relative_abundance
+            >>> ini.iso["He-4"].abu_rel
             0.999834
-            >>> ini.isotope[["H-2", "He-3"]].relative_abundance
+            >>> ini.iso[["H-2", "He-3"]].abu_rel
             array([1.94e-05, 1.66e-04])
         """
         return ProxyList(self, Isotopes, self._iso_dict.keys(), unit=self._unit)
@@ -143,10 +143,8 @@ class IniAbu(object):
         (
             self._ele_dict_log,
             self._iso_dict_log,
-        ) = utilities.make_log_abundance_dictionaries(self._ele_dict)
-        self._ele_dict_mf, self._iso_dict_mf = utilities.make_mass_fraction_dictionary(
-            self._ele_dict
-        )
+        ) = utilities.make_log_abu_dict(self._ele_dict)
+        self._ele_dict_mf, self._iso_dict_mf = utilities.make_mf_dict(self._ele_dict)
 
         self._database = db
 
@@ -274,7 +272,7 @@ class IniAbu(object):
             >>> ini.unit = "num_log"  # set logarithmic abundance unit
             >>> ini.unit
             'num_log'
-            >>> ini.element["H"].solar_abundance
+            >>> ini.ele["H"].abu_solar
             12.0
 
             >>> ini.unit = "num_lin"  # set back to default
@@ -292,7 +290,7 @@ class IniAbu(object):
 
     # METHODS #
 
-    def bracket_element(self, nominator, denominator, value, mass_fraction=None):
+    def ele_bracket(self, nominator, denominator, value, mass_fraction=None):
         """Calculate the bracket ratio for a given element ratio and a value.
 
         Bracket notation is defined as:
@@ -300,7 +298,7 @@ class IniAbu(object):
         result = log10(measured value) - log10(solar ratio)
 
         Nominator and denominator have the same restrictions as for the
-        ``ratio_element`` method.
+        ``ele_ratio`` method.
         The same number of values must be supplied as there are element ratios defined.
 
         :param nominator: Element(s) in nominator.
@@ -324,11 +322,11 @@ class IniAbu(object):
 
         Example:
             >>> from iniabu import ini
-            >>> ini.bracket_element("Ne", "Si", 33)
+            >>> ini.ele_bracket("Ne", "Si", 33)
             1.0008802726402624
         """
         solar_ratios = return_as_ndarray(
-            self.ratio_element(nominator, denominator, mass_fraction=mass_fraction)
+            self.ele_ratio(nominator, denominator, mass_fraction=mass_fraction)
         )
         value = return_as_ndarray(value)
 
@@ -340,7 +338,7 @@ class IniAbu(object):
 
         return np.log10(value) - np.log10(solar_ratios)
 
-    def bracket_isotope(self, nominator, denominator, value, mass_fraction=None):
+    def iso_bracket(self, nominator, denominator, value, mass_fraction=None):
         """Calculate the bracket ratio for a given isotope ratio and a value.
 
         Bracket notation is defined as:
@@ -348,7 +346,7 @@ class IniAbu(object):
         result = log10(measured value) - log10(solar ratio)
 
         Nominator and denominator have the same restrictions as for the
-        ``ratio_element`` method.
+        ``ele_ratio`` method.
         The same number of values must be supplied as there are element ratios defined.
 
         :param nominator: Isotope(s) in nominator.
@@ -372,11 +370,11 @@ class IniAbu(object):
 
         Example:
             >>> from iniabu import ini
-            >>> ini.bracket_isotope("Ne-21", "Ne-20", 2.397)
+            >>> ini.iso_bracket("Ne-21", "Ne-20", 2.397)
             3.0002854858741057
         """
         solar_ratios = return_as_ndarray(
-            self.ratio_isotope(nominator, denominator, mass_fraction=mass_fraction)
+            self.iso_ratio(nominator, denominator, mass_fraction=mass_fraction)
         )
         value = return_as_ndarray(value)
 
@@ -388,7 +386,7 @@ class IniAbu(object):
 
         return np.log10(value) - np.log10(solar_ratios)
 
-    def delta_element(
+    def ele_delta(
         self, nominator, denominator, value, mass_fraction=None, delta_factor=1000.0
     ):
         """Calculate the delta-value for a given element ratio and a value.
@@ -401,7 +399,7 @@ class IniAbu(object):
         permil. Other factors can be chosen.
 
         Nominator and denominator have the same restrictions as for the
-        ``ratio_element`` method.
+        ``ele_ratio`` method.
         The same number of values must be supplied as there are element ratios defined.
 
         :param nominator: Element(s) in nominator.
@@ -429,11 +427,11 @@ class IniAbu(object):
 
         Example:
             >>> from iniabu import ini
-            >>> ini.delta_element("Ne", "Si", 3.4)
+            >>> ini.ele_delta("Ne", "Si", 3.4)
             32.39347210030586
         """
         solar_ratios = return_as_ndarray(
-            self.ratio_element(nominator, denominator, mass_fraction=mass_fraction)
+            self.ele_ratio(nominator, denominator, mass_fraction=mass_fraction)
         )
         value = return_as_ndarray(value)
 
@@ -445,7 +443,7 @@ class IniAbu(object):
 
         return (value / solar_ratios - 1) * delta_factor
 
-    def delta_isotope(
+    def iso_delta(
         self, nominator, denominator, value, mass_fraction=None, delta_factor=1000.0
     ):
         """Calculate the delta-value for a given isotope ratio and a value.
@@ -458,7 +456,7 @@ class IniAbu(object):
         permil. Other factors can be chosen.
 
         Nominator and denominator have the same restrictions as for the
-        ``ratio_element`` method.
+        ``ele_ratio`` method.
         The same number of values must be supplied as there are isotope ratios defined.
 
         :param nominator: Isotope(s) in nominator.
@@ -486,17 +484,17 @@ class IniAbu(object):
 
         Example:
             >>> from iniabu import ini
-            >>> ini.delta_isotope("Ne-22", "Ne-20", 0.07, delta_factor=10000)
+            >>> ini.iso_delta("Ne-22", "Ne-20", 0.07, delta_factor=10000)
             -479.9999999999993
 
             >>> # For more than 1 ratio
             >>> nominator_isos = ["Ne-21", "Ne-22"]
             >>> values = [0.01, 0.07]  # values to compare with
-            >>> ini.delta_isotope(nominator_isos, "Ne-20", values, delta_factor=10000)
+            >>> ini.iso_delta(nominator_isos, "Ne-20", values, delta_factor=10000)
             array([31746.24829468,  -480.        ])
         """
         solar_ratios = return_as_ndarray(
-            self.ratio_isotope(nominator, denominator, mass_fraction=mass_fraction)
+            self.iso_ratio(nominator, denominator, mass_fraction=mass_fraction)
         )
         value = return_as_ndarray(value)
 
@@ -508,7 +506,7 @@ class IniAbu(object):
 
         return (value / solar_ratios - 1) * delta_factor
 
-    def ratio_element(self, nominator, denominator, mass_fraction=None):
+    def ele_ratio(self, nominator, denominator, mass_fraction=None):
         """Get the ratios of given elements.
 
         Nominator and denominator can be element names or lists of element names (if
@@ -534,28 +532,28 @@ class IniAbu(object):
         Example:
             >>> from iniabu import ini
             >>> # Calculate H/He ratio
-            >>> ini.ratio_element("H", "He")
+            >>> ini.ele_ratio("H", "He")
             10.314692775474606
 
             >>> # Calculate same ratio as mass fraction
-            >>> ini.ratio_element("H", "He", mass_fraction=True)
+            >>> ini.ele_ratio("H", "He", mass_fraction=True)
             2.597460199709773
 
             >>> # Calculate ratios with multiple elements
-            >>> ini.ratio_element(["H", "He", "Al"], ["Si"])
+            >>> ini.ele_ratio(["H", "He", "Al"], ["Si"])
             array([2.59082755e+04, 2.51178354e+03, 8.46253876e-02])
 
             >>> # Multiple ratios at the same time
-            >>> ini.ratio_element(["H", "He"], ["He", "H"])
+            >>> ini.ele_ratio(["H", "He"], ["He", "H"])
             array([10.31469278,  0.09694908])
 
             >>> # The result when the solar abundance of an element is not avaialble
             >>> ini.database = "nist"
-            >>> ini.ratio_element("H", "He")
+            >>> ini.ele_ratio("H", "He")
             nan
 
             >>> ini.database = "lodders09"  # set back to default and check again
-            >>> ini.ratio_element("H", "He")
+            >>> ini.ele_ratio("H", "He")
             10.314692775474606
         """
         # turn into string if necessary
@@ -572,8 +570,8 @@ class IniAbu(object):
 
         # get the values back, use linear units if required:
         with linear_units(self, mass_fraction=mass_fraction) as ini_tmp:
-            nominator_value = ini_tmp.element[nominator].solar_abundance
-            denominator_value = ini_tmp.element[denominator].solar_abundance
+            nominator_value = ini_tmp.ele[nominator].abu_solar
+            denominator_value = ini_tmp.ele[denominator].abu_solar
 
         ratio = nominator_value / denominator_value
 
@@ -590,7 +588,7 @@ class IniAbu(object):
 
         return ratio
 
-    def ratio_isotope(self, nominator, denominator, mass_fraction=None):
+    def iso_ratio(self, nominator, denominator, mass_fraction=None):
         """Get the ratios of given isotopes.
 
         Grabs the isotope ratios for nominator / denominator.
@@ -621,28 +619,28 @@ class IniAbu(object):
         Example:
             >>> from iniabu import ini
             >>> # calculate Ne-21 / Ne-20 isotope ratio
-            >>> ini.ratio_isotope("Ne-21", "Ne-20")
+            >>> ini.iso_ratio("Ne-21", "Ne-20")
             0.002395424836601307
 
             >>> # calculate isotope ratios for all Ne isotopes versus Ne-20
-            >>> ini.ratio_isotope("Ne", "Ne-20")
+            >>> ini.iso_ratio("Ne", "Ne-20")
             array([1.        , 0.00239542, 0.07352941])
 
             >>> # Isotope ratios for Ne-21 and Ne-22 versus most abundant Ne isotope
-            >>> ini.ratio_isotope(["Ne-21", "Ne-22"], "Ne")
+            >>> ini.iso_ratio(["Ne-21", "Ne-22"], "Ne")
             array([0.00239542, 0.07352941])
 
             >>> # repeat this calculation assuming mass fractions
-            >>> ini.ratio_isotope(["Ne-21", "Ne-22"], "Ne", mass_fraction=True)
+            >>> ini.iso_ratio(["Ne-21", "Ne-22"], "Ne", mass_fraction=True)
             array([0.00251541, 0.08088125])
 
             >>> from iniabu import inimf
             >>> # calculate Ne-21 / Ne-20 isotope ratio using mass fractions
-            >>> inimf.ratio_isotope("Ne-21", "Ne-20")
+            >>> inimf.iso_ratio("Ne-21", "Ne-20")
             0.002515409891030499
 
             >>> # calculate the same ratio in number fractions
-            >>> inimf.ratio_isotope("Ne-21", "Ne-20", mass_fraction=False)
+            >>> inimf.iso_ratio("Ne-21", "Ne-20", mass_fraction=False)
             0.002395424836601307
         """
         # check for equal length if nominator and denominator are lists
@@ -656,15 +654,15 @@ class IniAbu(object):
 
         # check if elements are in nominator / denominator
         if isinstance(nominator, str) and nominator in self._ele_dict.keys():
-            nominator = self._get_all_isotopes(nominator)
+            nominator = self._get_all_isos(nominator)
 
         if isinstance(denominator, str) and denominator in self._ele_dict.keys():
-            denominator = self._get_major_isotope(denominator)
+            denominator = self._get_major_iso(denominator)
 
         # get the values back:
         with linear_units(self, mass_fraction=mass_fraction) as ini_tmp:
-            nominator_value = ini_tmp.isotope[nominator].solar_abundance
-            denominator_value = ini_tmp.isotope[denominator].solar_abundance
+            nominator_value = ini_tmp.iso[nominator].abu_solar
+            denominator_value = ini_tmp.iso[denominator].abu_solar
 
         ratio = nominator_value / denominator_value
 
@@ -686,7 +684,7 @@ class IniAbu(object):
 
     # PRIVATE METHODS #
 
-    def _get_all_isotopes(self, element):
+    def _get_all_isos(self, element):
         """Get all isotopes for a given element.
 
         :param element: Element.
@@ -695,11 +693,11 @@ class IniAbu(object):
         :return: List of isotopes.
         :rtype: list
         """
-        isotopes = self.element[element].isotopes_a
+        isotopes = self.ele[element].iso_a
         ret_val = ["{}-{}".format(element, isotope) for isotope in isotopes]
         return ret_val
 
-    def _get_major_isotope(self, element):
+    def _get_major_iso(self, element):
         """Get the most abundant isotope for a given element.
 
         :param element: Element.
@@ -708,6 +706,6 @@ class IniAbu(object):
         :return: Isotope.
         :rtype: str
         """
-        isotopes = self.element[element].isotopes_a
-        abus = self.element[element].isotopes_relative_abundance
+        isotopes = self.ele[element].iso_a
+        abus = self.ele[element].iso_abu_rel
         return "{}-{}".format(element, isotopes[abus.argmax()])

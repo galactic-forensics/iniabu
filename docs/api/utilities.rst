@@ -12,10 +12,28 @@ Utility classes and functions
     :undoc-members:
 
 
-:func:`make_log_abundance_dictionaries`
----------------------------------------
+:func:`linear_units`
+--------------------
 
-.. autofunction:: make_log_abundance_dictionaries
+.. autofunction:: linear_units
+
+
+:func:`make_iso_dict`
+---------------------
+
+.. autofunction:: make_iso_dict
+
+
+:func:`make_log_abu_dict`
+-------------------------
+
+.. autofunction:: make_log_abu_dict
+
+
+:func:`make_mf_dict`
+---------------------
+
+.. autofunction:: make_mf_dict
 
 
 :func:`return_as_ndarray`

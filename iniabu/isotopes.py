@@ -17,8 +17,8 @@ class Isotopes(object):
 
     Example:
         >>> from iniabu import ini
-        >>> isotope = ini.isotope["Si-28"]
-        >>> isotope.relative_abundance
+        >>> isotope = ini.iso["Si-28"]
+        >>> isotope.abu_rel
         0.9223
 
     .. warning:: This class should NOT be manually created by the user. It is
@@ -64,19 +64,7 @@ class Isotopes(object):
     # PROPERTIES #
 
     @property
-    def mass(self):
-        """Get the mass of an isotope.
-
-        :return: Mass of an isotope.
-        :rtype: float,ndarray<float>
-        """
-        ret_arr = []
-        for iso in self._isos:
-            ret_arr.append(data.isotopes_mass[iso])
-        return return_list_simplifier(ret_arr)
-
-    @property
-    def relative_abundance(self):
+    def abu_rel(self):
         """Get relative abundance of isotope(s).
 
         Returns the relative abundance of the selected isotope(s). Returns the result
@@ -94,7 +82,7 @@ class Isotopes(object):
         return return_list_simplifier(ret_arr)
 
     @property
-    def solar_abundance(self):
+    def abu_solar(self):
         """Get solar abundance of isotope(s).
 
         Returns the solar abundance of the selected isotope(s). Returns the result
@@ -109,4 +97,16 @@ class Isotopes(object):
         for iso in self._isos:
             ret_arr.append(self._iso_dict[iso][1])
         ret_arr = np.array(ret_arr)
+        return return_list_simplifier(ret_arr)
+
+    @property
+    def mass(self):
+        """Get the mass of an isotope.
+
+        :return: Mass of an isotope.
+        :rtype: float,ndarray<float>
+        """
+        ret_arr = []
+        for iso in self._isos:
+            ret_arr.append(data.isotopes_mass[iso])
         return return_list_simplifier(ret_arr)
