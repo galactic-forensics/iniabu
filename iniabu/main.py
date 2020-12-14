@@ -299,7 +299,10 @@ class IniAbu(object):
 
         Nominator and denominator have the same restrictions as for the
         ``ele_ratio`` method.
-        The same number of values must be supplied as there are element ratios defined.
+        If one element ratio is defined but multiple values, the isotope ratio for
+        all values is calculated and returned as a numpy array. If more than one element
+        ratio is defined, the same number of values must be supplied as there are
+        element ratios defined.
 
         :param nominator: Element(s) in nominator.
         :type nominator: str,list
@@ -330,7 +333,7 @@ class IniAbu(object):
         )
         value = return_as_ndarray(value)
 
-        if solar_ratios.shape != value.shape:
+        if solar_ratios.shape != value.shape and solar_ratios.shape != ():
             raise ValueError(
                 "Length of requested element ratios does not match length of "
                 "provided values."
@@ -347,7 +350,10 @@ class IniAbu(object):
 
         Nominator and denominator have the same restrictions as for the
         ``ele_ratio`` method.
-        The same number of values must be supplied as there are element ratios defined.
+        If one isotope ratio is defined but multiple values, the isotope ratio for
+        all values is calculated and returned as a numpy array. If more than one isotope
+        ratio is defined, the same number of values must be supplied as there are
+        isotope ratios defined.
 
         :param nominator: Isotope(s) in nominator.
         :type nominator: str,list
@@ -378,7 +384,7 @@ class IniAbu(object):
         )
         value = return_as_ndarray(value)
 
-        if solar_ratios.shape != value.shape:
+        if solar_ratios.shape != value.shape and solar_ratios.shape != ():
             raise ValueError(
                 "Length of requested isotope ratios does not match length of "
                 "provided values."
@@ -400,7 +406,10 @@ class IniAbu(object):
 
         Nominator and denominator have the same restrictions as for the
         ``ele_ratio`` method.
-        The same number of values must be supplied as there are element ratios defined.
+        If one element ratio is defined but multiple values, the isotope ratio for
+        all values is calculated and returned as a numpy array. If more than one element
+        ratio is defined, the same number of values must be supplied as there are
+        element ratios defined.
 
         :param nominator: Element(s) in nominator.
         :type nominator: str,list
@@ -435,7 +444,7 @@ class IniAbu(object):
         )
         value = return_as_ndarray(value)
 
-        if solar_ratios.shape != value.shape:
+        if solar_ratios.shape != value.shape and solar_ratios.shape != ():
             raise ValueError(
                 "Length of requested element ratios does not match length of "
                 "provided values."
@@ -457,7 +466,10 @@ class IniAbu(object):
 
         Nominator and denominator have the same restrictions as for the
         ``ele_ratio`` method.
-        The same number of values must be supplied as there are isotope ratios defined.
+        If one isotope ratio is defined but multiple values, the isotope ratio for
+        all values is calculated and returned as a numpy array. If more than one isotope
+        ratio is defined, the same number of values must be supplied as there are
+        isotope ratios defined.
 
         :param nominator: Isotope(s) in nominator.
         :type nominator: str,list
@@ -498,7 +510,7 @@ class IniAbu(object):
         )
         value = return_as_ndarray(value)
 
-        if solar_ratios.shape != value.shape:
+        if solar_ratios.shape != value.shape and solar_ratios.shape != ():
             raise ValueError(
                 "Length of requested isotope ratios does not match length of "
                 "provided values."
