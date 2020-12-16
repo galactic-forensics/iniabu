@@ -109,4 +109,5 @@ class Isotopes(object):
         ret_arr = []
         for iso in self._isos:
             ret_arr.append(data.isotopes_mass[iso])
+        ret_arr = np.array(ret_arr)
         return return_list_simplifier(ret_arr)

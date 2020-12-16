@@ -518,6 +518,92 @@ class IniAbu(object):
 
         return (value / solar_ratios - 1) * delta_factor
 
+    def iso_int_norm(
+        self,
+        nominator,
+        norm_isos,
+        sample_values,
+        sample_norm_values,
+        delta_factor=10000,
+        law="exp",
+    ):
+        """Calculate internally normalized value for isotope data with respect to solar.
+
+        The internally normalized value requires two normalizing isotopes. This
+        normalization ratios the value to one normalization isotope and uses the
+        second one to correct for mass-dependent fractionation. Details can be found
+        in the background section of the documentation.
+
+        Note: A `mass_fraction` toggle, as for other routines, is useless here. Internal
+        normalization, by definition, removes any fractionation effects due to mass.
+
+        An elemental routine analogous to this one does not make sense since elemental
+        ratios do usually show other effects than mass dependent ones.
+
+        :param nominator: Name of the nominator isotope(s) to be used. Multiple can be
+            selected at once by giving them as a list.
+        :type nominator: str or tuple/list(str)
+        :param norm_isos: The names of the normalizing isotopes. First is the major
+            normalizing isotope, i.e., the one that the sample value is ratioed to.
+            The second one is the isotope that is used for correcting mass fractionation
+            effects.
+        :type norm_isos: tuple/list(str, str)
+        :param sample_values: The sample's value(s) for the nominator isotope.
+            Shape must match the `nominator` name and values must be in the same order.
+        :type sample_values: float, ndarray/tuple/list(floats)
+        :param sample_norm_values: The sample's values for the normalization isotopes.
+            Same order as the normalization isotope names.
+        :type sample_norm_values: tuple/list/ndarray(float, float)
+        :param delta_factor: What factor should the normalization be multiplied?
+            Defaults to 10000 (for internally normalized epsilon values).
+        :type delta_factor: float
+        :param law: Normalization law to use: Either "exp" for exponential low or "lin"
+            for linear law. Defaults to "exp"
+        :type law: str
+
+        :return: Internally normalized delta-values multiplied with given factor.
+            Returns as many values as given in nominator / sample_values.
+        :rtype: float, ndarray(float)
+
+        :raises ValueError: Input values are mismatched, selected law is not valid.
+        """
+        sample_values = np.array(sample_values)
+        sample_norm_values = np.array(sample_norm_values)
+
+        # get masses and isotope ratios for normalization isotopes
+        mass_maj_norm, mass_min_norm = self.iso[norm_isos].mass
+        iso_ratio_solar_norm = self.iso_ratio(norm_isos[1], norm_isos[0])
+
+        # measured value isotope ratio
+        iso_ratio_smpl_norm = sample_norm_values[1] / sample_norm_values[0]
+
+        # get masses and ratios for nominator isotope
+        mass_nominator = self.iso[nominator].mass
+        iso_ratio_solar = self.iso_ratio(nominator, norm_isos[0])
+        if law == "exp":
+            # calculate exponent for exponential law
+            beta = np.log10(iso_ratio_smpl_norm / iso_ratio_solar_norm) / np.log10(
+                mass_min_norm / mass_maj_norm
+            )
+            # calculate normalized ratio for sample (star ratio)
+            smp_ratio = (
+                sample_values
+                / sample_norm_values[0]
+                / (mass_nominator / mass_maj_norm) ** beta
+            )
+        elif law == "lin":
+            raise NotImplementedError
+        else:
+            raise ValueError(
+                f"The selected law {law} is invalid. Please select either 'exp' for "
+                f"an exponential law or 'lin' for a linear law."
+            )
+
+        # calculate capital delta value
+        eps_value = (smp_ratio / iso_ratio_solar - 1) * delta_factor
+
+        return eps_value
+
     def ele_ratio(self, nominator, denominator, mass_fraction=None):
         """Get the ratios of given elements.
 
