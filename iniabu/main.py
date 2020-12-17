@@ -655,7 +655,7 @@ class IniAbu(object):
                 f"an exponential law or 'lin' for a linear law."
             )
 
-        return return_as_ndarray(capd_value)
+        return capd_value
 
     def ele_ratio(self, nominator, denominator, mass_fraction=None):
         """Get the ratios of given elements.
