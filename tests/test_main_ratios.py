@@ -286,23 +286,3 @@ def test_iso_ratio_iso_ele(ini_default, iso, ele):
     iso_denominator = ini_default._get_major_iso(ele)
     val_exp = ini_default.iso_dict[iso][1] / ini_default.iso_dict[iso_denominator][1]
     assert ini_default.iso_ratio(iso, ele) == val_exp
-
-
-# PRIVATE ROUTINES
-
-
-@given(ele=st.sampled_from(list(data.lodders09_elements.keys())))
-def test_get_all_isos(ini_default, ele):
-    """Ensure appropriate isotope list is returned for a given element."""
-    iso_list = []
-    for iso in ini_default.ele_dict[ele][1]:
-        iso_list.append(f"{ele}-{iso}")
-    assert ini_default._get_all_isos(ele) == iso_list
-
-
-@given(ele=st.sampled_from(list(data.lodders09_elements.keys())))
-def test_get_major_iso(ini_default, ele):
-    """Ensure that the correct major isotope is returned."""
-    index = np.array(ini_default.ele_dict[ele][2]).argmax()
-    maj_iso = f"{ele}-{ini_default.ele_dict[ele][1][index]}"
-    assert ini_default._get_major_iso(ele) == maj_iso
