@@ -566,7 +566,23 @@ class IniAbu(object):
         :rtype: float, ndarray(float)
 
         :raises ValueError: Input values are mismatched, selected law is not valid.
+
+        Example:
+            >>> from iniabu import ini
+            >>> # define input values
+            >>> norm_isos = ("Ni-58", "Ni-60") # normalizing isotopes
+            >>> sample_vals = (1., 0.4, 0.15, 0.5, 0.3)  # measured isotope abundances
+            >>> sample_norm_vals = (sample_vals[0], sample_vals[1])  # Ni-58, Ni-60
+            >>> # get the internally normalized values for all nickel isotopes
+            >>> ini.iso_int_norm("Ni", norm_isos, sample_vals, sample_norm_vals)
+            array([     0.        ,      0.        ,  75068.93030287,  77568.12815864,
+                   189333.87185102])
         """
+        # if nominator is an element, get all isos
+        if nominator in self.ele_dict.keys():
+            nominator = self._get_all_isos(nominator)
+
+        # values to numpy arrays
         sample_values = np.array(sample_values)
         sample_norm_values = np.array(sample_norm_values)
 
@@ -580,6 +596,14 @@ class IniAbu(object):
         # get masses and ratios for nominator isotope
         mass_nominator = self.iso[nominator].mass
         iso_ratio_solar = self.iso_ratio(nominator, norm_isos[0])
+
+        # check for input value shape mismatch
+        if mass_nominator.shape != sample_values.shape and mass_nominator.shape != ():
+            raise ValueError(
+                "Length of requested isotope ratios does not match length of "
+                "provided values."
+            )
+
         if law == "exp":
             # calculate exponent for exponential law
             beta = np.log10(iso_ratio_smpl_norm / iso_ratio_solar_norm) / np.log10(
@@ -591,18 +615,47 @@ class IniAbu(object):
                 / sample_norm_values[0]
                 / (mass_nominator / mass_maj_norm) ** beta
             )
+            # capital delta value
+            capd_value = (smp_ratio / iso_ratio_solar - 1) * delta_factor
         elif law == "lin":
-            raise NotImplementedError
+            # get the respective (lower-case) delta values
+            delta_norm = self.iso_delta(
+                norm_isos[1],
+                norm_isos[0],
+                sample_norm_values[1] / sample_norm_values[0],
+                delta_factor=delta_factor,
+            )
+            delta_samp = self.iso_delta(
+                nominator,
+                norm_isos[0],
+                sample_values / sample_norm_values[0],
+                delta_factor=delta_factor,
+            )
+            # calculate mass difference ratio
+            corr_factor = (mass_maj_norm - mass_nominator) / (
+                mass_maj_norm - mass_min_norm
+            )
+            # calculate capital delta value
+            capd_value = delta_samp - corr_factor * delta_norm
+
+            capd_value = np.array(capd_value)
+
+            # make sure the value makes sense - the rest is up to the user
+            # this is kind of ugly but does the trick for now...
+            if capd_value.shape == ():
+                if capd_value < -delta_factor:
+                    capd_value = -delta_factor
+            else:
+                for it, val in enumerate(capd_value):
+                    if val < -delta_factor:
+                        capd_value[it] = -delta_factor
         else:
             raise ValueError(
                 f"The selected law {law} is invalid. Please select either 'exp' for "
                 f"an exponential law or 'lin' for a linear law."
             )
 
-        # calculate capital delta value
-        eps_value = (smp_ratio / iso_ratio_solar - 1) * delta_factor
-
-        return eps_value
+        return return_as_ndarray(capd_value)
 
     def ele_ratio(self, nominator, denominator, mass_fraction=None):
         """Get the ratios of given elements.
