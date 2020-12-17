@@ -12,7 +12,7 @@ on:
 jobs:
   # Build and test
   build:
-
+    if: github.repository_owner == 'galactic-forensics'
     runs-on: ubuntu-latest
     strategy:
       matrix:
