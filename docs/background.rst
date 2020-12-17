@@ -179,3 +179,147 @@ and the respective :math:`f`-values:
      - 1, 000,000,000
    * - ppt, parts per trillion
      - 1,000,000,000,000
+
+Internal normalization
+~~~~~~~~~~~~~~~~~~~~~~
+
+In cosmo- and geochemistry,
+measured isotope ratios
+are often internally normalized.
+This is especially true for measurements
+that suffer from mass-dependent fractionation.
+
+.. image:: figures/int_norm.png
+  :width: 800
+  :alt: Regualar vs. internal normalization
+
+Above figure shows an example
+of the two normalization scenarios.
+On the left side is
+the regular δ-value notation
+as described above.
+As the normalization isotope,
+:sup:`58`\ Ni is chosen.
+The red, dashed line
+shows the internal,
+mass-dependent fractionation
+that was introduced into the system artificially.
+Clearly,
+:sup:`60`\ Ni shows some positive
+deviation from this line.
+After internal normalization,
+a clear excess in :sup:`60`\ Ni
+can be seen in the figure.
+
+Internal normalization
+(right side)
+normalizes the same dataset
+to a second isotope.
+Here, :sup:`62`\ Ni is chosen.
+Assuming that any anomaly in :sup:`62`\ Ni
+is due to mass-dependent fractionation,
+all isotope ratios can be corrected
+for this mass-dependent fractionation.
+To do so,
+a mass-dependent fractionation law
+must be applied.
+These,
+internally normalized values,
+if expressed in permil,
+are often described with
+a capital delta (Δ).
+
+.. note:: The same pre-factors
+  as discussed above are applied
+  for internal normalization.
+  Often, measurements obtained using
+  inductively-coupled plasma mass spectrometry (ICP-MS)
+  are internally normalized
+  and results are expressed in
+  ε- (parts per 10,000)
+  or µ-values (parts per 100,000).
+  Note that the same notation
+  is frequently used
+  for both normalizations.
+
+A detailed description on
+mass fractionation laws can be found in
+`Dauphas and Schauble (2016) <https://doi.org/10.1146/annurev-earth-060115-012157>`_.
+
+In the ``iniabu`` package,
+corrections using an exponential (default)
+and linear law
+can be applied.
+
+The **exponential law**,
+which is applied by default,
+assumes an exponential relation
+for the mass dependent mass fractionation.
+Let us assume the example from the above figure.
+The major normalization isotope :sup:`j`\ Ni
+here is :sup:`58`\ Ni,
+the minor normalization isotope :sup:`i`\ Ni
+is :sup:`62`\ Ni.
+For a given sample,
+an exponential factor β
+can be calculated as:
+
+.. math::
+
+  \beta = \frac{\log(^{i}\mathrm{Ni}/^{j}\mathrm{Ni})_{\mathrm{sample}}/
+                \log(^{i}\mathrm{Ni}/^{j}\mathrm{Ni})_{\mathrm{solar}}}
+               {\log(m_{i} / m_{j})}
+
+Using this exponential factor,
+the mass-dependent fractionation corrected value
+of an isotope ratio of interest,
+e.g.,
+:sup:`x`\ Ni/:sup:`j`\ Ni
+can be calculated as:
+
+.. math::
+
+  \left(\frac{^{x}\mathrm{Ni}}{^{j}\mathrm{Ni}}\right)_{\mathrm{sample}}^{*}
+  = \frac{(^{x}\mathrm{Ni}/^{j}\mathrm{Ni})_{\mathrm{sample}}}
+         {(m_{x} / m_{j})^{\beta}}
+
+Using this corrected ratio,
+the Δ-value can be calculated as:
+
+.. math::
+
+  \Delta^{x}\mathrm{Ni}_{i/j}
+  = \left(\frac{(^{x}\mathrm{Ni} / ^{j}\mathrm{Ni})_{\mathrm{sample}}^{*}}
+               {(^{x}\mathrm{Ni} / ^{j}\mathrm{Ni})_{\mathrm{solar}}} - 1
+    \right) \times k
+
+Here :math:`k` is the delta factor
+and defines the unit as described
+above for δ-values.
+
+The **linear law**
+to correct for mass-dependent fractionation
+can be calculated as following:
+
+.. math::
+
+  \Delta^{x}\mathrm{Ni}_{i/j}
+  = \delta^{x}\mathrm{Ni}_{j}
+    - \frac{m_{j} - m_{x}}{m_{j} - m_{i}} \times \delta^{i}\mathrm{Ni}_{j}
+
+Here,
+:math:`^{x}\mathrm{Ni}_{j}`
+is short for the ratio
+:math:`^{x}\mathrm{Ni}/^{j}\mathrm{Ni}`.
+
+The delta factor :math:`k`
+is part of the δ-value calculation.
+With the linear law,
+values smaller than  -(delta factor)
+are theoretically possible,
+however,
+such values are unphysical.
+The ``iso_int_norm`` routine
+automatically detects such values
+and sets them to the minimal possible value
+of -(delta factor).

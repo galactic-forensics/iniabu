@@ -150,4 +150,5 @@ class Elements(object):
             isos_abu = np.array([abu for abu in self._ele_dict[ele][2]])
             isos_mass = np.array([data.isotopes_mass[iso] for iso in isos])
             ret_arr.append(np.sum(isos_abu * isos_mass))
+        ret_arr = np.array(ret_arr)
         return return_list_simplifier(ret_arr)

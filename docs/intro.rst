@@ -647,3 +647,106 @@ Some examples for calculating bracket notation values for isotopes:
     array([ 0.        , -0.70565195,  0.07739557])
     >>> ini.iso_bracket("Si", "Si", msr)
     array([ 0.        , -0.70565195,  0.07739557])
+
+
+Internal normalization
+~~~~~~~~~~~~~~~~~~~~~~
+
+Internal normalization normalizes
+isotope ratios to two isotopes
+in order to remove any effects
+due to mass-dependent fractionation.
+A detailed explanation and further
+references can be found in the section
+:doc:`Background Information <background>`.
+
+.. note:: Internal normalization is only
+  available for isotopes at this point.
+  Elemental measurements generally
+  suffer from effects other than
+  mass-dependent fractionation.
+  The math could of course be applied
+  to elements as well,
+  however,
+  can currently not be done with ``iniabu``.
+
+Several inputs are required
+for internal normalization.
+These are:
+
+- The nominator isotope(s)
+- The major and minor normalization isotopes
+- The nominator isotope abundance(s) in the sample
+- The normalization isotope abundances
+
+The normalization isotopes
+and respective abundances
+must be given as a tuple or list
+with the main normalization isotope first.
+The minor normalization isotope (second)
+is the one used to correct
+mass-dependent fractionation.
+
+You can also select the ``delta_factor``.
+This is the multiplier by which
+the internally normalized value
+is multiplied at the end.
+By default,
+this factor is set to 10,000
+and thus gives deviations
+in parts per 10,000.
+In geo- and cosmochemistry
+these deviations are often referred to
+as ε-values.
+
+By default,
+an internally normalized value
+is calculated
+using the exponential law
+``law="exp"``.
+However,
+you can also choose to use the linear law
+by setting ``law="lin"``.
+
+Some examples:
+
+- Normalize :sup:`60`\ Ni internally
+  with respect to :sup:`58`\ Ni
+  and :sup:`62`\ Ni.
+  Use some made-up values for the data.
+
+  .. code-block:: python
+
+    >>> ni58_counts = 1000000
+    >>> ni60_counts = 250000
+    >>> ni62_counts = 10000
+    >>> norm_counts = (ni58_counts, ni62_counts)
+    >>> ini.iso_int_norm("Ni-60", ("Ni-58", "Ni-62"), ni60_counts, norm_counts)
+    5145.864708640091
+
+- Now this value is large
+  to express in parts per 10,000.
+  Let's switch the units to permil.
+
+  .. code-block:: python
+
+    >>> ini.iso_int_norm("Ni-60", ("Ni-58", "Ni-62"), ni60_counts, norm_counts,
+                         delta_factor=1000)
+    514.5864708640091
+
+- If all nickel isotopes have been measured,
+  the internally normalized values can be calculated
+  for all isotopes at once:
+
+  .. code-block:: python
+
+    >>> msrs = (1000000, 250000, 2600, 10000, 2000)
+    >>> norm_msrs = (msrs[0], msrs[3])  # Ni-58 and Ni-62
+    >>> ini.iso_int_norm("Ni", ("Ni-58", "Ni-62"), msrs, norm_msrs, delta_factor=1000)
+    array([ 0.00000000e+00,  5.14586471e+02, -4.49223918e+02,  2.22044605e-13,
+            7.41295081e+02])
+
+  As expected,
+  the internally normalized values
+  for :sup:`58`\ Ni and :sup:`62`\ Ni
+  are zero within numerical precisions.
