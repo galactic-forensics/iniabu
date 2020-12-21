@@ -126,15 +126,6 @@ def test_unit_invalid(ini_default):
 
 
 @given(ele=st.sampled_from(list(data.lodders09_elements.keys())))
-def test_get_all_isos(ini_default, ele):
-    """Ensure appropriate isotope list is returned for a given element."""
-    iso_list = []
-    for iso in ini_default.ele_dict[ele][1]:
-        iso_list.append(f"{ele}-{iso}")
-    assert ini_default._get_all_isos(ele) == iso_list
-
-
-@given(ele=st.sampled_from(list(data.lodders09_elements.keys())))
 def test_get_major_iso(ini_default, ele):
     """Ensure that the correct major isotope is returned."""
     index = np.array(ini_default.ele_dict[ele][2]).argmax()

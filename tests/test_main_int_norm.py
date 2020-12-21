@@ -4,6 +4,8 @@ from hypothesis import given, strategies as st
 import numpy as np
 import pytest
 
+from iniabu.utilities import get_all_isos
+
 
 # INTERNAL NORMALIZATION #
 
@@ -144,7 +146,7 @@ def test_iso_int_norm_exp_single_delta(ini_default, delta_fct):
 def test_iso_int_norm_exp_multi_isos(ini_default, smp_values):
     """Internal normalization using exponential law for multiple isotopes."""
     nominator_ele = "Ni"
-    nominator_isos = ini_default._get_all_isos(nominator_ele)
+    nominator_isos = get_all_isos(ini_default, nominator_ele)
     norm_isos_ind = (0, 3)
     norm_isos = (nominator_isos[norm_isos_ind[0]], nominator_isos[norm_isos_ind[1]])
     smp_values = np.array(smp_values)
@@ -185,7 +187,7 @@ def test_iso_int_norm_exp_multi_isos(ini_default, smp_values):
 def test_iso_int_norm_lin_multi(ini_default, smp_values):
     """Internal normalization using linear law for multiple isotopes."""
     nominator_ele = "Ni"
-    nominator_isos = ini_default._get_all_isos(nominator_ele)
+    nominator_isos = get_all_isos(ini_default, nominator_ele)
     norm_isos_ind = (0, 3)
     norm_isos = (nominator_isos[norm_isos_ind[0]], nominator_isos[norm_isos_ind[1]])
     smp_values = np.array(smp_values)

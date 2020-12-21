@@ -10,7 +10,7 @@ from . import data
 # CLASSES #
 
 
-class ProxyList(object):
+class ProxyList:
     """Proxy for accessing elements and isotopes as lists.
 
     This class is inspired by a class with the same name from the project
@@ -70,6 +70,22 @@ class ProxyList(object):
 
 
 # FUNCTIONS #
+
+
+def get_all_isos(ini, ele):
+    """Get all isotopes of a given element.
+
+    :param ini: Initialized iniabu instance
+    :type ini: IniAbu
+    :param ele: Element name
+    :type ele: str
+
+    :return: All isotopes of the element as a list.
+    :rtype: list(str)
+    """
+    isotopes = ini.ele[ele].iso_a
+    ret_val = ["{}-{}".format(ele, isotope) for isotope in isotopes]
+    return ret_val
 
 
 @contextmanager

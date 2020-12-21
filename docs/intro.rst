@@ -261,6 +261,10 @@ can be loaded into a variable as following:
 The following properties can now be queried
 from the element:
 
+- The name of an element,
+  which just returns that same abbreviation
+  used to call the element,
+  can be queried with ``name``.
 - The mass of the element,
   calculated using the isotope masses
   and the currently loaded abundances,
@@ -285,13 +289,17 @@ one could run the following statement:
    >>> ele.abu_solar
    847990.0
 
+.. note:: You can query multiple elements as once.
+  To do so,
+  simply pass a list of the elements
+  to be queried.
 
 
 Querying an isotope
 ~~~~~~~~~~~~~~~~~~~
 
 To query an isotope's properties
-with respect to teh solar abundance,
+with respect to the solar abundance,
 it can be loaded into a temporary variable,
 similar to when loading an element.
 For example:
@@ -306,6 +314,8 @@ as following:
 The following properties can then
 be queried from this isotope:
 
+- The name of the isotope(s) requested
+  can be queried with ``name``.
 - The mass of a specific isotope using ``mass``.
 - The solar abundance of the isotope itself using ``abu_solar``,
   normed as discussed above
@@ -330,6 +340,22 @@ one could run the following two commands in python:
   >>> iso.abu_rel
   0.058449999999999995
 
+
+.. note:: To query all isotopes of an element,
+  you can query the isotope as following:
+
+  .. code-block:: python
+
+    >>> iso = ini.iso["Ne"]
+    >>> iso.name
+    ['Ne-20', 'Ne-21', 'Ne-22']
+
+
+.. note:: You can query multiple isotopes at once.
+  To do so,
+  simply pass a list of the isotopes
+  (or even elements in case of all isotopes)
+  to be queried.
 
 Element and isotope ratios
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

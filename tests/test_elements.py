@@ -186,3 +186,21 @@ def test_mass(ini_default, ele1, ele2):
     masses_expected = np.array([mass_expected1, mass_expected2])
     masses_gotten = ini_default.ele[[ele1, ele2]].mass
     np.testing.assert_equal(masses_gotten, masses_expected)
+
+
+@given(ele=st.sampled_from(list(iniabu.data.lodders09_elements.keys())))
+def test_name_single(ini_default, ele):
+    """Return the name of a given element."""
+    ele_name = ini_default.ele[ele].name
+    assert ele_name == ele
+
+
+@given(
+    ele1=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+    ele2=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+)
+def test_name_multi(ini_default, ele1, ele2):
+    """Return the names of multiple elements."""
+    names_expected = [ele1, ele2]
+    names_received = ini_default.ele[[ele1, ele2]].name
+    assert names_received == names_expected

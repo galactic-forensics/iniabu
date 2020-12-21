@@ -12,6 +12,12 @@ Utility classes and functions
     :undoc-members:
 
 
+:func:`get_all_isos`
+--------------------
+
+.. autofunction:: get_all_isos
+
+
 :func:`linear_units`
 --------------------
 
