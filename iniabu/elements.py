@@ -35,8 +35,8 @@ class Elements(object):
 
         :param parent: Parent class.
         :type parent: class:`iniabu.IniAbu`
-        :param eles: Element dictionary.
-        :type eles: dict
+        :param eles: Elements to process.
+        :type eles: list(str)
         :param unit: Units used for return.
         :type unit: str
         :param *args: Variable length argument list.

@@ -6,6 +6,7 @@ import pytest
 
 import iniabu.data
 import iniabu.isotopes
+import iniabu.utilities
 
 
 def test_isotopes_require_parent_class():
@@ -21,7 +22,7 @@ def test_isotopes_wrong_unit():
     parent = iniabu.IniAbu()  # fake a correct parent
     unit = "random_unit"
     with pytest.raises(NotImplementedError) as err_info:
-        iniabu.isotopes.Isotopes(parent, "Si-28", unit=unit)
+        iniabu.isotopes.Isotopes(parent, ["Si-28"], unit=unit)
     err_msg = err_info.value.args[0]
     assert err_msg == f"The chosen unit {unit} is currently not implemented."
 
@@ -143,3 +144,32 @@ def test_name_multi(ini_default, iso1, iso2):
     names_expected = [iso1, iso2]
     names_received = ini_default.iso[[iso1, iso2]].name
     assert names_received == names_expected
+
+
+@given(ele=st.sampled_from(list(iniabu.data.lodders09_elements.keys())))
+def test_name_all_ele(ini_default, ele):
+    """Return the names of all isotopes if an element is passed on."""
+    isos = iniabu.utilities.get_all_isos(ini_default, ele)
+    assert ini_default.iso[ele].name == iniabu.utilities.return_list_simplifier(isos)
+
+
+@given(
+    ele1=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+    ele2=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+)
+def test_name_all_ele_multi(ini_default, ele1, ele2):
+    """Return the names of all isotopes if elements are passed on."""
+    isos = iniabu.utilities.get_all_isos(
+        ini_default, ele1
+    ) + iniabu.utilities.get_all_isos(ini_default, ele2)
+    assert ini_default.iso[[ele1, ele2]].name == isos
+
+
+@given(
+    iso=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
+    ele=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
+)
+def test_name_all_iso_and_ele(ini_default, iso, ele):
+    """Return the names of all isotopes for isotopes and element mixed."""
+    isos = [iso] + iniabu.utilities.get_all_isos(ini_default, ele)
+    assert ini_default.iso[[iso, ele]].name == isos

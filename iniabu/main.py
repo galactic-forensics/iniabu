@@ -10,7 +10,12 @@ from . import data
 from . import utilities
 from .elements import Elements
 from .isotopes import Isotopes
-from .utilities import linear_units, ProxyList, return_as_ndarray, return_string_as_list
+from .utilities import (
+    linear_units,
+    ProxyList,
+    return_as_ndarray,
+    return_string_as_list,
+)
 
 
 class IniAbu(object):
@@ -111,7 +116,8 @@ class IniAbu(object):
             >>> ini.iso[["H-2", "He-3"]].abu_rel
             array([1.94e-05, 1.66e-04])
         """
-        return ProxyList(self, Isotopes, self._iso_dict.keys(), unit=self._unit)
+        valid_keys = list(self.iso_dict.keys()) + list(self.ele_dict.keys())
+        return ProxyList(self, Isotopes, valid_keys, unit=self._unit)
 
     # PROPERTIES #
 
@@ -578,10 +584,6 @@ class IniAbu(object):
             array([     0.        ,      0.        ,  75068.93030287,  77568.12815864,
                    189333.87185102])
         """
-        # if nominator is an element, get all isos
-        if nominator in self.ele_dict.keys():
-            nominator = self._get_all_isos(nominator)
-
         # values to numpy arrays
         sample_values = np.array(sample_values)
         sample_norm_values = np.array(sample_norm_values)
@@ -803,10 +805,6 @@ class IniAbu(object):
                     "is not allowed."
                 )
 
-        # check if elements are in nominator / denominator
-        if isinstance(nominator, str) and nominator in self._ele_dict.keys():
-            nominator = self._get_all_isos(nominator)
-
         if isinstance(denominator, str) and denominator in self._ele_dict.keys():
             denominator = self._get_major_iso(denominator)
 
@@ -834,19 +832,6 @@ class IniAbu(object):
         return ratio
 
     # PRIVATE METHODS #
-
-    def _get_all_isos(self, element):
-        """Get all isotopes for a given element.
-
-        :param element: Element.
-        :type element: str
-
-        :return: List of isotopes.
-        :rtype: list
-        """
-        isotopes = self.ele[element].iso_a
-        ret_val = ["{}-{}".format(element, isotope) for isotope in isotopes]
-        return ret_val
 
     def _get_major_iso(self, element):
         """Get the most abundant isotope for a given element.

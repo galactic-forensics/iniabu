@@ -3,11 +3,12 @@
 This class manages the isotopes. It must be called from :class:`iniabu.IniAbu`.
 """
 
+import itertools
 
 import numpy as np
 
 from . import data
-from .utilities import return_list_simplifier
+from .utilities import get_all_isos, return_list_simplifier
 
 
 class Isotopes(object):
@@ -33,8 +34,8 @@ class Isotopes(object):
 
         :param parent: Parent class.
         :type parent: class:`iniabu.IniAbu`
-        :param isos: Isotope dictionary.
-        :type isos: dict
+        :param isos: Isotopes to process.
+        :type isos: list(str)
         :param unit: Units used for return.
         :type unit: str
         :param *args: Variable length argument list.
@@ -47,6 +48,15 @@ class Isotopes(object):
         # check for correct parent
         if parent.__class__.__name__ != "IniAbu":
             raise TypeError("Isotopes class must be initialized from IniAbu.")
+
+        # create isotopes with elements and isotopes available
+        tmp_isos = []
+        for entry in isos:
+            if entry in parent.ele_dict.keys():
+                tmp_isos.append(get_all_isos(parent, entry))
+            else:
+                tmp_isos.append([entry])  # for flattening list with itertools (std lib)
+        isos = list(itertools.chain(*tmp_isos))
 
         # set the variables
         self._isos = isos
