@@ -152,3 +152,12 @@ class Elements(object):
             ret_arr.append(np.sum(isos_abu * isos_mass))
         ret_arr = np.array(ret_arr)
         return return_list_simplifier(ret_arr)
+
+    @property
+    def name(self):
+        """Get the name of an element.
+
+        :return: Name of the set element(s).
+        :rtype: str, list(str)
+        """
+        return return_list_simplifier(self._eles)

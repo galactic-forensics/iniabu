@@ -111,3 +111,12 @@ class Isotopes(object):
             ret_arr.append(data.isotopes_mass[iso])
         ret_arr = np.array(ret_arr)
         return return_list_simplifier(ret_arr)
+
+    @property
+    def name(self):
+        """Get the name of an isotope.
+
+        :return: Name of the set isotope(s).
+        :rtype: str, list(str)
+        """
+        return return_list_simplifier(self._isos)

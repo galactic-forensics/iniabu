@@ -125,3 +125,21 @@ def test_mass(ini_default, iso1, iso2):
     )
     masses_gotten = ini_default.iso[[iso1, iso2]].mass
     np.testing.assert_equal(masses_gotten, masses_expected)
+
+
+@given(iso=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())))
+def test_name_single(ini_default, iso):
+    """Return the name of a given isotope."""
+    iso_name = ini_default.iso[iso].name
+    assert iso_name == iso
+
+
+@given(
+    iso1=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
+    iso2=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
+)
+def test_name_multi(ini_default, iso1, iso2):
+    """Return the names of multiple isotopes."""
+    names_expected = [iso1, iso2]
+    names_received = ini_default.iso[[iso1, iso2]].name
+    assert names_received == names_expected
