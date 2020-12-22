@@ -33,7 +33,7 @@ run this command in your terminal:
 
    $ pip install iniabu
 
-Alternatively you can install the inabu project directly from GitHub.
+Alternatively you can install the ``iniabu`` project directly from GitHub.
 To do so, type in your terminal:
 
 .. code-block:: console
@@ -80,6 +80,11 @@ Please also have a look at the
 There,
 each module is described in detail,
 often with examples on how to use the specific function.
+
+Furthermore,
+some examples in the form of Jupyter notebooks
+can be found on GitHub in
+`docs/jupyter_examples <https://github.com/galactic-forensics/iniabu/tree/master/docs/jupyter_examples>`_.
 
 
 Importing the module

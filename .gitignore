@@ -50,3 +50,6 @@ lib64
 .nox
 .pytest_cache
 htmlcov
+
+## Jupyter
+*.ipynb_checkpoints
