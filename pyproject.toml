@@ -7,7 +7,7 @@ module = "iniabu"
 author = "Reto Trappitsch"
 author-email = "reto@galactic-forensics.space"
 home-page = "https://github.com/galactic-forensics/iniabu"
-requires = ["numpy>=1.19.4"]
+requires = ["numpy"]
 requires-python=">=3.6"
 description-file="README.rst"
 classifiers = [
