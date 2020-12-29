@@ -1,4 +1,4 @@
-"""Initialization of the iniabu package."""
+"""Solar System initial abundance package."""
 
 # import the standard module as ini
 from .main import IniAbu
