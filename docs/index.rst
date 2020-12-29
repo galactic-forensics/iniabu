@@ -37,8 +37,8 @@ As one might guess,
 Functions that are useful for everyday's life as an
 astrophysicist, cosmo-, or geochemist,
 are here made available in an easy to use interface.
-You can find more information on the scientific background
-:doc:`here <background>`.
+More information can also be found in the
+:doc:`scientific background section <background>`.
 Aside from querying the databases,
 the ``iniabu`` tool allows you directly
 to calculate isotope ratios,
@@ -65,14 +65,6 @@ hopefully detailed,
 We welcome all contributions,
 from simple typo fixes in the documentation,
 to feature contributions!
-
-.. note:: Currently the package is still in testing
-  and has not been released on PyPi as v1.0.0.
-  You can always check the badge above to see
-  which version is currently available on PyPi.
-  Please follow the instructions on the
-  :doc:`Installation and Usage <intro>`
-  page to see how to install the package from GitHub.
 
 
 Issues and feature requests

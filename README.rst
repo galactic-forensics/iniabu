@@ -37,8 +37,9 @@ As one might guess,
 Functions that are useful for everyday's life as an
 astrophysicist, cosmo-, or geochemist,
 are here made available in an easy to use interface.
-You can find more information on the scientific background
-`here <https://iniabu.readthedocs.io/en/latest/background.html>`_.
+More information can also be found in the
+`scientific background section <https://iniabu.readthedocs.io/en/latest/background.html>`_
+in the documentation.
 Aside from querying the databases,
 the ``iniabu`` tool allows you directly
 to calculate isotope ratios,
