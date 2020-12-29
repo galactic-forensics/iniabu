@@ -68,23 +68,24 @@ We welcome all contributions,
 from simple typo fixes in the documentation,
 to feature contributions!
 
-.. note:: Currently the package is still in testing
-  and has not been released on PyPi as v1.0.0.
-  You can always check the badge above to see
-  which version is currently available on PyPi.
-  Please follow the instructions on the
-  `Installation and Usage <https://iniabu.readthedocs.io/en/latest/intro.html>`_
-  page to see how to install the package from GitHub.
-
 Installation
 ------------
 
-This package is not yet available on PyPi.
-You can install it however directly from GitHub:
+The stable version of this package
+is available and PyPi
+and can be installed as:
 
 .. code-block:: console
 
-    $ pip install git+https://github.com/galactic-forensics/iniabu.git
+  $ pip install iniabu
+
+Alternatively,
+you can install the latest version
+directly from GitHub:
+
+.. code-block:: console
+
+  $ pip install git+https://github.com/galactic-forensics/iniabu.git
 
 
 Issues and feature requests

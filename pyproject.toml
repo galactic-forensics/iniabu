@@ -5,13 +5,13 @@ build-backend = "flit_core.buildapi"
 [tool.flit.metadata]
 module = "iniabu"
 author = "Reto Trappitsch"
-author-email = "trappitsch@users.noreply.github.com"
+author-email = "reto@galactic-forensics.space"
 home-page = "https://github.com/galactic-forensics/iniabu"
 requires = ["numpy"]
 requires-python=">=3.6"
 description-file="README.rst"
 classifiers = [
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
@@ -32,16 +32,16 @@ dev = [
     "flake8-black",
     "flake8-bugbear",
     "flake8-docstrings",
-    "flake8-import-order"
+    "flake8-import-order",
 ]
 doc = [
-    "pytest",
     "sphinx",
     "sphinx_rtd_theme"
 ]
 test = [
     "pytest",
     "pytest-cov",
+    "pytest-mock",
     "pytest-sugar"
 ]
 
