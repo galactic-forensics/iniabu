@@ -21,19 +21,15 @@ and the latest one should be working great.
 Installation
 ------------
 
-.. warning:: Currently,
-    this package can only be installed from its GitHub repository.
-    Installation directly from PyPi
-    will result in the old version (v0.3.1) being installed.
-
-To install the iniabu project,
+To install the latest stable version of ``iniabu``,
 run this command in your terminal:
 
 .. code-block:: console
 
    $ pip install iniabu
 
-Alternatively you can install the ``iniabu`` project directly from GitHub.
+Alternatively you can install ``iniabu`` directly from GitHub.
+This will install the latest version.
 To do so, type in your terminal:
 
 .. code-block:: console
