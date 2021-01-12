@@ -28,7 +28,7 @@ extensions = ["sphinx.ext.autodoc", "sphinx_rtd_theme"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
-# The master toctree document.
+# The main toctree document.
 master_doc = "index"
 
 # The name of the Pygments (syntax highlighting) style to use.

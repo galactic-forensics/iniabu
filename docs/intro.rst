@@ -80,7 +80,7 @@ often with examples on how to use the specific function.
 Furthermore,
 some examples in the form of Jupyter notebooks
 can be found on GitHub in
-`docs/jupyter_examples <https://github.com/galactic-forensics/iniabu/tree/master/docs/jupyter_examples>`_.
+`docs/jupyter_examples <https://github.com/galactic-forensics/iniabu/tree/main/docs/jupyter_examples>`_.
 
 
 Importing the module
