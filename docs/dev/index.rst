@@ -9,7 +9,7 @@ our code of conduct.
 We expect everybody to adhere to it.
 You can find this project's
 code of condact
-`here <https://github.com/galactic-forensics/iniabu/blob/master/CODE_OF_CONDUCT.md>`_.
+`here <https://github.com/galactic-forensics/iniabu/blob/main/CODE_OF_CONDUCT.md>`_.
 
 To get started with developing,
 fork the github repository and

@@ -7,14 +7,14 @@ The Iniabu Project
 .. image:: https://img.shields.io/pypi/v/iniabu?color=informational
     :target: https://pypi.org/project/iniabu/
     :alt: PyPi
-.. image:: https://github.com/galactic-forensics/iniabu/workflows/tests/badge.svg?branch=master
+.. image:: https://github.com/galactic-forensics/iniabu/workflows/tests/badge.svg?branch=main
     :target: https://github.com/galactic-forensics/iniabu
     :alt: tests
-.. image:: https://github.com/galactic-forensics/iniabu/workflows/doctests/badge.svg?branch=master
+.. image:: https://github.com/galactic-forensics/iniabu/workflows/doctests/badge.svg?branch=main
     :target: https://github.com/galactic-forensics/iniabu
     :alt: doctests
-.. image:: https://coveralls.io/repos/github/galactic-forensics/iniabu/badge.svg?branch=master
-    :target: https://coveralls.io/github/galactic-forensics/iniabu?branch=master
+.. image:: https://coveralls.io/repos/github/galactic-forensics/iniabu/badge.svg?branch=main
+    :target: https://coveralls.io/github/galactic-forensics/iniabu?branch=main
     :alt: coverage
 .. image:: https://img.shields.io/badge/License-GPL%20v2-blue.svg
     :target: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
