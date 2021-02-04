@@ -155,7 +155,7 @@ class Isotopes(object):
         :rtype: int, ndarray<int>
         """
         eles = self._element
-        ret_arr = np.zeros(len(eles), int)
+        ret_arr = np.zeros(len(eles), dtype=int)
         for it, ele in enumerate(eles):
             ret_arr[it] = data.elements_z[ele]
         return return_list_simplifier(ret_arr)

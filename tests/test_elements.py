@@ -212,10 +212,12 @@ def test_name_multi(ini_default, ele1, ele2):
 )
 def test_z(ini_default, ele1, ele2):
     """Get the number of protons for element."""
-    # single
     z_ele = iniabu.data.elements_z[ele1]
-    assert ini_default.ele[ele1].z == z_ele
+    ret_val = ini_default.ele[ele1].z
+    assert isinstance(ret_val, np.int64)
+    assert ret_val == z_ele
 
-    # list
     z_eles = np.array([z_ele, iniabu.data.elements_z[ele2]])
-    np.testing.assert_equal(ini_default.ele[[ele1, ele2]].z, z_eles)
+    ret_val = ini_default.ele[[ele1, ele2]].z
+    assert ret_val.dtype == np.int64
+    np.testing.assert_equal(ret_val, z_eles)
