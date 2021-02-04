@@ -114,6 +114,12 @@ The respective imports for these are:
   >>> from iniabu import inimf  # mass fraction
 
 
+.. note:: While the current default database is Lodders et al. (2009)
+  we will not consider loading a different default database
+  a breaking change.
+  If you want to always load Lodders et al. (2009),
+  use the specific import below.
+
 In case multiple databases
 are required at the same time,
 e.g., :code:`db1` using Lodders et al. (2009)
@@ -279,6 +285,8 @@ from the element:
   the relative abundances will also be given
   as mass fractions!
 - The solar abundances of its (stable) isotopes using ``iso_abu_solar``
+- The number of protons of an element
+  can be queried with ``z``.
 
 For example,
 to query the solar abundance of iron
@@ -315,6 +323,9 @@ as following:
 The following properties can then
 be queried from this isotope:
 
+- The number of nucleons / mass number
+  of an isotope
+  can be queried with ``a``.
 - The name of the isotope(s) requested
   can be queried with ``name``.
 - The mass of a specific isotope using ``mass``.
@@ -327,6 +338,8 @@ be queried from this isotope:
   If you are using "mass_fractions" as units,
   the relative abundances will also be given
   as mass fractions!
+- The number of protons of an isotope
+  can be queried with ``z``.
 
 For example:
 To query the solar and the relative abundances
