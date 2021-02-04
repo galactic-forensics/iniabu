@@ -41,6 +41,19 @@ def test_isotopes_isos_list(ini_default, iso1, iso2):
     iso1=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
     iso2=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
 )
+def test_a(ini_default, iso1, iso2):
+    """Return mass number of isotope (what is actually put in already)."""
+    assert ini_default.iso[iso1].a == int(iso1.split("-")[1])
+    np.testing.assert_equal(
+        ini_default.iso[[iso1, iso2]].a,
+        np.array([int(iso1.split("-")[1]), int(iso2.split("-")[1])]),
+    )
+
+
+@given(
+    iso1=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
+    iso2=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
+)
 def test_abu_rel(ini_default, iso1, iso2):
     """Test isotope relative abundance returner."""
     assert ini_default.iso[iso1].abu_rel == iniabu.data.lodders09_isotopes[iso1][0]
@@ -173,3 +186,24 @@ def test_name_all_iso_and_ele(ini_default, iso, ele):
     """Return the names of all isotopes for isotopes and element mixed."""
     isos = [iso] + iniabu.utilities.get_all_isos(ini_default, ele)
     assert ini_default.iso[[iso, ele]].name == isos
+
+
+@given(
+    iso1=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
+    iso2=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())),
+)
+def test_z(ini_default, iso1, iso2):
+    """Get the number of protons for element."""
+    # single
+    z_ele = iniabu.data.elements_z[iso1.split("-")[0]]
+    assert ini_default.iso[iso1].z == z_ele
+
+    # list
+    z_eles = np.array([z_ele, iniabu.data.elements_z[iso2.split("-")[0]]])
+    np.testing.assert_equal(ini_default.iso[[iso1, iso2]].z, z_eles)
+
+
+def test_element(ini_default):
+    """Return the elements of selected isotopes as strings."""
+    assert ini_default.iso["H-2"]._element == ["H"]  # must be list
+    assert ini_default.iso[["U-235", "Ne-21", "Ne-22"]]._element == ["U", "Ne", "Ne"]

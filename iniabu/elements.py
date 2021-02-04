@@ -161,3 +161,15 @@ class Elements(object):
         :rtype: str, list(str)
         """
         return return_list_simplifier(self._eles)
+
+    @property
+    def z(self):
+        """Get the number of protons for the element.
+
+        :return: Number of protons for the set element(s).
+        :rtype: int, ndarray<int>
+        """
+        ret_arr = np.zeros(len(self._eles), dtype=int)
+        for it, ele in enumerate(self._eles):
+            ret_arr[it] = data.elements_z[ele]
+        return return_list_simplifier(ret_arr)

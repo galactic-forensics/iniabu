@@ -74,6 +74,22 @@ class Isotopes(object):
     # PROPERTIES #
 
     @property
+    def a(self):
+        """Get total number of nucleons for given isotope.
+
+        Returns the total number of nucleons for the given isotope. Sure, this is
+        already passed as an argument in the isotope name, however, might be useful
+        for plotting to have a return for it.
+
+        :return: Mass number of isotope
+        :rtype: int, ndarray<int>
+        """
+        ret_arr = np.zeros(len(self._isos), dtype=int)
+        for it, iso in enumerate(self._isos):
+            ret_arr[it] = iso.split("-")[1]
+        return return_list_simplifier(ret_arr)
+
+    @property
     def abu_rel(self):
         """Get relative abundance of isotope(s).
 
@@ -130,3 +146,30 @@ class Isotopes(object):
         :rtype: str, list(str)
         """
         return return_list_simplifier(self._isos)
+
+    @property
+    def z(self):
+        """Get the number of protons for the element.
+
+        :return: Number of protons for the set element(s).
+        :rtype: int, ndarray<int>
+        """
+        eles = self._element
+        ret_arr = np.zeros(len(eles), int)
+        for it, ele in enumerate(eles):
+            ret_arr[it] = data.elements_z[ele]
+        return return_list_simplifier(ret_arr)
+
+    # private properties and functions
+
+    @property
+    def _element(self):
+        """Return the elements associated with the isotope.
+
+        :return: Name of element(s).
+        :rtype: str, list(str)
+        """
+        ret_arr = []
+        for iso in self._isos:
+            ret_arr.append(iso.split("-")[0])
+        return ret_arr
