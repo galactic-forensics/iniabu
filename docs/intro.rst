@@ -40,15 +40,19 @@ To do so, type in your terminal:
 Available databases
 -------------------
 Several databases are available to work with.
-The default database is called "lodders09"
+The current default database is called "lodders09"
 and is based on
 `Lodders et al. (2009) <https://doi.org/10.1007/978-3-540-88055-4_34>`_.
+This might be updated in the future
+without considering it
+a breaking change.
+Old databases will always stay available.
 Further databases,
 listed by the string used to call them,
 are as following:
 
 - "asplund09": `Asplund et al. (2009) <https://doi.org/10.1146/annurev.astro.46.060407.145222>`_
-- "lodders09" (default): `Lodders et al. (2009) <https://doi.org/10.1007/978-3-540-88055-4_34>`_
+- "lodders09" (current default): `Lodders et al. (2009) <https://doi.org/10.1007/978-3-540-88055-4_34>`_
 - "nist": `NIST database <https://www.nist.gov/pml/atomic-weights-and-isotopic-compositions-relative-atomic-masses>`_
 
 The solar abundances of all databases
