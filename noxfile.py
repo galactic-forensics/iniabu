@@ -15,6 +15,7 @@ python_main = "3.9"
 def black(session):
     """Autoformat all python files with black."""
     args = session.posargs or locations
+    session.install("--upgrade", "pip")
     session.install("black==20.8b1")
     session.run("black", *args)
 
@@ -29,6 +30,7 @@ def build(session):
 @nox.session(python=python_main)
 def docs(session):
     """Build the documentation."""
+    session.install("--upgrade", "pip")
     session.install("sphinx", "sphinx_rtd_theme", "-r", "requirements.txt", "pytest")
     session.chdir("docs")
     session.run(
@@ -40,6 +42,7 @@ def docs(session):
 def lint(session):
     """Lint project using ``flake8``."""
     args = session.posargs or locations
+    session.install("--upgrade", "pip")
     session.install("-r", "dev-requirements.txt")
     session.run("flake8", *args)
 
@@ -47,6 +50,7 @@ def lint(session):
 @nox.session(python=python_suite)
 def tests(session):
     """Test the project using ``pytest``."""
+    session.install("--upgrade", "pip")
     session.install("-r", "requirements.txt", "-r", "dev-requirements.txt")
     session.run("pytest")
 
@@ -54,6 +58,7 @@ def tests(session):
 @nox.session(python=python_main)
 def safety(session):
     """Safety check for all dependencies."""
+    session.install("--upgrade", "pip")
     session.install("safety", "-r", "requirements.txt", "-r", "dev-requirements.txt")
     session.run(
         "safety",
@@ -66,5 +71,6 @@ def safety(session):
 def xdoctest(session):
     """Test docstring examples with xdoctest."""
     args = session.posargs or ["all"]
+    session.install("--upgrade", "pip")
     session.install("xdoctest[all]", "-r", "requirements.txt")
     session.run("python", "-m", "xdoctest", package, *args)

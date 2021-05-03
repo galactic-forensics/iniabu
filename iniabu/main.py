@@ -27,7 +27,16 @@ class IniAbu(object):
     - ``lodders09``: Lodders et al. (2009), doi: 10.1007/978-3-540-88055-4_34
     - ``nist``: Current (as of 2020) NIST isotopic abundances.
 
-    Todo Example
+    For detailed examples, see: https://iniabu.readthedocs.io/
+
+    Example:
+        >>> from iniabu import ini
+        >>> ini.iso["Ne"].name
+        ['Ne-20', 'Ne-21', 'Ne-22']
+        >>> ini.iso["Ne"].abu_solar
+        array([3060000.,    7330.,  225000.])
+        >>> ini.iso_delta("Si-30", "Si-28", 0.02)
+        -403.23624595469255
     """
 
     def __init__(self, database="lodders09", unit="num_lin"):
@@ -810,8 +819,12 @@ class IniAbu(object):
 
         # get the values back:
         with linear_units(self, mass_fraction=mass_fraction) as ini_tmp:
-            nominator_value = ini_tmp.iso[nominator].abu_solar
-            denominator_value = ini_tmp.iso[denominator].abu_solar
+            if self._database == "nist":
+                nominator_value = ini_tmp.iso[nominator].abu_rel
+                denominator_value = ini_tmp.iso[denominator].abu_rel
+            else:
+                nominator_value = ini_tmp.iso[nominator].abu_solar
+                denominator_value = ini_tmp.iso[denominator].abu_solar
 
         ratio = nominator_value / denominator_value
 
@@ -828,6 +841,12 @@ class IniAbu(object):
                 np.array(denominator_masses) / np.array(nominator_masses)
             )
             ratio /= corr_factor
+
+        # if nist database, we need to check for the same elements, otherwise nan
+        if self._database == "nist":
+            z_ratio = self.iso[nominator].z / self.iso[denominator].z  # ratio of Z
+            ratio = np.where(np.array(z_ratio) == 1, np.array(ratio), np.nan)
+            # ratio = utilities.return_list_simplifier(ratio)
 
         return ratio
 

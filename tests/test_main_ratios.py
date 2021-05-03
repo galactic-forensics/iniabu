@@ -287,3 +287,36 @@ def test_iso_ratio_iso_ele(ini_default, iso, ele):
     iso_denominator = ini_default._get_major_iso(ele)
     val_exp = ini_default.iso_dict[iso][1] / ini_default.iso_dict[iso_denominator][1]
     assert ini_default.iso_ratio(iso, ele) == val_exp
+
+
+# TESTS FOR NIST RATIOS - USE RELATIVE IF THE SAME ELEMENT THROUGHOUT THE BOARD
+
+
+def test_nist_ratio_iso_iso(ini_nist):
+    """If NIST db, calculate isotope ratios (same element) from relative ratio."""
+    iso1 = "Ne-21"
+    iso2 = "Ne-22"
+    expected = ini_nist.iso_dict[iso1][0] / ini_nist.iso_dict[iso2][0]
+    assert ini_nist.iso_ratio(iso1, iso2) == expected
+
+
+def test_nist_ratio_iso_iso_unequal(ini_nist):
+    """Return nan if NIST db and isotope ratio of different elements requested."""
+    iso1 = "He-3"
+    iso2 = "Ne-21"
+    assert np.isnan(ini_nist.iso_ratio(iso1, iso2))
+
+
+def test_nist_ratio_isos_isos(ini_nist):
+    """Assortment of tests for NIST db isoratio return."""
+    nom = ["He-3", "Ne-21", "Ne-22", "Ar-36"]
+    denom = ["Ne-20", "Ne-20", "He-4", "Ar-38"]
+    expected = np.array(
+        [
+            np.nan,
+            ini_nist.iso_dict[nom[1]][0] / ini_nist.iso_dict[denom[1]][0],
+            np.nan,
+            ini_nist.iso_dict[nom[3]][0] / ini_nist.iso_dict[denom[3]][0],
+        ]
+    )
+    np.testing.assert_equal(ini_nist.iso_ratio(nom, denom), expected)
