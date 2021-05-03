@@ -27,7 +27,16 @@ class IniAbu(object):
     - ``lodders09``: Lodders et al. (2009), doi: 10.1007/978-3-540-88055-4_34
     - ``nist``: Current (as of 2020) NIST isotopic abundances.
 
-    Todo Example
+    For detailed examples, see: https://iniabu.readthedocs.io/
+
+    Example:
+        >>> from iniabu import ini
+        >>> ini.iso["Ne"].name
+        ['Ne-20', 'Ne-21', 'Ne-22']
+        >>> ini.iso["Ne"].abu_solar
+        array([3060000.,    7330.,  225000.])
+        >>> ini.iso_delta("Si-30", "Si-28", 0.02)
+        -403.23624595469255
     """
 
     def __init__(self, database="lodders09", unit="num_lin"):
