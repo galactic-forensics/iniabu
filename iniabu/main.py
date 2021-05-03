@@ -810,8 +810,12 @@ class IniAbu(object):
 
         # get the values back:
         with linear_units(self, mass_fraction=mass_fraction) as ini_tmp:
-            nominator_value = ini_tmp.iso[nominator].abu_solar
-            denominator_value = ini_tmp.iso[denominator].abu_solar
+            if self._database == "nist":
+                nominator_value = ini_tmp.iso[nominator].abu_rel
+                denominator_value = ini_tmp.iso[denominator].abu_rel
+            else:
+                nominator_value = ini_tmp.iso[nominator].abu_solar
+                denominator_value = ini_tmp.iso[denominator].abu_solar
 
         ratio = nominator_value / denominator_value
 
@@ -828,6 +832,12 @@ class IniAbu(object):
                 np.array(denominator_masses) / np.array(nominator_masses)
             )
             ratio /= corr_factor
+
+        # if nist database, we need to check for the same elements, otherwise nan
+        if self._database == "nist":
+            z_ratio = self.iso[nominator].z / self.iso[denominator].z  # ratio of Z
+            ratio = np.where(np.array(z_ratio) == 1, np.array(ratio), np.nan)
+            # ratio = utilities.return_list_simplifier(ratio)
 
         return ratio
 
