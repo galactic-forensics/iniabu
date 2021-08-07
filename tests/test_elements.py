@@ -221,3 +221,10 @@ def test_z(ini_default, ele1, ele2):
     ret_val = ini_default.ele[[ele1, ele2]].z
     assert ret_val.dtype == np.int64
     np.testing.assert_equal(ret_val, z_eles)
+
+
+def test_element_naming_case_sensitivity(ini_default):
+    """Call element with any capitalization."""
+    assert ini_default.ele["ti"].name == "Ti"
+    assert ini_default.ele["tI"].name == "Ti"
+    assert ini_default.ele["TI"].name == "Ti"

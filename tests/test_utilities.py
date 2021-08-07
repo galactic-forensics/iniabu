@@ -30,8 +30,8 @@ def test_proxy_list_index_error(ini_default):
         ini_default.ele[item]
     err_msg = err_info.value.args[0]
     assert (
-        err_msg
-        == f"Item {item} out of range. Must be in {ini_default._ele_dict.keys()}."
+        err_msg == f"Item {item.capitalize()} out of range. "
+        f"Must be in {ini_default._ele_dict.keys()}."
     )
 
 
@@ -76,7 +76,7 @@ def test_get_all_isos(ini_default, ele):
 
 def test_iso_transform():
     """Transform some example isotopes."""
-    iso_transform = iniabu.utilities.iso_transform
+    iso_transform = iniabu.utilities.item_formatter
     assert iso_transform("Si-28") == "Si-28"
     assert iso_transform("28Si") == "Si-28"
     assert iso_transform("Si28") == "Si-28"

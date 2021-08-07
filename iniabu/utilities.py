@@ -50,19 +50,19 @@ class ProxyList:
 
     def __getitem__(self, idx):
         """Get an item from the proxy list."""
-        # call iso transformer
-        idx = iso_transform(idx)
         # turn idx into a list
         if isinstance(idx, tuple):
             idx = list(idx)
         # turn into list if required
         idx = return_string_as_list(idx)
 
-        for it in idx:
-            if it not in self._valid_set:
+        for it, entry in enumerate(idx):
+            entry = item_formatter(entry)
+            idx[it] = entry
+            if entry not in self._valid_set:
                 raise IndexError(
                     "Item {} out of range. Must be "
-                    "in {}.".format(it, self._valid_set)
+                    "in {}.".format(entry, self._valid_set)
                 )
         return self._proxy_cls(self._parent, idx, *self.args, **self.kwargs)
 
@@ -90,7 +90,7 @@ def get_all_isos(ini, ele):
     return ret_val
 
 
-def iso_transform(iso: str) -> str:
+def item_formatter(iso: str) -> str:
     """Transform iso either into correct format, e.g,. from `46Ti` to `Ti-46`.
 
     Supported formats:
@@ -102,23 +102,24 @@ def iso_transform(iso: str) -> str:
     :return: iso, but in transformed notation
     """
     if "-" in iso:
-        return iso
+        iso_split = iso.split("-")
+        return f"{iso_split[0].capitalize()}-{iso_split[1]}"
     elif iso[0].isnumeric():  # mass number comes first
         index_to = None
         for it, char in enumerate(iso):
             if not char.isnumeric():
                 index_to = it
                 break
-        return f"{iso[index_to:]}-{iso[:index_to]}"
+        return f"{iso[index_to:].capitalize()}-{iso[:index_to]}"
     elif iso[-1].isnumeric():  # mass number comes last
         index_to = None
         for it, char in enumerate(iso):
             if char.isnumeric():
                 index_to = it
                 break
-        return f"{iso[:index_to]}-{iso[index_to:]}"
+        return f"{iso[:index_to].capitalize()}-{iso[index_to:]}"
     else:
-        return iso  # no rule applied, return input (important for elements!)
+        return iso.capitalize()  # no rule applied, return input (e.g., elements)
 
 
 @contextmanager
