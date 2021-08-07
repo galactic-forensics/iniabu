@@ -215,3 +215,12 @@ def test_element(ini_default):
     """Return the elements of selected isotopes as strings."""
     assert ini_default.iso["H-2"]._element == ["H"]  # must be list
     assert ini_default.iso[["U-235", "Ne-21", "Ne-22"]]._element == ["U", "Ne", "Ne"]
+
+
+@given(iso=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())))
+def test_isotope_naming_schemes(ini_default, iso):
+    """Call isotopes with various naming schemes; ENH 2021-08-07."""
+    # Naming mass number first, e.g., 235U
+    iso_split = iso.split("-")  # 0 is name, 1 is mass number
+    iso_aa_first = f"{iso_split[1]}{iso_split[0]}"
+    assert ini_default.iso[iso_aa_first].name == iso

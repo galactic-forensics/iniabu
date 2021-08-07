@@ -50,6 +50,8 @@ class ProxyList:
 
     def __getitem__(self, idx):
         """Get an item from the proxy list."""
+        # call iso transformer
+        idx = iso_transform(idx)
         # turn idx into a list
         if isinstance(idx, tuple):
             idx = list(idx)
@@ -86,6 +88,37 @@ def get_all_isos(ini, ele):
     isotopes = ini.ele[ele].iso_a
     ret_val = ["{}-{}".format(ele, isotope) for isotope in isotopes]
     return ret_val
+
+
+def iso_transform(iso: str) -> str:
+    """Transform iso either into correct format, e.g,. from `46Ti` to `Ti-46`.
+
+    Supported formats:
+    - `46Ti`
+    - `Ti-46`
+
+    :param iso: Isotope as string
+
+    :return: iso, but in transformed notation
+    """
+    if "-" in iso:
+        return iso
+    elif iso[0].isnumeric():  # mass number comes first
+        index_to = None
+        for it, char in enumerate(iso):
+            if not char.isnumeric():
+                index_to = it
+                break
+        return f"{iso[index_to:]}-{iso[:index_to]}"
+    elif iso[-1].isnumeric():  # mass number comes last
+        index_to = None
+        for it, char in enumerate(iso):
+            if char.isnumeric():
+                index_to = it
+                break
+        return f"{iso[:index_to]}-{iso[index_to:]}"
+    else:
+        return iso  # no rule applied, return input (important for elements!)
 
 
 @contextmanager

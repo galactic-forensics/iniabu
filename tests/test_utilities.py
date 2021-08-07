@@ -74,6 +74,14 @@ def test_get_all_isos(ini_default, ele):
     assert get_all_isos(ini_default, ele) == iso_list
 
 
+def test_iso_transform():
+    """Transform some example isotopes."""
+    iso_transform = iniabu.utilities.iso_transform
+    assert iso_transform("Si-28") == "Si-28"
+    assert iso_transform("28Si") == "Si-28"
+    assert iso_transform("Si28") == "Si-28"
+
+
 def test_linear_units_switch(ini_mf):
     """Ensure context manager works properly when unit switch required."""
     ini_log = iniabu.IniAbu(unit="num_log")
