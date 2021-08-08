@@ -219,7 +219,7 @@ def test_element(ini_default):
 
 @given(iso=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())))
 def test_isotope_naming_schemes(ini_default, iso):
-    """Call isotopes with various naming schemes; ENH 2021-08-07."""
+    """Call isotopes with various naming schemes."""
     # Naming mass number first, e.g., 235U
     iso_split = iso.split("-")  # 0 is name, 1 is mass number
     iso_aa_first = f"{iso_split[1]}{iso_split[0]}"
