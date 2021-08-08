@@ -22,6 +22,9 @@ class Isotopes(object):
         >>> isotope.abu_rel
         0.9223
 
+    .. note:: You can also call isotopes using alternative spellings, e.g.,
+        "28Si" or "Si28".
+
     .. warning:: This class should NOT be manually created by the user. It is
         designed to be initialized by :class:`iniabu.IniAbu`
     """
@@ -141,6 +144,9 @@ class Isotopes(object):
     @property
     def name(self):
         """Get the name of an isotope.
+
+        If an alternative spelling was used to call the isotope, e.g., "Si28" or "28Si",
+        the name will still be returnd as "Si-28", which is the default for `iniabu`.
 
         :return: Name of the set isotope(s).
         :rtype: str, list(str)

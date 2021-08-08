@@ -269,6 +269,7 @@ can be loaded into a variable as following:
 
     >>> ele = ini.ele["Si"]
 
+Note that element names are not case sensitive.
 The following properties can now be queried
 from the element:
 
@@ -324,6 +325,10 @@ as following:
 
     >>> iso = ini.iso["Fe-54"]
 
+You can also use alternative spellings for the isotope name,
+e.g., ``"54Fe"`` or ``"Fe54"``.
+Furthermore,
+none of these spellings are case sensitive.
 The following properties can then
 be queried from this isotope:
 
@@ -332,6 +337,8 @@ be queried from this isotope:
   can be queried with ``a``.
 - The name of the isotope(s) requested
   can be queried with ``name``.
+  These names will always be in the standard format,
+  e.g., ``"Fe-54"``.
 - The mass of a specific isotope using ``mass``.
 - The solar abundance of the isotope itself using ``abu_solar``,
   normed as discussed above

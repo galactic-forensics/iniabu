@@ -56,11 +56,13 @@ class ProxyList:
         # turn into list if required
         idx = return_string_as_list(idx)
 
-        for it in idx:
-            if it not in self._valid_set:
+        for it, entry in enumerate(idx):
+            entry = item_formatter(entry)
+            idx[it] = entry
+            if entry not in self._valid_set:
                 raise IndexError(
                     "Item {} out of range. Must be "
-                    "in {}.".format(it, self._valid_set)
+                    "in {}.".format(entry, self._valid_set)
                 )
         return self._proxy_cls(self._parent, idx, *self.args, **self.kwargs)
 
@@ -86,6 +88,41 @@ def get_all_isos(ini, ele):
     isotopes = ini.ele[ele].iso_a
     ret_val = ["{}-{}".format(ele, isotope) for isotope in isotopes]
     return ret_val
+
+
+def item_formatter(iso: str) -> str:
+    """Transform `iso` into correct format, e.g,. from `46Ti` to `Ti-46`.
+
+    Also appropriately capitalizes isotopes and elements.
+
+    Supported formats:
+    - `46Ti`
+    - `Ti46`
+    - `Ti-46`
+
+    :param iso: Isotope as string or element name.
+
+    :return: iso, but in transformed notation and capitalized
+    """
+    if "-" in iso:
+        iso_split = iso.split("-")
+        return f"{iso_split[0].capitalize()}-{iso_split[1]}"
+    elif iso[0].isnumeric():  # mass number comes first
+        index_to = None
+        for it, char in enumerate(iso):
+            if not char.isnumeric():
+                index_to = it
+                break
+        return f"{iso[index_to:].capitalize()}-{iso[:index_to]}"
+    elif iso[-1].isnumeric():  # mass number comes last
+        index_to = None
+        for it, char in enumerate(iso):
+            if char.isnumeric():
+                index_to = it
+                break
+        return f"{iso[:index_to].capitalize()}-{iso[index_to:]}"
+    else:
+        return iso.capitalize()  # no rule applied, return input (e.g., elements)
 
 
 @contextmanager

@@ -215,3 +215,37 @@ def test_element(ini_default):
     """Return the elements of selected isotopes as strings."""
     assert ini_default.iso["H-2"]._element == ["H"]  # must be list
     assert ini_default.iso[["U-235", "Ne-21", "Ne-22"]]._element == ["U", "Ne", "Ne"]
+
+
+@given(iso=st.sampled_from(list(iniabu.data.lodders09_isotopes.keys())))
+def test_isotope_naming_schemes(ini_default, iso):
+    """Call isotopes with various naming schemes."""
+    # Naming mass number first, e.g., 235U
+    iso_split = iso.split("-")  # 0 is name, 1 is mass number
+    iso_aa_first = f"{iso_split[1]}{iso_split[0]}"
+    assert ini_default.iso[iso_aa_first].name == iso
+
+
+def test_isotope_naming_schemes_list(ini_default):
+    """Call the isotope naming scheme on a list."""
+    isos_in = ["28Si", "29Si"]
+    isos_exp = ["Si-28", "Si-29"]
+    assert ini_default.iso[isos_in].name == isos_exp
+
+
+def test_isotopes_naming_schemes_mixed(ini_default):
+    """Input list with mixed naming schemes."""
+    isos_in = ["Si-28", "29Si", "Si30"]
+    isos_exp = ["Si-28", "Si-29", "Si-30"]
+    assert ini_default.iso[isos_in].name == isos_exp
+
+
+def test_isotope_naming_case_sensitivity(ini_default):
+    """Call isotopes with various capitalization versions."""
+    assert ini_default.iso["si-28"].name == "Si-28"
+    assert ini_default.iso["SI-28"].name == "Si-28"
+    assert ini_default.iso["sI-28"].name == "Si-28"
+    assert ini_default.iso["si28"].name == "Si-28"
+    assert ini_default.iso["28si"].name == "Si-28"
+    # list
+    assert ini_default.iso[["si-28", "28SI", "sI28"]].name == ["Si-28"] * 3
