@@ -91,7 +91,7 @@ def get_all_isos(ini, ele):
 
 
 def item_formatter(iso: str) -> str:
-    """Transform `iso` into correct format, e.g,. from `46Ti` to `Ti-46`
+    """Transform `iso` into correct format, e.g,. from `46Ti` to `Ti-46`.
 
     Also appropriately capitalizes isotopes and elements.
 
