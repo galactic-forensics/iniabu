@@ -249,3 +249,11 @@ def test_isotope_naming_case_sensitivity(ini_default):
     assert ini_default.iso["28si"].name == "Si-28"
     # list
     assert ini_default.iso[["si-28", "28SI", "sI28"]].name == ["Si-28"] * 3
+
+
+def test_isotope_naming_not_altered(ini_default):
+    """Ensure that input isotope list with alternative spelling is not altered."""
+    isos = ["46Ti", "47Ti"]
+    isos_exp = isos.copy()
+    _ = ini_default.iso[isos]
+    assert isos == isos_exp
