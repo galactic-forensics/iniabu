@@ -50,7 +50,8 @@ class ProxyList:
 
     def __getitem__(self, idx):
         """Get an item from the proxy list."""
-        idx = idx.copy()  # do not alter user input
+        if hasattr(idx, "copy"):
+            idx = idx.copy()  # do not modify user input
         # turn idx into a list
         if isinstance(idx, tuple):
             idx = list(idx)
