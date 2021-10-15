@@ -175,8 +175,8 @@ and the respective :math:`f`-values:
      - 100,000
    * - ppm, parts per million
      - 1,000,000
-   * - ppb, parts per trillion
-     - 1, 000,000,000
+   * - ppb, parts per billion
+     - 1,000,000,000
    * - ppt, parts per trillion
      - 1,000,000,000,000
 
