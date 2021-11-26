@@ -10,9 +10,6 @@ The Iniabu Project
 .. image:: https://github.com/galactic-forensics/iniabu/workflows/tests/badge.svg?branch=main
     :target: https://github.com/galactic-forensics/iniabu
     :alt: tests
-.. image:: https://github.com/galactic-forensics/iniabu/workflows/doctests/badge.svg?branch=main
-    :target: https://github.com/galactic-forensics/iniabu
-    :alt: doctests
 .. image:: https://coveralls.io/repos/github/galactic-forensics/iniabu/badge.svg?branch=main
     :target: https://coveralls.io/github/galactic-forensics/iniabu?branch=main
     :alt: coverage
