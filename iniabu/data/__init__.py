@@ -9,6 +9,7 @@ from .nist15 import (  # noqa: F401
     nist15_elements,
     nist15_isotopes,
 )
+from .nist15_isomasses_all import isotopes_mass as isotopes_mass_all
 
 
 def database_selector(db):
