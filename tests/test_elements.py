@@ -44,6 +44,7 @@ def test_elements_eles_list(ini_default, ele1, ele2):
 def test_abu_solar(ini_default, ele1, ele2):
     """Test solar abundance property."""
     assert ini_default.ele[ele1].abu_solar == iniabu.data.lodders09_elements[ele1][0]
+    assert ini_default.ele[ele2].abu_solar == iniabu.data.lodders09_elements[ele2][0]
     left = ini_default.ele[[ele1, ele2]].abu_solar
     right = np.array(
         [
@@ -51,7 +52,7 @@ def test_abu_solar(ini_default, ele1, ele2):
             iniabu.data.lodders09_elements[ele2][0],
         ]
     )
-    np.testing.assert_equal(left, right)
+    np.testing.assert_allclose(left, right)
 
 
 @given(
