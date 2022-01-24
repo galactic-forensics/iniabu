@@ -352,6 +352,14 @@ be queried from this isotope:
 - The number of protons of an isotope
   can be queried with ``z``.
 
+.. note:: All isotope functions can be suffixed
+    with `_all`.
+    This will return information on all available isotopes,
+    including unstable ones.
+    Of course, solar system abundances for these are not available
+    and will be returned as zeros,
+    however, this might be useful to query masses.
+
 For example:
 To query the solar and the relative abundances
 of :sup:`54`\Fe

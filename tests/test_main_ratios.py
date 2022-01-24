@@ -6,7 +6,7 @@ import pytest
 
 import iniabu
 import iniabu.data as data
-from iniabu.utilities import get_all_isos
+from iniabu.utilities import get_all_stable_isos
 
 
 # RATIOS ELEMENT #
@@ -200,7 +200,7 @@ def test_iso_ratio_isos_isos_length_mismatch(ini_default):
 )
 def test_iso_ratio_ele_iso(ini_default, ele1, iso2):
     """Calculae isotope ratios for all isotopes of an element versus one isotope."""
-    all_isos = get_all_isos(ini_default, ele1)
+    all_isos = get_all_stable_isos(ini_default, ele1)
     val_exp = np.empty(len(all_isos))
     for it, iso in enumerate(all_isos):
         val_exp[it] = ini_default.iso_dict[iso][1] / ini_default.iso_dict[iso2][1]

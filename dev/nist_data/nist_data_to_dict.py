@@ -16,8 +16,13 @@ re_uncertainty = re.compile(r"\((.+?)\)")
 re_reference = re.compile(r"\[(.+?)\]")
 
 
+# filename and if all is done (if all, only do isotope masses)
+fname = "nist_all.txt"
+for_all = True
+
+
 data_in = []
-with open("nist_iso_ratios.txt", "r") as f:
+with open(fname, "r") as f:
     for line in f:
         data_in.append(line.rstrip())
 
@@ -193,21 +198,28 @@ The text file with the NIST data can be seen in dev/nist_data as well.
 '''"""
 
 # save file
-with open("nist15.py", "w") as f:
+if for_all:
+    outfile = "nist15_isomasses_all.py"
+else:
+    outfile = "nist15.py"
+
+with open(outfile, "w") as f:
     f.write(py_header)
     f.write("\n\n")
     f.write("import numpy as np\nNaN = np.nan\n\n")
-    f.write("elements_mass = ")
-    f.write(json.dumps(ele_mass_dict, indent=4))
-    f.write("\n\n")
-    f.write("elements_z = ")
-    f.write(json.dumps(ele_zz_dict, indent=4))
-    f.write("\n\n")
+    if not for_all:
+        f.write(json.dumps(ele_mass_dict, indent=4))
+        f.write("elements_mass = ")
+        f.write("\n\n")
+        f.write("elements_z = ")
+        f.write(json.dumps(ele_zz_dict, indent=4))
+        f.write("\n\n")
     f.write("isotopes_mass = ")
     f.write(json.dumps(iso_mass_dict, indent=4))
-    f.write("\n\n")
-    f.write("nist15_elements = ")
-    f.write(json.dumps(ele_dict, indent=4))
-    f.write("\n\n")
-    f.write("nist15_isotopes = ")
-    f.write(json.dumps(iso_dict, indent=4))
+    if not for_all:
+        f.write("\n\n")
+        f.write("nist15_elements = ")
+        f.write(json.dumps(ele_dict, indent=4))
+        f.write("\n\n")
+        f.write("nist15_isotopes = ")
+        f.write(json.dumps(iso_dict, indent=4))
