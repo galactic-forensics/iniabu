@@ -37,14 +37,11 @@ def test_elements_eles_list(ini_default, ele1, ele2):
     assert ini_default.ele[[ele1, ele2]]._eles == [ele1, ele2]
 
 
-@given(
-    ele1=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
-    ele2=st.sampled_from(list(iniabu.data.lodders09_elements.keys())),
-)
-def test_abu_solar(ini_default, ele1, ele2):
+def test_abu_solar(ini_default):
     """Test solar abundance property."""
+    ele1 = "Ne"
+    ele2 = "Ca"
     assert ini_default.ele[ele1].abu_solar == iniabu.data.lodders09_elements[ele1][0]
-    assert ini_default.ele[ele2].abu_solar == iniabu.data.lodders09_elements[ele2][0]
     left = ini_default.ele[[ele1, ele2]].abu_solar
     right = np.array(
         [
