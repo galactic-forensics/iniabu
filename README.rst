@@ -19,9 +19,6 @@ The Iniabu Project
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
     :alt: Code style: black
-.. image:: https://github.com/galactic-forensics/iniabu/workflows/CodeQL/badge.svg
-    :target: https://github.com/galactic-forensics/iniabu
-    :alt: CodeQL
 
 Introduction
 ------------
