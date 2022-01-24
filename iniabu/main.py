@@ -125,7 +125,8 @@ class IniAbu(object):
             >>> ini.iso[["H-2", "He-3"]].abu_rel
             array([1.94e-05, 1.66e-04])
         """
-        valid_keys = list(self.iso_dict.keys()) + list(self.ele_dict.keys())
+        # valid_keys = list(self.iso_dict.keys()) + list(self.ele_dict.keys())
+        valid_keys = list(data.isotopes_mass_all.keys()) + list(self.ele_dict.keys())
         return ProxyList(self, Isotopes, valid_keys, unit=self._unit)
 
     # PROPERTIES #

@@ -11,7 +11,8 @@ import iniabu.data
 import iniabu.elements
 import iniabu.utilities
 from iniabu.utilities import (
-    get_all_isos,
+    get_all_available_isos,
+    get_all_stable_isos,
     linear_units,
     make_iso_dict,
     make_log_abu_dict,
@@ -65,13 +66,22 @@ def test_proxy_list_length(ini_default):
 # FUNCTIONS #
 
 
+def test_get_all_available_isos(ini_default):
+    """Ensure all available isotope are returned for a given element."""
+    ele = "H"
+    default_iso_list = get_all_stable_isos(ini_default, ele)
+
+    all_iso_list = get_all_available_isos(ele)
+    assert len(default_iso_list) < len(all_iso_list)
+
+
 @given(ele=st.sampled_from(list(iniabu.data.lodders09_elements.keys())))
-def test_get_all_isos(ini_default, ele):
+def test_get_all_stable_isos(ini_default, ele):
     """Ensure appropriate isotope list is returned for a given element."""
     iso_list = []
     for iso in ini_default.ele_dict[ele][1]:
         iso_list.append(f"{ele}-{iso}")
-    assert get_all_isos(ini_default, ele) == iso_list
+    assert get_all_stable_isos(ini_default, ele) == iso_list
 
 
 def test_iso_transform():

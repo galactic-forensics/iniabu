@@ -76,7 +76,25 @@ class ProxyList:
 # FUNCTIONS #
 
 
-def get_all_isos(ini, ele):
+def get_all_available_isos(ele):
+    """Get all available isotopes of a given element, stable and unstable.
+
+    This is particularly interesting if we want to know the mass of unstable isotopes.
+
+    :param ele: Element name
+    :type ele: str
+
+    :return: All isotopes of the element as a list.
+    :rtype: list(str)
+    """
+    all_iso_list = list(data.isotopes_mass_all.keys())
+    ret_val = [
+        entry for entry in all_iso_list if entry.split("-")[0].lower() == ele.lower()
+    ]
+    return ret_val
+
+
+def get_all_stable_isos(ini, ele):
     """Get all isotopes of a given element.
 
     :param ini: Initialized iniabu instance
