@@ -106,7 +106,7 @@ def get_all_stable_isos(ini, ele):
     :rtype: list(str)
     """
     isotopes = ini.ele[ele].iso_a
-    ret_val = ["{}-{}".format(ele, isotope) for isotope in isotopes]
+    ret_val = [f"{ele}-{isotope}" for isotope in isotopes]
     return ret_val
 
 
@@ -186,7 +186,7 @@ def make_iso_dict(element_dict):
     iso_entries = []
     for key in element_dict.keys():
         for it, iso in enumerate(element_dict[key][1]):
-            iso_keys.append("{}-{}".format(key, iso))
+            iso_keys.append(f"{key}-{iso}")
             rel_abu = element_dict[key][2][it]
             ss_abu = element_dict[key][3][it]
             iso_entries.append([rel_abu, ss_abu])

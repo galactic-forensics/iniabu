@@ -15,7 +15,7 @@ from .utilities import (
 )
 
 
-class Isotopes(object):
+class Isotopes:
     """Class representing the isotopes.
 
     This is mainly a list to easily interact with the `parent._iso_dict` dictionary.

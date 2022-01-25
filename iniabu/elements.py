@@ -10,7 +10,7 @@ from . import data
 from .utilities import return_list_simplifier
 
 
-class Elements(object):
+class Elements:
     """Class representing the elements.
 
     This is mainly a list to easily interact with the `parent._ele_dict` dictionary.

@@ -18,7 +18,7 @@ from .utilities import (
 )
 
 
-class IniAbu(object):
+class IniAbu:
     """Initialize the IniAbu class.
 
     By default, the ``lodders09`` database is read in. Available databases are:
@@ -864,4 +864,4 @@ class IniAbu(object):
         """
         isotopes = self.ele[element].iso_a
         abus = self.ele[element].iso_abu_rel
-        return "{}-{}".format(element, isotopes[abus.argmax()])
+        return f"{element}-{isotopes[abus.argmax()]}"

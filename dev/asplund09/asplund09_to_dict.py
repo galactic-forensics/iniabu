@@ -10,12 +10,12 @@ import numpy as np
 from collections import OrderedDict
 
 isotopes = []
-with open("asplund09_isotopes.txt", "r") as f:
+with open("asplund09_isotopes.txt") as f:
     for line in f:
         isotopes.append(line.rstrip().split())
 
 elements = []
-with open("asplund09_elements.txt", "r") as f:
+with open("asplund09_elements.txt") as f:
     for line in f:
         elements.append(line.rstrip().split())
 
@@ -83,7 +83,7 @@ iso_entries = []
 for ele in ele_keys:
     for it, aa in enumerate(ele_dict[ele][1]):
         # iso key
-        iso_keys.append("{}-{}".format(ele, aa))
+        iso_keys.append(f"{ele}-{aa}")
         # entry
         tmp_entry = []
         # abundance

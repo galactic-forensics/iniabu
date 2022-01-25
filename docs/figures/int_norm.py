@@ -31,7 +31,7 @@ ax[0].plot(
     mew=2.0,
     linewidth=1,
     ms=8,
-    label="$\delta$-values",
+    label=r"$\delta$-values",
 )
 # define x limit
 xlim = (57.5, 64.5)
@@ -66,7 +66,7 @@ ax[1].plot(
     mew=2.0,
     linewidth=1,
     ms=8,
-    label="$\Delta$-values",
+    label=r"$\Delta$-values",
 )
 # horizontal line
 ax[1].hlines(0, xlim[0], xlim[1], linestyles="--", colors="k", linewidth=0.5)

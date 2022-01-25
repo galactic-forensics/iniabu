@@ -8,7 +8,7 @@ sys.path.append("../")
 
 project = "iniabu"
 author = "Reto Trappitsch"
-copyright = "2020, {}".format(author)
+copyright = f"2020, {author}"
 version = "1.0.1"
 release = version
 
