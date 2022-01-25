@@ -10,7 +10,7 @@ from collections import OrderedDict
 
 # read in data file
 data_in = []
-with open("lodders09.dat", "r") as f:
+with open("lodders09.dat") as f:
     for line in f:
         data_in.append(line.rstrip().split())
 
@@ -30,7 +30,7 @@ iso_keys = []
 iso_entries = []
 
 for dat in data:
-    iso_keys.append("{}-{}".format(dat[1], dat[2]))
+    iso_keys.append(f"{dat[1]}-{dat[2]}")
     iso_entries.append([dat[3], dat[4]])
 
 iso_dict = OrderedDict(zip(iso_keys, iso_entries))

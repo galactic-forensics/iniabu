@@ -22,7 +22,7 @@ for_all = True
 
 
 data_in = []
-with open(fname, "r") as f:
+with open(fname) as f:
     for line in f:
         data_in.append(line.rstrip())
 
@@ -56,7 +56,7 @@ def save_data(data):
         f.writelines("Z\tName\tA\tRel_Mass\tAbundance\n")
         for line in data:
             for item in line:
-                f.writelines("{}\t".format(item))
+                f.writelines(f"{item}\t")
             f.writelines("\n")
 
 
@@ -145,7 +145,7 @@ for element in ele_keys:
     # loop through A list
     for it, aa in enumerate(ele_dict[element][1]):
         # create the isotope name
-        iso_keys.append("{}-{}".format(element, aa))
+        iso_keys.append(f"{element}-{aa}")
         # stitch information together
         tmp_list = []
         tmp_list.append(ele_dict[element][2][it])
