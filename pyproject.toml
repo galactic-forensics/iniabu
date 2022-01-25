@@ -40,7 +40,7 @@ doc = [
     "sphinx_rtd_theme"
 ]
 test = [
-    "pytest",
+    "pytest>=6.0",
     "pytest-cov",
     "pytest-mock",
     "pytest-sugar"
@@ -51,3 +51,8 @@ Documentation = "https://iniabu.readthedocs.io"
 
 [tool.flit.sdist]
 exclude = ["dev/"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--cov=iniabu -v"
+testpaths = "tests"
