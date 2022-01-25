@@ -166,38 +166,12 @@ Their GitHub site describes in detail
 how to use the formatter.
 There is really not much to configure.
 
-If you are using
-`PyCharm <https://www.jetbrains.com/pycharm/>`_
-as you editor,
-have a look at the
-`BlackConnect <https://plugins.jetbrains.com/plugin/14321-blackconnect>`_
-plugin.
-Make sure that no options are checked
-in the section ``Formatting options``.
-
-Alternatively, a ``nox`` session is implemented
-to automatically format code with ``black``.
-To do so,
-run the following command from your terminal:
-
-.. code-block:: console
-
-    $ nox -rs black
-
-As an alternative,
-the pre-commit hook can also be used
-to format your code using black.
-Check out section
+Formatting with black is implemented
+via a pre-commit hooks,
+see section
 :ref:`section_hooks`
 for more information.
-
-.. caution:: Make sure that you use
-  the correct version of black,
-  especially when formatting
-  differently from using ``nox``
-  or the pre-commit hook.
-  You can find the currently used version
-  in the `noxfile.py`.
+The hook file also specifies the used version of black.
 
 
 .. _section_linting:

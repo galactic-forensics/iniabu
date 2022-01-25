@@ -12,15 +12,6 @@ python_main = "3.10"
 
 
 @nox.session(python=python_main)
-def black(session):
-    """Autoformat all python files with black."""
-    args = session.posargs or locations
-    session.install("--upgrade", "pip")
-    session.install("black==20.8b1")
-    session.run("black", *args)
-
-
-@nox.session(python=python_main)
 def build(session):
     """Pack iniabu for release on PyPi."""
     session.install("flit")
