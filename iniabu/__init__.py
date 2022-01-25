@@ -8,7 +8,7 @@ inimf = IniAbu(unit="mass_fraction")
 inilog = IniAbu(unit="num_log")
 
 # Package information
-__version__ = "1.0.1"
+__version__ = "1.1.0"
 
 __title__ = "iniabu"
 __description__ = (
