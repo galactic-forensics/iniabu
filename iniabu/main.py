@@ -309,7 +309,7 @@ class IniAbu:
     def ele_bracket(self, nominator, denominator, value, mass_fraction=None):
         """Calculate the bracket ratio for a given element ratio and a value.
 
-        Bracket notation is defined as:
+        The bracket notation is the usual astronomy / logarithmic ratio, defined as:
 
         result = log10(measured value) - log10(solar ratio)
 
@@ -360,7 +360,7 @@ class IniAbu:
     def iso_bracket(self, nominator, denominator, value, mass_fraction=None):
         """Calculate the bracket ratio for a given isotope ratio and a value.
 
-        Bracket notation is defined as:
+        The bracket notation is the usual astronomy / logarithmic ratio, defined as:
 
         result = log10(measured value) - log10(solar ratio)
 

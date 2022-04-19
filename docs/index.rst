@@ -38,6 +38,7 @@ the ``iniabu`` tool allows you directly
 to calculate isotope ratios,
 δ-values,
 or ratios in bracket notation
+(the usual astronomy / logarithmic ratio notation)
 for fast comparison with your observations or measurements.
 These calculations can also be performed "numpy-style",
 i.e., element-wise on whole arrays.
