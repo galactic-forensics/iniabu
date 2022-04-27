@@ -134,6 +134,18 @@ def test_norm_isos(ini_default):
     assert ini_default.norm_isos == {"Ba": "Ba-136", "Si": "Si-29"}
 
 
+def test_norm_isos_not_dict(ini_default):
+    """Raise TypeError if norm isos are not given as a dictionary."""
+    with pytest.raises(TypeError):
+        ini_default.norm_isos = 42
+
+
+def test_norm_isos_wrong_values(ini_default):
+    """Raise TypeError if values of dictionary are not one string."""
+    with pytest.raises(TypeError):
+        ini_default.norm_isos = {"Ba": ["Ba-136", "Ba-134"]}
+
+
 def test_reset_norm_isos(ini_default):
     """Reset the normalization isotopes to be an empty dictionary."""
     ini_default.norm_isos = {"Ba": "Ba-136"}
