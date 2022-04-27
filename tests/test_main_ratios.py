@@ -257,7 +257,7 @@ def test_iso_ratio_iso_iso_mf_num_fraction(ini_mf, iso1, iso2):
 )
 def test_iso_ratio_isos_ele_mass_fraction_true(ini_default, iso1, iso2, ele):
     """Calculate isotope ratios as mass fraction from num_lin units."""
-    iso_denominator = ini_default._get_major_iso(ele)
+    iso_denominator = ini_default._get_norm_iso(ele)
     val_exp = np.array(
         [
             ini_default.iso_dict[iso1][1]
@@ -284,7 +284,7 @@ def test_iso_ratio_isos_ele_mass_fraction_true(ini_default, iso1, iso2, ele):
 )
 def test_iso_ratio_iso_ele(ini_default, iso, ele):
     """Calculate isotope ratio for one isotope and an element (i.e., major isotope)."""
-    iso_denominator = ini_default._get_major_iso(ele)
+    iso_denominator = ini_default._get_norm_iso(ele)
     val_exp = ini_default.iso_dict[iso][1] / ini_default.iso_dict[iso_denominator][1]
     assert ini_default.iso_ratio(iso, ele) == val_exp
 

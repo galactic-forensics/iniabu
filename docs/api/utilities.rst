@@ -12,11 +12,20 @@ Utility classes and functions
     :undoc-members:
 
 
-:func:`get_all_isos`
---------------------
+:func:`get_all_available_isos`
+------------------------------
 
-.. autofunction:: get_all_isos
+.. autofunction:: get_all_available_isos
 
+:func:`get_all_stable_isos`
+---------------------------
+
+.. autofunction:: get_all_stable_isos
+
+:func:`item_formatter`
+-----------------------
+
+.. autofunction:: item_formatter
 
 :func:`linear_units`
 --------------------

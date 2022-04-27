@@ -122,12 +122,51 @@ def test_unit_invalid(ini_default):
     assert err_msg == f"Your selected unit {unit} is not a valid unit."
 
 
+# USER DEFINED NORMALIZATION ISOTOPES: GETTING AND SETTING
+
+
+def test_norm_isos(ini_default):
+    """Set and add to norm isos."""
+    assert ini_default.norm_isos == {}
+    ini_default.norm_isos = {"Ba": "Ba-136"}
+    assert ini_default.norm_isos == {"Ba": "Ba-136"}
+    ini_default.norm_isos = {"Si": "Si-29"}
+    assert ini_default.norm_isos == {"Ba": "Ba-136", "Si": "Si-29"}
+
+
+def test_norm_isos_not_dict(ini_default):
+    """Raise TypeError if norm isos are not given as a dictionary."""
+    with pytest.raises(TypeError):
+        ini_default.norm_isos = 42
+
+
+def test_norm_isos_wrong_values(ini_default):
+    """Raise TypeError if values of dictionary are not one string."""
+    with pytest.raises(TypeError):
+        ini_default.norm_isos = {"Ba": ["Ba-136", "Ba-134"]}
+
+
+def test_reset_norm_isos(ini_default):
+    """Reset the normalization isotopes to be an empty dictionary."""
+    ini_default.norm_isos = {"Ba": "Ba-136"}
+    ini_default.reset_norm_isos()
+    assert ini_default.norm_isos == {}
+
+
 # PRIVATE ROUTINES
 
 
 @given(ele=st.sampled_from(list(data.lodders09_elements.keys())))
-def test_get_major_iso(ini_default, ele):
+def test_get_norm_iso(ini_default, ele):
     """Ensure that the correct major isotope is returned."""
     index = np.array(ini_default.ele_dict[ele][2]).argmax()
     maj_iso = f"{ele}-{ini_default.ele_dict[ele][1][index]}"
-    assert ini_default._get_major_iso(ele) == maj_iso
+    assert ini_default._get_norm_iso(ele) == maj_iso
+
+
+def test_get_norm_iso_user(ini_default):
+    """Return user defined norm isotopes when the user defined them."""
+    ele = "Ba"
+    assert ini_default._get_norm_iso(ele) == "Ba-138"
+    ini_default.norm_isos = {"Ba": "Ba-136"}
+    assert ini_default._get_norm_iso(ele) == "Ba-136"

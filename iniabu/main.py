@@ -60,6 +60,9 @@ class IniAbu:
         # set unit
         self.unit = unit
 
+        # normalization isotopes - user defined
+        self._norm_isos = {}
+
         # done with init
         self._is_initializing = False
 
@@ -266,6 +269,55 @@ class IniAbu:
         :rtype: dict
         """
         return self._iso_dict_mf
+
+    @property
+    def norm_isos(self) -> dict:
+        """Get / Set user defined normalization isotopes.
+
+        .. note:: If you set the `norm_isos` multiple times, it will not be overwritten.
+            Keys will rather be added to the dictionary. To reset it, please use the
+            function `ini.reset_norm_isos()`.
+
+        :setter: A dictionary with your normalization isotope per element.
+
+        :return: The dictionary with user defined normalization isotopes.
+
+        Example:
+            >>> from iniabu import ini
+            >>> ini.norm_isos
+            {}
+            >>> ini.norm_isos = {"Ba": "Ba-136"}
+            >>> ini.norm_isos
+            {'Ba': 'Ba-136'}
+            >>> ini.norm_isos = {"Si": "Si-29"}
+            >>> ini.norm_isos
+            {'Ba': 'Ba-136', 'Si': 'Si-29'}
+            >>> ini.reset_norm_isos()
+            >>> ini.norm_isos
+            {}
+        """
+        return self._norm_isos
+
+    @norm_isos.setter
+    def norm_isos(self, value: dict):
+        if not isinstance(value, dict):
+            raise TypeError(
+                "The normalization isotopes must be given as a dictionary. "
+                "The key should be the element name, the value the "
+                "normalization isotope."
+            )
+
+        for key in value.keys():
+            val = value[key]
+            if not isinstance(val, str):
+                raise TypeError(
+                    f"The value {val} for key {key} must be a string, but it is not. "
+                    f"Please make sure you only select one normalization isotope per "
+                    f"element."
+                )
+            nkey = utilities.item_formatter(key)
+            nval = utilities.item_formatter(val)
+            self._norm_isos[nkey] = nval
 
     @property
     def unit(self):
@@ -816,7 +868,7 @@ class IniAbu:
                 )
 
         if isinstance(denominator, str) and denominator in self._ele_dict.keys():
-            denominator = self._get_major_iso(denominator)
+            denominator = self._get_norm_iso(denominator)
 
         # get the values back:
         with linear_units(self, mass_fraction=mass_fraction) as ini_tmp:
@@ -851,9 +903,26 @@ class IniAbu:
 
         return ratio
 
+    def reset_norm_isos(self):
+        """Reset the user defined normalization isotopes.
+
+        This will result in the normalization isotopes to be simple a empty dictionary
+        again.
+
+        Example:
+            >>> from iniabu import ini
+            >>> ini.norm_isos = {"Ba": "Ba-136"}
+            >>> ini.norm_isos
+            {'Ba': 'Ba-136'}
+            >>> ini.reset_norm_isos()
+            >>> ini.norm_isos
+            {}
+        """
+        self._norm_isos = {}
+
     # PRIVATE METHODS #
 
-    def _get_major_iso(self, element):
+    def _get_norm_iso(self, element):
         """Get the most abundant isotope for a given element.
 
         :param element: Element.
@@ -862,6 +931,9 @@ class IniAbu:
         :return: Isotope.
         :rtype: str
         """
-        isotopes = self.ele[element].iso_a
-        abus = self.ele[element].iso_abu_rel
-        return f"{element}-{isotopes[abus.argmax()]}"
+        if element in self._norm_isos.keys():
+            return self._norm_isos[element]
+        else:
+            isotopes = self.ele[element].iso_a
+            abus = self.ele[element].iso_abu_rel
+            return f"{element}-{isotopes[abus.argmax()]}"
