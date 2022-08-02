@@ -1,5 +1,5 @@
 darglint>=1.5.1
-flake8
+flake8>=4,<5
 flake8-bandit
 flake8-black
 flake8-bugbear
