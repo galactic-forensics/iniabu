@@ -32,7 +32,7 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         if [ -f dev-requirements.txt ]; then pip install -r dev-requirements.txt; fi
     - name: Run nox
-      run: nox
+      run: nox --no-error-on-missing-interpreters
     - name: Re-run coverage and push to coveralls
       env:
         COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
