@@ -190,7 +190,7 @@ def make_iso_dict(element_dict):
             rel_abu = element_dict[key][2][it]
             ss_abu = element_dict[key][3][it]
             iso_entries.append([rel_abu, ss_abu])
-    return dict(zip(iso_keys, iso_entries))
+    return dict(zip(iso_keys, iso_entries, strict=True))
 
 
 def make_log_abu_dict(element_dict):
@@ -233,7 +233,7 @@ def make_log_abu_dict(element_dict):
         ele_entries.append(tmp_entry)
 
     # form new dictionary
-    element_dict_log = dict(zip(ele_keys, ele_entries))
+    element_dict_log = dict(zip(ele_keys, ele_entries, strict=True))
 
     # isotope dictionary
     isotope_dict_log = make_iso_dict(element_dict_log)
