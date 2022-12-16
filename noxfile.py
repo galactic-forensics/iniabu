@@ -7,7 +7,7 @@ nox.options.sessions = "lint", "safety", "tests", "xdoctest"
 
 package = "iniabu"
 locations = "iniabu", "tests", "noxfile.py", "docs/conf.py"
-python_suite = ["3.10", "3.9", "3.8", "3.7", "3.6"]
+python_suite = ["3.10", "3.9", "3.8", "3.7"]
 python_main = "3.10"
 
 

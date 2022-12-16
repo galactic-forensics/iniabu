@@ -6,7 +6,7 @@ Dependencies
 ------------
 
 This package is tested
-with python versions 3.6 - 3.9.
+with python versions 3.7 - 3.10.
 It might work on older python version as well,
 however,
 compatibility is not guaranteed.
