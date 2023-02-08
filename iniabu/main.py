@@ -170,8 +170,8 @@ class IniAbu:
         # print message on what was loaded:
         if not self._is_initializing:
             print(
-                f"iniabu loaded database: '{self.database}', current units: "
-                f"'{self.unit}'"
+                f"iniabu loaded database: {self.database!r}, current units: "
+                f"{self.unit!r}"
             )
 
     @property

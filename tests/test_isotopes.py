@@ -44,7 +44,7 @@ def test_isotopes_isos_list(ini_default, iso1, iso2):
 def test_a(ini_default, iso1, iso2):
     """Return mass number of isotope (what is actually put in already)."""
     ret_val = ini_default.iso[iso1].a
-    assert isinstance(ret_val, int)
+    assert ret_val.dtype == int
     assert ret_val == int(iso1.split("-")[1])
 
     ret_val = ini_default.iso[[iso1, iso2]].a
@@ -246,7 +246,7 @@ def test_z(ini_default, iso1, iso2):
     """Get the number of protons for element."""
     z_ele = iniabu.data.elements_z[iso1.split("-")[0]]
     ret_val = ini_default.iso[iso1].z
-    assert isinstance(ret_val, int)
+    assert ret_val.dtype == int
     assert ret_val == z_ele
 
     # list
