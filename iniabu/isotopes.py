@@ -187,7 +187,6 @@ class Isotopes:
             isos = self._isos
 
         for iso in isos:
-
             try:
                 ret_arr.append(self._iso_dict[iso][0])
             except KeyError:

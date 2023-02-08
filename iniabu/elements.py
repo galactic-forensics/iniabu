@@ -96,7 +96,7 @@ class Elements:
         """
         ret_arr = []
         for ele in self._eles:
-            ret_arr.append(np.array(self._ele_dict[ele][1], dtype=np.int))
+            ret_arr.append(np.array(self._ele_dict[ele][1], dtype=int))
         return return_list_simplifier(ret_arr)
 
     @property
@@ -113,7 +113,7 @@ class Elements:
         """
         ret_arr = []
         for ele in self._eles:
-            ret_arr.append(np.array(self._ele_dict[ele][2], dtype=np.float))
+            ret_arr.append(np.array(self._ele_dict[ele][2], dtype=float))
         return return_list_simplifier(ret_arr)
 
     @property
@@ -130,7 +130,7 @@ class Elements:
         """
         ret_arr = []
         for ele in self._eles:
-            ret_arr.append(np.array(self._ele_dict[ele][3], dtype=np.float))
+            ret_arr.append(np.array(self._ele_dict[ele][3], dtype=float))
         return return_list_simplifier(ret_arr)
 
     @property
