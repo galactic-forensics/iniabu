@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
+        python-version: ["3.8", "3.9", "3.10", "3.11"]
 
     steps:
     - uses: actions/checkout@v2
@@ -28,14 +28,25 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install nox
-        pip install coveralls
+        pip install .[test]
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         if [ -f dev-requirements.txt ]; then pip install -r dev-requirements.txt; fi
     - name: Run nox
       run: nox --no-error-on-missing-interpreters
-    - name: Re-run coverage and push to coveralls
-      env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+    - name: Generate coverage report
       run: |
-        pytest
-        coveralls
+        pip install codecov
+        pip install pytest-cov
+        pytest --cov=./ --cov-report=xml
+        codecov
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: ./coverage/reports/
+        env_vars: OS,PYTHON
+        fail_ci_if_error: true
+        files: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        verbose: true
