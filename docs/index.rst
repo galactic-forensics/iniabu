@@ -10,9 +10,9 @@ The Iniabu Project
 .. image:: https://github.com/galactic-forensics/iniabu/workflows/tests/badge.svg?branch=main
     :target: https://github.com/galactic-forensics/iniabu
     :alt: tests
-.. image:: https://coveralls.io/repos/github/galactic-forensics/iniabu/badge.svg?branch=main
-    :target: https://coveralls.io/github/galactic-forensics/iniabu?branch=main
-    :alt: coverage
+.. image:: https://codecov.io/gh/galactic-forensics/iniabu/branch/main/graph/badge.svg?token=P2SJEANE6S
+    :target: https://codecov.io/gh/galactic-forensics/iniabu
+    :alt: Code coverage
 .. image:: https://img.shields.io/badge/License-GPL%20v2-blue.svg
     :target: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
     :alt: License: GPL v2
