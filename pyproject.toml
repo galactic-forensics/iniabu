@@ -1,6 +1,6 @@
 [build-system]
-requires = ["flit_core >=2,<4"]
-build-backend = "flit_core.buildapi"
+requires = ["flit_scm"]
+build-backend = "flit_scm:buildapi"
 
 [tool.flit.metadata]
 module = "iniabu"
@@ -57,3 +57,6 @@ exclude = ["dev/"]
 minversion = "6.0"
 addopts = "--cov=iniabu -v"
 testpaths = "tests"
+
+[tool.setuptools_scm]
+write_to = "iniabu/_version.py"
