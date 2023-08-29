@@ -43,7 +43,7 @@ def tests(session):
 def safety(session):
     """Safety check for all dependencies."""
     session.install("--upgrade", "pip")
-    session.install(".[dev,test]")
+    session.install("safety", ".[dev,test]")
     session.run(
         "safety",
         "check",
