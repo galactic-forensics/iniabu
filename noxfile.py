@@ -12,17 +12,10 @@ python_main = "3.11"
 
 
 @nox.session(python=python_main)
-def build(session):
-    """Pack iniabu for release on PyPi."""
-    session.install("flit")
-    session.run("flit", "build")
-
-
-@nox.session(python=python_main)
 def docs(session):
     """Build the documentation."""
     session.install("--upgrade", "pip")
-    session.install("sphinx", "sphinx_rtd_theme", "-r", "requirements.txt", "pytest")
+    session.install(".[doc]")
     session.chdir("docs")
     session.run(
         "sphinx-build", "-b", "html", ".", "_build/html/"
@@ -34,7 +27,7 @@ def lint(session):
     """Lint project using ``flake8``."""
     args = session.posargs or locations
     session.install("--upgrade", "pip")
-    session.install("-r", "dev-requirements.txt")
+    session.install(".[dev]")
     session.run("flake8", *args)
 
 
@@ -42,7 +35,7 @@ def lint(session):
 def tests(session):
     """Test the project using ``pytest``."""
     session.install("--upgrade", "pip")
-    session.install("-r", "requirements.txt", "-r", "dev-requirements.txt")
+    session.install(".[dev,test]")
     session.run("pytest")
 
 
@@ -50,7 +43,7 @@ def tests(session):
 def safety(session):
     """Safety check for all dependencies."""
     session.install("--upgrade", "pip")
-    session.install("safety", "-r", "requirements.txt", "-r", "dev-requirements.txt")
+    session.install("safety", ".[dev,test]")
     session.run(
         "safety",
         "check",
@@ -63,5 +56,5 @@ def xdoctest(session):
     """Test docstring examples with xdoctest."""
     args = session.posargs or ["all"]
     session.install("--upgrade", "pip")
-    session.install("xdoctest[all]", "-r", "requirements.txt")
+    session.install("xdoctest[all]", ".")
     session.run("python", "-m", "xdoctest", package, *args)
