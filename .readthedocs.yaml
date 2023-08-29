@@ -26,4 +26,4 @@ formats:
 python:
    install:
      - method: pip
-       path: .[docs]
+       path: .[doc]
