@@ -24,6 +24,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Physics",
 ]
 
+version = "1.1.2"
 [tool.flit.metadata.requires-extra]
 dev = [
     "darglint>=1.5.1",
