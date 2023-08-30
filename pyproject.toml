@@ -2,14 +2,14 @@
 requires = ["flit_scm"]
 build-backend = "flit_scm:buildapi"
 
-[tool.flit.metadata]
-module = "iniabu"
-author = "Reto Trappitsch"
-author-email = "reto@galactic-forensics.space"
-home-page = "https://github.com/galactic-forensics/iniabu"
-requires = ["numpy"]
+[project]
+name = "iniabu"
+authors = [
+    {name="Reto Trappitsch", email="reto@galactic-forensics.space"}
+]
+dependencies = ["numpy"]
 requires-python=">=3.8"
-description-file="README.rst"
+readme = "README.rst"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python",
@@ -23,8 +23,13 @@ classifiers = [
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Physics",
 ]
+dynamic = ["version", "description"]
 
-[tool.flit.metadata.requires-extra]
+[project.urls]
+Source = "https://github.com/galactic-forensics/iniabu"
+Documentation = "https://iniabu.readthedocs.io"
+
+[project.optional-dependencies]
 dev = [
     "darglint>=1.5.1",
     "flake8",
@@ -47,16 +52,13 @@ test = [
     "pytest-sugar"
 ]
 
-[tool.flit.metadata.urls]
-Documentation = "https://iniabu.readthedocs.io"
-
-[tool.flit.sdist]
-exclude = ["dev/"]
-
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "--cov=iniabu -v"
 testpaths = "tests"
+
+[tool.flit.sdist]
+exclude = [".gitignore", ".readthedocs.yaml", "dev/"]
 
 [tool.setuptools_scm]
 write_to = "iniabu/_version.py"
