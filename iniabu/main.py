@@ -3,7 +3,6 @@
 This file contains the main `IniAbu` class.
 """
 
-
 import numpy as np
 
 from . import data
