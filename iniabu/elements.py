@@ -3,7 +3,6 @@
 This class manages the elements. It must be called from :class:`iniabu.IniAbu`.
 """
 
-
 import numpy as np
 
 from . import data

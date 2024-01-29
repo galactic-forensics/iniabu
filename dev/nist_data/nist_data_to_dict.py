@@ -4,7 +4,6 @@ some appropriate python dictionary structures. One for elements, one for
 isotopes.
 """
 
-
 import numpy as np
 import re
 import json
