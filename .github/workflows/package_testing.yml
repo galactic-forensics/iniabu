@@ -30,7 +30,9 @@ jobs:
         rye pin ${{ matrix.python-version }}
         rye sync
     - name: Run Tests for python interface
-      run: rye test
+      run: |
+        rye test
+        rye run test_doc
     - name: Run Lint on one python
       if: ${{ matrix.python-version == env.MAIN_PYTHON_VERSION }}
       run: rye lint

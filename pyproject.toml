@@ -27,10 +27,13 @@ dev-dependencies = [
     "pytest-mock>=3.14.0",
     "pytest-cov>=5.0.0",
     "hypothesis>=6.111.2",
+    "pygments>=2.18.0",
+    "xdoctest>=1.2.0",
 ]
 
 [tool.rye.scripts]
 test_cov = "rye run pytest --cov --cov-report xml"
+test_doc = "rye run xdoctest iniabu"
 
 [tool.hatch.metadata]
 allow-direct-references = true
