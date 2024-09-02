@@ -1,6 +1,6 @@
 [project]
 name = "iniabu"
-version = "0.1.2"
+version = "1.2.0"
 description = "Read solar system abundances and automatically calculate various metrics, e.g., delta-values, dex, etc."
 authors = [
     { name = "Reto Trappitsch", email = "reto@galactic-forensics.space" }
