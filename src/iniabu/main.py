@@ -35,7 +35,7 @@ class IniAbu:
         >>> ini.iso["Ne"].abu_solar
         array([3060000.,    7330.,  225000.])
         >>> ini.iso_delta("Si-30", "Si-28", 0.02)
-        -403.23624595469255
+        np.float64(-403.23624595469255)
     """
 
     def __init__(self, database="lodders09", unit="num_lin"):
@@ -82,7 +82,7 @@ class IniAbu:
             >>> from iniabu import ini
             >>> # get the solar abundance of silicon
             >>> ini.ele["Si"].abu_solar
-            999700.0
+            np.float64(999700.0)
 
             >>> # get a numpy array of the solar abundance of two elements
             >>> ini.ele[["Fe", "Ni"]].abu_solar
@@ -115,7 +115,7 @@ class IniAbu:
             >>> from iniabu import ini
             >>> # get the solar abundance of Si-28
             >>> ini.iso["Si-28"].abu_solar
-            922000.0
+            np.float64(922000.0)
 
             >>> # get a numpy array of the solar abundance of two isotopes
             >>> ini.iso[["Fe-56", "Ni-60"]].abu_solar
@@ -123,7 +123,7 @@ class IniAbu:
 
             >>> # similarly, query relative abundance(s) of isotope(s)
             >>> ini.iso["He-4"].abu_rel
-            0.999834
+            np.float64(0.999834)
             >>> ini.iso[["H-2", "He-3"]].abu_rel
             array([1.94e-05, 1.66e-04])
         """
@@ -152,6 +152,8 @@ class IniAbu:
             >>> ini.database
             'nist'
             >>> ini.database = "lodders09"  # simple switch back!
+            >>> ini.database
+            'lodders09'
         """
         return self._database
 
@@ -340,7 +342,7 @@ class IniAbu:
             >>> ini.unit
             'num_log'
             >>> ini.ele["H"].abu_solar
-            12.0
+            np.float64(12.0)
 
             >>> ini.unit = "num_lin"  # set back to default
             >>> ini.unit
@@ -393,7 +395,7 @@ class IniAbu:
         Example:
             >>> from iniabu import ini
             >>> ini.ele_bracket("Ne", "Si", 33)
-            1.0008802726402624
+            np.float64(1.0008802726402624)
         """
         solar_ratios = return_as_ndarray(
             self.ele_ratio(nominator, denominator, mass_fraction=mass_fraction)
@@ -444,7 +446,7 @@ class IniAbu:
         Example:
             >>> from iniabu import ini
             >>> ini.iso_bracket("Ne-21", "Ne-20", 2.397)
-            3.0002854858741057
+            np.float64(3.0002854858741057)
         """
         solar_ratios = return_as_ndarray(
             self.iso_ratio(nominator, denominator, mass_fraction=mass_fraction)
@@ -504,7 +506,7 @@ class IniAbu:
         Example:
             >>> from iniabu import ini
             >>> ini.ele_delta("Ne", "Si", 3.4)
-            32.39347210030586
+            np.float64(32.39347210030586)
         """
         solar_ratios = return_as_ndarray(
             self.ele_ratio(nominator, denominator, mass_fraction=mass_fraction)
@@ -564,7 +566,7 @@ class IniAbu:
         Example:
             >>> from iniabu import ini
             >>> ini.iso_delta("Ne-22", "Ne-20", 0.07, delta_factor=10000)
-            -479.9999999999993
+            np.float64(-479.9999999999993)
 
             >>> # For more than 1 ratio
             >>> nominator_isos = ["Ne-21", "Ne-22"]
@@ -747,11 +749,11 @@ class IniAbu:
             >>> from iniabu import ini
             >>> # Calculate H/He ratio
             >>> ini.ele_ratio("H", "He")
-            10.314692775474606
+            np.float64(10.314692775474606)
 
             >>> # Calculate same ratio as mass fraction
             >>> ini.ele_ratio("H", "He", mass_fraction=True)
-            2.597460199709773
+            np.float64(2.597460199709773)
 
             >>> # Calculate ratios with multiple elements
             >>> ini.ele_ratio(["H", "He", "Al"], ["Si"])
@@ -763,12 +765,13 @@ class IniAbu:
 
             >>> # The result when the solar abundance of an element is not avaialble
             >>> ini.database = "nist"
+            iniabu loaded database: 'nist', current units: 'num_lin'
             >>> ini.ele_ratio("H", "He")
-            nan
+            np.float64(nan)
 
             >>> ini.database = "lodders09"  # set back to default and check again
             >>> ini.ele_ratio("H", "He")
-            10.314692775474606
+            np.float64(10.314692775474606)
         """
         # turn into string if necessary
         nominator = return_string_as_list(nominator)
@@ -834,7 +837,7 @@ class IniAbu:
             >>> from iniabu import ini
             >>> # calculate Ne-21 / Ne-20 isotope ratio
             >>> ini.iso_ratio("Ne-21", "Ne-20")
-            0.002395424836601307
+            np.float64(0.002395424836601307)
 
             >>> # calculate isotope ratios for all Ne isotopes versus Ne-20
             >>> ini.iso_ratio("Ne", "Ne-20")
@@ -851,11 +854,11 @@ class IniAbu:
             >>> from iniabu import inimf
             >>> # calculate Ne-21 / Ne-20 isotope ratio using mass fractions
             >>> inimf.iso_ratio("Ne-21", "Ne-20")
-            0.002515409891030499
+            np.float64(0.002515409891030499)
 
             >>> # calculate the same ratio in number fractions
             >>> inimf.iso_ratio("Ne-21", "Ne-20", mass_fraction=False)
-            0.002395424836601307
+            np.float64(0.002395424836601307)
         """
         # check for equal length if nominator and denominator are lists
         if not isinstance(nominator, str) and not isinstance(denominator, str):

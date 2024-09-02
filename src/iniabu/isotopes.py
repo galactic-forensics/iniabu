@@ -24,7 +24,7 @@ class Isotopes:
         >>> from iniabu import ini
         >>> isotope = ini.iso["Si-28"]
         >>> isotope.abu_rel
-        0.9223
+        np.float64(0.9223)
 
     .. note:: You can also call isotopes using alternative spellings, e.g.,
         "28Si" or "Si28".
