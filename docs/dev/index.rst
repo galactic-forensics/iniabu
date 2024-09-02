@@ -19,334 +19,61 @@ contributing to an open-source project,
 have a look at
 `these general guidelines <https://opensource.guide/how-to-contribute/#how-to-submit-a-contribution>`_.
 
-This project uses fairly tight restrictions
-in terms of testing and linting.
-Don't be discouraged if you run into issues.
-Always feel free to ask questions by
-`raising an issue <https://github.com/galactic-forensics/iniabu/issues>`_.
-Many style guides and ideas here are taken from the
-`Hypermodern Python <https://cjolowicz.github.io/posts/hypermodern-python-01-setup/>`_
-blog created by Claudio Jolowicz.
-These blog post,
-while intense,
-are an excellent read and are highly recommended.
+We are trying to make it as easy as possible
+to contribute to this project.
+The project itself is set up using
+`rye <(https://rye.astral.sh)>`_.
+This makes everything very smooth.
 
+Development workflow
+--------------------
 
-Dependencies
-------------
+Fork the repository and clone it to your computer.
+If you have rye installed, simply run:
 
-For full testing of the project,
-you should have the supported python versions installed.
-Furthermore, you need to install ``nox``,
-which can be done from the console by typing:
+```
+rye sync
+```
 
-.. code-block:: console
+and all dependencies will be installed and you are ready to go.
+We use rye to manage format and lint.
+To format and lint, run:
 
-    $ pip install nox
+```
+rye fmt
+rye lint
+```
 
-If you completely test your setup with ``nox``,
-dependency installation is not required.
-If you like to test directly with ``pytest``,
-write your own temporary routines,
-create examples, etc.,
-you can install the dependencies
-from your console by typing:
+We also strive for 100% test coverage.
+So if you fix a bug, please write a test first that fails,
+then fix the bug,
+then make sure all tests still pass, including the new one.
+To run the tests, use:
 
-.. code-block:: console
+```
+rye test
+```
 
-    $ pip install -r requirements.txt
-    $ pip install -r dev-requirements.txt
-
-
-Contribution requirements
--------------------------
-
-All code submissions should be tested.
-The CI requires that all unit tests
-and lint tests complete successfully
-before merging into the main branch is allowed.
-
-
-**Coverage:**
-
-All code should be tested.
-Code testing coverage of 100% is required
-to ensure future integrity.
-
-
-**Docstrings:**
-
-The documentation automatically generates
-the API reference from the supplied docstrings.
-Please use
-`Sphinx style <https://sphinx-rtd-tutorial.readthedocs.io/en/latest/docstrings.html>`_
-docstrings to document your routines.
-
-
-**Linting:**
-
-All code must adhere to ``flake8`` specifications,
-see also :ref:`section_linting`.
-This allows for better readability.
-Even though you won't remember all linting rules,
-you should go back and fix linting issues after testing.
-The tests will give you feedback on what to do.
-
-
-
-Test driven development
------------------------
-
-Testing of the ``iniabu`` package is done using ``pytest``
-and automated using ``nox``.
-To run a full test using ``nox``,
-Python 3.6, 3.7, 3.8, and 3.9,
-must be available in the environment.
-A full nox test, which includes
-linting, safety, and tests
-can be run from the terminal by typing:
-
-.. code-block:: console
-
-    $ nox
-
-To check wha sessions are implemented,
-run the following code from your terminal:
-
-.. code-block:: console
-
-    $ nox -l
-
-This will also display information
-for all sessions implemented in ``nox``.
-You can also check out the ``noxfile.py`` directly.
-
-Please also check the
-`nox documentation <https://nox.thea.codes/en/stable/index.html>`_
-for further options, etc.
-
-The test suite lives in the ``tests`` folder.
-This folder mirrors the package structure.
+If you add a new feature,
+please also add a test for it.
 In addition,
-a file named ``conftest.py``
-is used to set fixtures for pytest.
-This allows for proper initialization
-of the package with every test.
+please add a docstring to the new feature that includes an example.
+This will automatically be included in the documentation.
+To test all the docstrings,
+run:
 
-The iniabu project requires that the whole code base
-is covered with tests, i.e.,
-that a code coverage of 100% is maintained.
-Of course, the tests should also be meaningful!
-This code coverage ensures that future developments
-do not break other functionalities.
-More about this can be found in
-:ref:`section_testing`.
+```
+rye run test_doc
+```
 
-**Example: Bugfix**
-
-If a bug is found in the code and reported,
-a bug fix should be implemented in the following way:
-
-#. Write a test with the wanted outcome
-   and make sure the test suite fails
-   due to the reported bug.
-#. Fix the bug in the source code.
-#. The bug is fixed once tew new test
-   passes successfully
-   and no other tests were broken.
-
-
-Formatting with ``black``
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The iniabu project adopts the default style
-that is provided by the
-`black python formatter <https://github.com/psf/black>`_.
-Their GitHub site describes in detail
-how to use the formatter.
-There is really not much to configure.
-
-Formatting with black is implemented
-via a pre-commit hooks,
-see section
-:ref:`section_hooks`
-for more information.
-The hook file also specifies the used version of black.
-
-
-.. _section_linting:
-
-
-Linting
-~~~~~~~
-
-Linting heavily improves code readability.
-Please follow all linting guidelines.
-We use ``flake8``.
-Furthermore, the following additional plugins are used:
-
-* ``flake8-bandit`` to identify security issues.
-* ``flake8-black`` to check that the codebase is formatted using black.
-* ``flake8-bugbear`` to find additional bugs and design problems.
-* ``flake8-docstrings`` to ensure docsting completeness and consistency.
-* ``flake8-import-order`` to ensure consistent package importing.
-
-Exact linting options are configured in the
-``.flake8`` file.
-This file also contains comments
-to better understand the options.
-
-Invoking only linting with nox can be done
-from the terminal by typing:
-
-.. code-block:: console
-
-    $ nox -rs lint
-
-To fix linting issues,
-read the output of the linter carefully.
-If absolutely required,
-use the ``# noqa: err`` comment
-after the line in question
-to exclude specific linting errors.
-Replace the ``err`` part with the error number
-that was returned by the linter.
-This should only be used where it makes sense.
-
-
-
-.. _section_testing:
-
-Testing
-~~~~~~~
-
-Project testing is done with ``pytest``.
-The following ``pytest`` plugins
-are defined in the ``dev-requirements.txt`` file:
-
-* ``pytest-cov`` to test code coverage.
-* ``pytest-mock`` to mock out certain parts of the code base.
-* ``pytest-sugar`` to display nicely formatted output.
-
-The ``pytest.ini`` file configures
-the testing environment properly.
-To run tests from the terminal,
-assuming that all dependencies are installed,
-type:
-
-.. code-block:: console
-
-    $ pytest
-
-To test the test suite only with ``nox``,
-you can type the following into the terminal:
-
-.. code-block:: console
-
-    $ nox -rs tests
-
-Again, adding the option ``-p 3.9``
-would limit the test to
-Python 3.9 only.
-
-**Hypothesis**
-
-Where adequate,
-make use of the
-`hypothesis <https://hypothesis.readthedocs.io/en/latest/>`_
-package for writing your tests.
-Have a look at the existing tests
-for input on what to test for.
-Hypothesis allows for simple edge case testing
-and often catches errors
-that might otherwise go through.
-
-
-Docstring example testing
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-As discussed before,
-docstrings should be used
-to document every new routine.
-The docstrings should also contain examples.
-Check out the source code for examples
-on how to write them.
-
-Examples should of course represent
-the behavior of the code.
-It thus must be written in Python prompt form.
-For example, look at the following example:
-
-.. code-block:: python
-
-    >>> from iniabu import ini  # loads with default ("lodders09")
-    >>> ini.database = "nist"  # change database to "nist"
-    >>> ini.database
-    'nist'
-
-To ensure that all examples are correct,
-they can be tested using
-`xdoctest <https://github.com/Erotemic/xdoctest>`_.
-This is implemented as a ``nox`` session
-and can be called
-by typing the following into your terminal:
-
-.. code-block:: console
-
-    $ nox -rs xdoctest
-
-*Note*: This is not part of the unit tests
-and must be called separately.
-A GitHub action is implemented
-to specifically run ``doctests``.
-
-
-
-Safety
-~~~~~~
-
-`Safety <https://github.com/pyupio/safety>`_
-is used to check all required dependencies
-for known security vulnerabilities.
-To run only ``safety`` form ``nox``,
-type the following into your terminal:
-
-.. code-block:: console
-
-    $ nox -rs safety
-
-
-Documentation
-~~~~~~~~~~~~~
-
-The documentation uses ``sphinx``.
-It is automatically built and hosted by
-`readthedocs.io <https://readthedocs.org/>`_.
-To locally build the documentation,
-run the following from your terminal:
-
-.. code-block:: console
-
-    $ nox -rs docs
-
-This will dump the ``html`` files
-for the documentation into the
-``docs/_build`` folder.
-You can now locally browse them.
-
-
-.. _section_hooks:
 
 Pre-commit hooks
 ~~~~~~~~~~~~~~~~
 
-Using pre-commit hooks
-your project can be tested
-for simple formatting mishaps.
-These will also be automatically corrected.
-Here,
-we use the
-`pre-commit framework <https://pre-commit.com>`_.
+Personally, I like the
+`pre-commit framework <https://pre-commit.com>`_
+a lot as it helps me commit clean code upon every commit.
+
 If you want to set up pre-commit hooks,
 go to the folder and run the following command
 (after installing pre-commit using pip or pipx):
@@ -358,11 +85,6 @@ go to the folder and run the following command
 This will install the hooks
 that are defined in `.pre-commit-config.yaml`
 into your git repository.
-Note that a fairly standard pre-commit configuration is used.
-Black is pinned to a specific version,
-i.e., the same version as in the nox file itself.
-
-
 
 
 Structure of the data tables
