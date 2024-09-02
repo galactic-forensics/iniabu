@@ -22,7 +22,7 @@ have a look at
 We are trying to make it as easy as possible
 to contribute to this project.
 The project itself is set up using
-`rye <(https://rye.astral.sh)>`_.
+`rye <https://rye.astral.sh>`_.
 This makes everything very smooth.
 
 Development workflow
@@ -31,18 +31,18 @@ Development workflow
 Fork the repository and clone it to your computer.
 If you have rye installed, simply run:
 
-```
-rye sync
-```
+.. code-block:: console
+
+  rye sync
 
 and all dependencies will be installed and you are ready to go.
 We use rye to manage format and lint.
 To format and lint, run:
 
-```
-rye fmt
-rye lint
-```
+.. code-block:: console
+
+  rye fmt
+  rye lint
 
 We also strive for 100% test coverage.
 So if you fix a bug, please write a test first that fails,
@@ -50,9 +50,9 @@ then fix the bug,
 then make sure all tests still pass, including the new one.
 To run the tests, use:
 
-```
-rye test
-```
+.. code-block:: console
+
+  rye test
 
 If you add a new feature,
 please also add a test for it.
@@ -62,9 +62,9 @@ This will automatically be included in the documentation.
 To test all the docstrings,
 run:
 
-```
-rye run test_doc
-```
+.. code-block:: console
+
+  rye run test_doc
 
 
 Pre-commit hooks
