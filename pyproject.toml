@@ -16,6 +16,12 @@ license = { text = "GPLv2" }
 Source = "https://github.com/galactic-forensics/iniabu"
 Documentation = "https://iniabu.readthedocs.io"
 
+[project.optional-dependencies]
+doc = [
+    "sphinx<8.0",
+    "sphinx-rtd-theme>=2.0.0",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
