@@ -63,8 +63,9 @@ class ProxyList:
             idx[it] = entry
             if entry not in self._valid_set:
                 raise IndexError(
-                    "Item {} out of range. Must be "
-                    "in {}.".format(entry, self._valid_set)
+                    "Item {} out of range. Must be " "in {}.".format(
+                        entry, self._valid_set
+                    )
                 )
         return self._proxy_cls(self._parent, idx, *self.args, **self.kwargs)
 

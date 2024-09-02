@@ -20,7 +20,7 @@ class Elements:
         'num_lin'
         >>> element = ini.ele["Si"]
         >>> element.abu_solar
-        999700.0
+        np.float64(999700.0)
 
     .. warning:: This class should NOT be manually created by the user. It is
         designed to be initialized by :class:`iniabu.IniAbu`.

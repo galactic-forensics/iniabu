@@ -1,64 +1,53 @@
-[build-system]
-requires = ["flit_scm"]
-build-backend = "flit_scm:buildapi"
-
 [project]
 name = "iniabu"
+version = "0.1.2"
+description = "Read solar system abundances and automatically calculate various metrics, e.g., delta-values, dex, etc."
 authors = [
-    {name="Reto Trappitsch", email="reto@galactic-forensics.space"}
+    { name = "Reto Trappitsch", email = "reto@galactic-forensics.space" }
 ]
-dependencies = ["numpy"]
-requires-python=">=3.8"
+dependencies = [
+    "numpy>=2.0",
+]
 readme = "README.rst"
-classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Operating System :: OS Independent",
-    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
-    "Intended Audience :: Science/Research",
-    "Topic :: Scientific/Engineering",
-    "Topic :: Scientific/Engineering :: Physics",
-]
-dynamic = ["version", "description"]
+requires-python = ">= 3.9"
+license = { text = "GPLv2" }
 
 [project.urls]
 Source = "https://github.com/galactic-forensics/iniabu"
 Documentation = "https://iniabu.readthedocs.io"
 
 [project.optional-dependencies]
-dev = [
-    "darglint>=1.5.1",
-    "flake8",
-    "flake8-bandit",
-    "flake8-black",
-    "flake8-bugbear",
-    "flake8-docstrings",
-    "flake8-import-order",
-    "bandit"
-]
 doc = [
-    "sphinx",
-    "sphinx_rtd_theme"
+    "sphinx<8.0",
+    "sphinx-rtd-theme>=2.0.0",
 ]
-test = [
-    "hypothesis",
-    "pytest>=6.0",
-    "pytest-cov",
-    "pytest-mock",
-    "pytest-sugar"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "pytest>=8.3.2",
+    "pytest-mock>=3.14.0",
+    "pytest-cov>=5.0.0",
+    "hypothesis>=6.111.2",
+    "xdoctest>=1.2.0",
+    "pygments>=2.18.0",
 ]
+
+[tool.rye.scripts]
+test_cov = "rye run pytest --cov --cov-report xml"
+test_doc = "rye run xdoctest iniabu"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/iniabu"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "--cov=iniabu -v"
 testpaths = "tests"
-
-[tool.flit.sdist]
-exclude = [".gitignore", ".readthedocs.yaml", "dev/"]
-
-[tool.setuptools_scm]
-write_to = "iniabu/_version.py"
