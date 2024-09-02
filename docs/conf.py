@@ -1,17 +1,16 @@
 """Configuration file for the Sphinx documentation builder."""
 
+import importlib.metadata
 import sys
 
 sys.path.append("../")
-
-from iniabu._version import __version__ as version  # noqa E402
 
 # -- Project information -----------------------------------------------------
 
 project = "iniabu"
 author = "Reto Trappitsch"
 copyright = f"2020-2023, {author}"
-release = version
+release = importlib.metadata.version("iniabu")
 
 
 # -- General configuration ---------------------------------------------------
