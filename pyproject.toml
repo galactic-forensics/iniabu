@@ -29,6 +29,8 @@ dev-dependencies = [
     "hypothesis>=6.111.2",
 ]
 
+test_cov = "rye run pytest --cov --cov-report xml"
+
 [tool.hatch.metadata]
 allow-direct-references = true
 

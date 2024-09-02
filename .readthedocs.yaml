@@ -25,5 +25,4 @@ formats:
 # install package via pip
 python:
    install:
-     - method: pip
-       path: requirements-dev.lock
+    - requirements: requirements.lock
