@@ -10,7 +10,7 @@ update_workflow minimum_version maximum_version:
     from pathlib import Path
     import sys
 
-    workflow = Path('.github/workflows/package_testing.yml')
+    workflows = [Path('.github/workflows/package_testing.yml'), Path('.github/workflows/release_on_pypi.yml')]
 
     vmin = sys.argv[1]
     vmax = sys.argv[2]
@@ -18,22 +18,23 @@ update_workflow minimum_version maximum_version:
     minor_min = int(vmin.split(".")[1])
     minor_max = int(vmax.split(".")[1])
 
-    with open(workflow) as f:
-        content = f.readlines()
+    for workflow in workflows:
+        with open(workflow) as f:
+            content = f.readlines()
 
-    for it, line in enumerate(content):
-        if "MAIN_PYTHON_VERSION: " in line:
-            print(it)
-            content[it] = f'  MAIN_PYTHON_VERSION: "{vmax}"\n'
-        elif "python-version:" in line:
-            new_line = f'        python-version: ['
-            for jt in range(minor_min, minor_max):
-                new_line += f'"3.{jt}", '
-            new_line += f'"3.{minor_max}"]\n'
-            content[it] = new_line
+        for it, line in enumerate(content):
+            if "MAIN_PYTHON_VERSION: " in line:
+                print(it)
+                content[it] = f'  MAIN_PYTHON_VERSION: "{vmax}"\n'
+            elif "python-version:" in line:
+                new_line = f'        python-version: ['
+                for jt in range(minor_min, minor_max):
+                    new_line += f'"3.{jt}", '
+                new_line += f'"3.{minor_max}"]\n'
+                content[it] = new_line
 
-    with open(workflow, 'w') as f:
-        f.writelines(content)
+        with open(workflow, 'w') as f:
+            f.writelines(content)
 
 [positional-arguments]
 python_update minimum_version maximum_version:
