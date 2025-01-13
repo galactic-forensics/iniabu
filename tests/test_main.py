@@ -64,7 +64,7 @@ def test_database_print(unit, mocker):
     ini.database = db_new
 
     spy_print.assert_called_with(
-        f"iniabu loaded database: {db_new!r}, current " f"units: {unit!r}"
+        f"iniabu loaded database: {db_new!r}, current units: {unit!r}"
     )
 
 
