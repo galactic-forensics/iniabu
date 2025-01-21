@@ -19,10 +19,6 @@ jobs:
     steps:
     - name: Checkout repo
       uses: actions/checkout@v4
-    # - name: Install depdencies
-    #   run: |
-    #     sudo apt-get update
-    #     sudo apt-get -y install libegl1-mesa
     - name: Install the latest version of rye
       uses: eifinger/setup-rye@v4
       with:
