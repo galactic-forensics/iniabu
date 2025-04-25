@@ -10,6 +10,7 @@ from . import utilities
 from .elements import Elements
 from .isotopes import Isotopes
 from .utilities import (
+    item_formatter,
     linear_units,
     ProxyList,
     return_as_ndarray,
@@ -886,8 +887,12 @@ class IniAbu:
         # correct if mass_fraction is true and not in mass_fraction notation already
         if mass_fraction and self.unit != "mass_fraction":
             # turn into list if necessary
-            nominator = return_string_as_list(nominator)
-            denominator = return_string_as_list(denominator)
+            nominator = [
+                item_formatter(iso) for iso in return_string_as_list(nominator)
+            ]
+            denominator = [
+                item_formatter(iso) for iso in return_string_as_list(denominator)
+            ]
             # get masses
             nominator_masses = [data.isotopes_mass[iso] for iso in nominator]
             denominator_masses = [data.isotopes_mass[iso] for iso in denominator]
