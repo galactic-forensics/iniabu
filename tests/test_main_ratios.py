@@ -320,3 +320,9 @@ def test_nist_ratio_isos_isos(ini_nist):
         ]
     )
     np.testing.assert_equal(ini_nist.iso_ratio(nom, denom), expected)
+
+
+def test_mf_non_standard_isonames(ini_default):
+    """BF: Mass fraction for non-standard isotope names."""
+    isos = ["28Si", "29Si"]
+    _ = ini_default.iso_ratio(*isos, mass_fraction=True)
