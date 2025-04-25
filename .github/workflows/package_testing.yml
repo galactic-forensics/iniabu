@@ -15,29 +15,29 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version:
+          - "3.9"
+          - "3.10"
+          - "3.11"
+          - "3.12"
+          - "3.13"
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
-    - name: Install the latest version of rye
-      uses: eifinger/setup-rye@v4
+    - uses: actions/checkout@v4
+    - name: Install uv and set the python version
+      uses: astral-sh/setup-uv@v5
       with:
-        version: 'latest'
-    - name: Sync Rye
-      run: |
-        rye pin ${{ matrix.python-version }}
-        rye sync
-    - name: Run Tests for python interface
-      run: |
-        rye test
-        rye run test_doc
+        python-version: ${{ matrix.python-version }}
+    - name: Install the project
+      run: uv sync --all-extras --dev
+    - name: Run tests
+      run: uv run pytest
     - name: Run Lint on one python
       if: ${{ matrix.python-version == env.MAIN_PYTHON_VERSION }}
-      run: rye lint
+      run: uv run ruff check
     - name: Run Pytest with coverage
       if: ${{ matrix.python-version == env.MAIN_PYTHON_VERSION }}
       run: |
-        rye run test_cov
+        uv run pytest --cov=iniabu --cov-report xml
     - name: Upload coverage reports to Codecov
       if: ${{ matrix.python-version == env.MAIN_PYTHON_VERSION && github.repository_owner == 'galactic-forensics' }}
       uses: codecov/codecov-action@v3
