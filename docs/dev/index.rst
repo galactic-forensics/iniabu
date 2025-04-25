@@ -22,27 +22,27 @@ have a look at
 We are trying to make it as easy as possible
 to contribute to this project.
 The project itself is set up using
-`rye <https://rye.astral.sh>`_.
+`uv <https://docs.astral.sh/uv/>`_.
 This makes everything very smooth.
 
 Development workflow
 --------------------
 
 Fork the repository and clone it to your computer.
-If you have rye installed, simply run:
+If you have uv installed, simply run:
 
 .. code-block:: console
 
-  rye sync
+  uv sync --all-extras
 
 and all dependencies will be installed and you are ready to go.
-We use rye to manage format and lint.
+We use ruff to manage format and lint.
 To format and lint, run:
 
 .. code-block:: console
 
-  rye fmt
-  rye lint
+  ruff format
+  ruff check
 
 We also strive for 100% test coverage.
 So if you fix a bug, please write a test first that fails,
@@ -52,7 +52,7 @@ To run the tests, use:
 
 .. code-block:: console
 
-  rye test
+  pytest
 
 If you add a new feature,
 please also add a test for it.
@@ -64,7 +64,7 @@ run:
 
 .. code-block:: console
 
-  rye run test_doc
+   xdoctest iniabu
 
 
 Pre-commit hooks

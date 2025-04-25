@@ -7,7 +7,7 @@ The Iniabu Project
 .. image:: https://img.shields.io/pypi/v/iniabu?color=informational
     :target: https://pypi.org/project/iniabu/
     :alt: PyPi
-.. image:: https://github.com/galactic-forensics/iniabu/workflows/tests/badge.svg?branch=main
+.. image:: https://github.com/galactic-forensics/iniabu/actions/workflows/package_testing.yml/badge.svg
     :target: https://github.com/galactic-forensics/iniabu
     :alt: tests
 .. image:: https://codecov.io/gh/galactic-forensics/iniabu/branch/main/graph/badge.svg?token=P2SJEANE6S
@@ -16,9 +16,6 @@ The Iniabu Project
 .. image:: https://img.shields.io/badge/License-GPL%20v2-blue.svg
     :target: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
     :alt: License: GPL v2
-.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
-    :target: https://github.com/psf/black
-    :alt: Code style: black
 
 Introduction
 ------------
